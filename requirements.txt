@@ -1,0 +1,14 @@
+attrs==19.3.0
+Django==2.2
+importlib-metadata==0.23
+jsonschema==3.1.1
+more-itertools==7.2.0
+Pillow==6.2.1
+psycopg2-binary==2.8.4
+pycountry==19.8.18
+pyrsistent==0.15.5
+pytz==2019.3
+six==1.12.0
+sorl-thumbnail==12.5.0
+sqlparse==0.3.0
+zipp==0.6.0

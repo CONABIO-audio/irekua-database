@@ -19,7 +19,7 @@ setup(
     author='CONABIO, Gustavo Everardo Robredo Esquivelzeta, Santiago Martínez Balvanera',
     author_email='erobredo@conabio.gob.mx, smartinez@conabio.gob.mx',
     install_requires=[
-        'django==2.2',
+        'django==2.2.4',
         'psycopg2_binary',
         'jsonschema',
         'sorl-thumbnail',

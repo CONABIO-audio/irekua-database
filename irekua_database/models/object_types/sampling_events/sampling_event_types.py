@@ -99,7 +99,7 @@ class SamplingEventType(IrekuaModelBase):
 
         try:
             device_type = self.samplingeventtypedevicetype_set.get(
-                device_type=device_type.name)
+                device_type=device_type)
         except self.device_types.model.DoesNotExist:
             msg = _(
                 'Device type %(device_type)s is not valid for sampling '

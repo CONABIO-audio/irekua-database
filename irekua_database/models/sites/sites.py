@@ -1,7 +1,6 @@
 from django.contrib.gis.geos import Point
 from django.contrib.gis.db.models import PointField
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.gis import forms
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -152,51 +151,3 @@ class Site(IrekuaModelBaseUser):
     def sampling_events(self):
         return SamplingEvent.objects.filter(
             collection_site__site=self)
-
-    @property
-    def map_widget(self):
-        name = 'point_{}'.format(self.pk)
-        widget = IrekuaMapWidget(attrs={
-            'map_width': '100%',
-            'map_height': '100%',
-            'id': name,
-            'disabled': True})
-
-        return widget.render(name, self.geo_ref)
-
-    @property
-    def map_widget_no_controls(self):
-        name = 'point_{}'.format(self.pk)
-        widget = IrekuaMapWidgetNoControls(attrs={
-            'map_width': '100%',
-            'map_height': '100%',
-            'id': name,
-            'disabled': True})
-
-        return widget.render(name, self.geo_ref)
-
-    @property
-    def map_widget_obscured(self):
-        name = 'point_{}'.format(self.pk)
-        widget = IrekuaMapWidgetObscured(attrs={
-            'map_width': '100%',
-            'map_height': '100%',
-            'id': name,
-            'disabled': True})
-
-        return widget.render(name, self.geo_ref)
-
-
-class IrekuaMapWidget(forms.OSMWidget):
-    default_zoom = 12
-    template_name = 'irekua/components/map_widget.html'
-
-
-class IrekuaMapWidgetNoControls(forms.OSMWidget):
-    default_zoom = 9
-    template_name = 'irekua/components/map_widget_no_controls.html'
-
-
-class IrekuaMapWidgetObscured(forms.OSMWidget):
-    default_zoom = 12
-    template_name = 'irekua/components/map_widget_obscured.html'

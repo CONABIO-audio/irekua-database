@@ -27,7 +27,14 @@ class Annotation(IrekuaModelBaseUser):
         on_delete=models.PROTECT,
         db_column='annotation_tool_id',
         verbose_name=_('annotation tool'),
-        help_text=_('Annotation tool used'),
+        help_text=_('Annotation tool used when annotating'),
+        blank=False)
+    visualizer = models.ForeignKey(
+        'Visualizer',
+        on_delete=models.PROTECT,
+        db_column='visualizers_id',
+        verbose_name=_('visualizer'),
+        help_text=_('Visualizer used when annotating'),
         blank=False)
     item = models.ForeignKey(
         'Item',
@@ -57,11 +64,11 @@ class Annotation(IrekuaModelBaseUser):
         help_text=_('Information of annotation location within item'),
         blank=True,
         null=False)
-    annotation_configuration = JSONField(
-        db_column='annotation_configuration',
-        verbose_name=_('annotation configuration'),
+    visualizer_configuration = JSONField(
+        db_column='visualizer_configuration',
+        verbose_name=_('visualizer configuration'),
         default=empty_JSON,
-        help_text=_('Configuration of annotation tool'),
+        help_text=_('Configuration of visualizer at annotation creation'),
         blank=True,
         null=False)
     certainty = models.CharField(
@@ -131,11 +138,15 @@ class Annotation(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({'annotation': error})
 
+        if self.annotation_type != self.annotation_tool.annotation_type:
+            msg = _('Invalid annotation tool for this annotation type')
+            raise ValidationError({'annotation_tool': msg})
+
         try:
-            self.annotation_tool.validate_configuration(
-                self.annotation_configuration)
+            self.visualizer.validate_configuration(
+                self.visualizer_configuration)
         except ValidationError as error:
-            raise ValidationError({'annotation_configuration': error})
+            raise ValidationError({'visualizer_configuration': error})
 
         if self.id:
             try:

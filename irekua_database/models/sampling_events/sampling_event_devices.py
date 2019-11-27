@@ -17,6 +17,18 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         blank=False,
         null=False)
 
+    deployed_on = models.DateTimeField(
+        db_column='deployed_on',
+        verbose_name=_('deployed on'),
+        help_text=_('Date at which the device started capturing information.'),
+        blank=True,
+        null=True)
+    recovered_on = models.DateTimeField(
+        db_column='recovered_on',
+        verbose_name=_('recovered on'),
+        help_text=_('Date at which the device stoped capturing information.'),
+        blank=True,
+        null=True)
     collection_device = models.ForeignKey(
         'CollectionDevice',
         db_column='collection_device_id',

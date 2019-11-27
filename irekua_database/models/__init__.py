@@ -1,3 +1,5 @@
+from django.contrib.auth.models import Group
+
 from .annotations.annotation_tools import AnnotationTool
 from .annotations.annotation_votes import AnnotationVote
 from .annotations.annotations import Annotation
@@ -44,7 +46,7 @@ from .terms.terms import Term
 from .users.institutions import Institution
 from .users.roles import Role
 from .users.users import User
-from django.contrib.auth.models import Group
+from .visualizers import Visualizer
 
 
 __all__ = [
@@ -95,4 +97,5 @@ __all__ = [
     'TermSuggestion',
     'TermType',
     'User',
+    'Visualizer',
 ]

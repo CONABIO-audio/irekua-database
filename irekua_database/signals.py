@@ -4,6 +4,7 @@ from django.dispatch import receiver
 
 @receiver(pre_save)
 def validate_model(sender, instance, raw=False, **kwargs):
+    print('validating')
     try:
         app_label = instance._meta.app_label
     except AttributeError:

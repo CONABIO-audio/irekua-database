@@ -6,4 +6,5 @@ class IrekuaDatabaseConfig(AppConfig):
     verbose_name = 'irekua-database'
 
     def ready(self):
-        import irekua_database.signals
+        # import irekua_database.signals
+        pass

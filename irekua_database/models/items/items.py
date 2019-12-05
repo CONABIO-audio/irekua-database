@@ -296,15 +296,15 @@ class Item(IrekuaModelBaseUser):
                 hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day)
                 hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day)
             elif tlen == 1:
-                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"])
-                hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day)
-                hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day)
+                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],time_info["hour"])
+                hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day,date_down_.hour)
+                hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day,date_up_.hour)
             elif tlen == 2:
-                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],date_info["hour"],date_info["minute"])
+                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],time_info["hour"],time_info["minute"])
                 hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day,date_down_.hour,date_down_.minute)
                 hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day,date_up_.hour,date_up_.minute)
             elif tlen == 3:
-                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],date_info["hour"],date_info["minute"],date_info["second"])
+                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],time_info["hour"],time_info["minute"],time_info["second"])
                 hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day,date_down_.hour,date_down_.minute,date_down_.second)
                 hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day,date_up_.hour,date_up_.minute,date_up_.second)
         else:

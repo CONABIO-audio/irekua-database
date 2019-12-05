@@ -95,8 +95,35 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         if self.created_by is None:
             return
 
-    def validate_dates(self, date_info):
-        pass
+    def validate_deployed_on(self):
+        starting_date = self.sampling_event.started_on
+
+        if not starting_date:
+            return
+
+        if not self.deployed_on:
+            self.deployed_on = starting_date
+            return
+
+        if starting_date > self.deployed_on:
+            message = _(
+                "Deployment date cannot be earlier that sampling event starting date")
+            raise ValidationError(message)
+
+    def validate_recovered_on(self):
+        ending_date = self.sampling_event.ended_on
+
+        if not ending_date:
+            return
+
+        if not self.recovered_on:
+            self.recovered_on = ending_date
+            return
+
+        if ending_date < self.recovered_on:
+            message = _(
+                "Recovery date cannot be latter that sampling event ending date")
+            raise ValidationError(message)
 
     def clean(self):
         try:
@@ -121,6 +148,16 @@ class SamplingEventDevice(IrekuaModelBaseUser):
                 sampling_event_device_type.validate_metadata(self.metadata)
             except ValidationError as error:
                 raise ValidationError({'metadata': error})
+
+        try:
+            self.validate_deployed_on()
+        except ValidationError as error:
+            raise ValidationError({'deployed_on': error})
+
+        try:
+            self.validate_recovered_on()
+        except ValidationError as error:
+            raise ValidationError({'recovered_on': error})
 
         try:
             physical_device = self.collection_device.physical_device

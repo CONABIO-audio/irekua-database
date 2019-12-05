@@ -95,9 +95,9 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         if self.created_by is None:
             return
 
-    def validate_date(self, date_info):
+    def validate_dates(self, date_info):
         pass
-        
+
     def clean(self):
         try:
             self.validate_licence()

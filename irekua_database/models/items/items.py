@@ -261,7 +261,7 @@ class Item(IrekuaModelBaseUser):
     def collection(self):
         return self.sampling_event_device.sampling_event.collection
 
-    def date_in_range(self,date_info,time_info,date_down,date_up,tmezone):
+    def date_in_range(self,date_info,time_info,date_down,date_up,timezone):
         dlen = 0
         tlen = 0
 

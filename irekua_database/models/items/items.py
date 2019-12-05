@@ -367,8 +367,8 @@ class Item(IrekuaModelBaseUser):
 
         sampling_event = self.sampling_event_device.sampling_event
 
-        deployed = self.sampling_event_device.date_down_on
-        recovered = self.sampling_event_device.date_up_on
+        deployed = self.sampling_event_device.deployed_on
+        recovered = self.sampling_event_device.recovered_on
         date_info = {'year': self.captured_on_year,'month': self.captured_on_month,'day': self.captured_on_day}
         time_info = {'hour': self.captured_on_hour,'minute': self.captured_on_minute,'second': self.captured_on_second}
         timezone = self.captured_on_timezone

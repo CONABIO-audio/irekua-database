@@ -1,4 +1,7 @@
 from django.contrib.postgres.fields import JSONField
+from django.contrib.gis.db.models import PointField
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.gis.geos import Point
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -29,6 +32,35 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         help_text=_('Date at which the device stoped capturing information.'),
         blank=True,
         null=True)
+
+    geo_ref = PointField(
+        blank=True,
+        null=True,
+        db_column='geo_ref',
+        verbose_name=_('geo ref'),
+        help_text=_('Georeference of deployed device as Geometry'),
+        spatial_index=True)
+    latitude = models.FloatField(
+        db_column='latitude',
+        verbose_name=_('latitude'),
+        help_text=_('Latitude of deployed device (in decimal degrees)'),
+        validators=[MinValueValidator(-90), MaxValueValidator(90)],
+        null=True,
+        blank=True)
+    longitude = models.FloatField(
+        db_column='longitude',
+        verbose_name=_('longitude'),
+        help_text=_('Longitude of deployed device (in decimal degrees)'),
+        validators=[MinValueValidator(-180), MaxValueValidator(180)],
+        null=True,
+        blank=True)
+    altitude = models.FloatField(
+        blank=True,
+        db_column='altitude',
+        verbose_name=_('altitude'),
+        help_text=_('Altitude of deployed device (in meters)'),
+        null=True)
+
     collection_device = models.ForeignKey(
         'CollectionDevice',
         db_column='collection_device_id',
@@ -125,7 +157,22 @@ class SamplingEventDevice(IrekuaModelBaseUser):
                 "Recovery date cannot be latter that sampling event ending date")
             raise ValidationError(message)
 
+    def sync_coordinates_and_georef(self):
+        if self.latitude is not None and self.longitude is not None:
+            self.geo_ref = Point([self.longitude, self.latitude])
+            return
+
+        if self.geo_ref:
+            self.latitude = self.geo_ref.y
+            self.longitude = self.geo_ref.x
+            return
+
+        msg = _('Geo reference or longitude-latitude must be provided')
+        raise ValidationError({'geo_ref': msg})
+
     def clean(self):
+        self.sync_coordinates_and_georef()
+
         try:
             self.validate_licence()
         except ValidationError as error:

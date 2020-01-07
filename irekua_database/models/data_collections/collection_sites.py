@@ -62,10 +62,14 @@ class CollectionSite(IrekuaModelBaseUser):
         )
 
     def __str__(self):
-        msg = _('Site %(site)s of collection %(collection)s')
-        params = dict(
-            site=str(self.site),
-            collection=str(self.collection))
+        if self.internal_id:
+            return self.internal_id
+
+        if self.site.name:
+            return self.site.name
+
+        msg = _('Site %(id)s')
+        params = dict(id=str(self.id))
         return msg % params
 
     def clean(self):

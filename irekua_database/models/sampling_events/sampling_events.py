@@ -74,10 +74,10 @@ class SamplingEvent(IrekuaModelBaseUser):
         ordering = ['-created_on']
 
     def __str__(self):
-        msg = _('Sampling Event %(site)s %(date)s')
+        msg = _('%(site)s - %(date)s')
         params = dict(
             site=str(self.collection_site),
-            date=self.started_on.strftime('%m-%Y'))
+            date=self.started_on.strftime('%m/%Y'))
         return msg % params
 
     @property

@@ -261,74 +261,15 @@ class Item(IrekuaModelBaseUser):
     def collection(self):
         return self.sampling_event_device.sampling_event.collection
 
-    def date_in_range(self,date_info,time_info,date_down,date_up,timezone):
-        dlen = 0
-        tlen = 0
-
-        for k in date_info.keys():
-            if date_info[k] is not None:
-                dlen += 1
-
-        for k in time_info.keys():
-            if time_info[k] is not None:
-                tlen += 1
-
-        tz = pytz_timezone(timezone)
-
-        date_down_ = date_down.astimezone(tz)
-        date_up_ = date_up.astimezone(tz)
-
-        hdate = None
-        hdate_up = None
-        hdate_down = None
-
-        if dlen == 1:
-            hdate = datetime.datetime(date_info["year"],1,1)
-            hdate_down = datetime.datetime(date_down_.year,1,1)
-            hdate_up = datetime.datetime(date_up_.year,1,1)
-        elif dlen == 2:
-            hdate = datetime.datetime(date_info["year"],date_info["month"],1)
-            hdate_down = datetime.datetime(date_down_.year,date_down_.month,1)
-            hdate_up = datetime.datetime(date_up_.year,date_up_.month,1)
-        elif dlen == 3:
-            if tlen == 0:
-                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"])
-                hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day)
-                hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day)
-            elif tlen == 1:
-                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],time_info["hour"])
-                hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day,date_down_.hour)
-                hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day,date_up_.hour)
-            elif tlen == 2:
-                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],time_info["hour"],time_info["minute"])
-                hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day,date_down_.hour,date_down_.minute)
-                hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day,date_up_.hour,date_up_.minute)
-            elif tlen == 3:
-                hdate = datetime.datetime(date_info["year"],date_info["month"],date_info["day"],time_info["hour"],time_info["minute"],time_info["second"])
-                hdate_down = datetime.datetime(date_down_.year,date_down_.month,date_down_.day,date_down_.hour,date_down_.minute,date_down_.second)
-                hdate_up = datetime.datetime(date_up_.year,date_up_.month,date_up_.day,date_up_.hour,date_up_.minute,date_up_.second)
-        else:
-            return False
-
-        hdate = tz.localize(hdate)
-        hdate_up = tz.localize(hdate_up)
-        hdate_down = tz.localize(hdate_down)
-
-        if hdate >= hdate_down and hdate <= hdate_up:
-            return True
-        else:
-            return False
-        
-
     def check_captured_on(self):
         if self.captured_on is not None:
-           captured_on = self.captured_on
+            captured_on = self.captured_on
         else:
-           if self.captured_on_timezone:
-               tz = pytz_timezone(self.captured_on_timezone)
-               captured_on = datetime.datetime.now(tz=tz)
-           else:
-               captured_on = timezone.now()
+            if self.captured_on_timezone:
+                tz = pytz_timezone(self.captured_on_timezone)
+                captured_on = datetime.datetime.now(tz=tz)
+            else:
+                captured_on = timezone.now()
 
         if (
                 self.captured_on_year and
@@ -365,28 +306,20 @@ class Item(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({'created_by': error})
 
-        sampling_event = self.sampling_event_device.sampling_event
-
-        deployed = self.sampling_event_device.deployed_on
-        recovered = self.sampling_event_device.recovered_on
-        date_info = {'year': self.captured_on_year,'month': self.captured_on_month,'day': self.captured_on_day}
-        time_info = {'hour': self.captured_on_hour,'minute': self.captured_on_minute,'second': self.captured_on_second}
-        timezone = self.captured_on_timezone
-
-        if not self.date_in_range(date_info,time_info,deployed,recovered,timezone):
+        sampling_event_device = self.sampling_event_device
+        try:
+            self.sampling_event_device.validate_date({
+                'year': self.captured_on_year,
+                'month': self.captured_on_month,
+                'day': self.captured_on_day,
+                'hour': self.captured_on_hour,
+                'minute': self.captured_on_minute,
+                'second': self.captured_on_second,
+                'timezone': self.captured_on_timezone})
+        except ValidationError as error:
             raise ValidationError({'captured_on': error})
 
-        # try:
-        #     self.sampling_event.validate_date({
-        #         'year': self.captured_on_year,
-        #         'month': self.captured_on_month,
-        #         'day': self.captured_on_day,
-        #         'hour': self.captured_on_hour,
-        #         'minute': self.captured_on_minute,
-        #         'second': self.captured_on_second})
-        # except ValidationError as error:
-        #     raise ValidationError({'captured_on': error})
-
+        sampling_event = sampling_event_device.sampling_event
         collection = sampling_event.collection
 
         try:

@@ -4,6 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from timezonefinder import TimezoneFinder
 
 from irekua_database.models.base import IrekuaModelBaseUser
 from irekua_database.utils import translate_doc
@@ -91,9 +92,7 @@ class Site(IrekuaModelBaseUser):
         if self.name is not None:
             name = ': ' + self.name
         msg = _('Site %(id)s%(name)s')
-        params = dict(
-            id=self.id,
-            name=name)
+        params = dict(id=self.id, name=name)
         return msg % params
 
     def clean(self):
@@ -149,5 +148,9 @@ class Site(IrekuaModelBaseUser):
 
     @property
     def sampling_events(self):
-        return SamplingEvent.objects.filter(
-            collection_site__site=self)
+        return SamplingEvent.objects.filter(collection_site__site=self)
+
+    @property
+    def timezone(self):
+        tf = TimezoneFinder()
+        return tf.timezone_at(lng=self.longitude, lat=self.latitude)

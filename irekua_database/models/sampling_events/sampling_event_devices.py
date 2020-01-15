@@ -1,3 +1,6 @@
+import datetime
+
+from pytz import timezone as pytz_timezone
 from django.contrib.postgres.fields import JSONField
 from django.contrib.gis.db.models import PointField
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -157,6 +160,65 @@ class SamplingEventDevice(IrekuaModelBaseUser):
                 "Recovery date cannot be latter that sampling event ending date")
             raise ValidationError(message)
 
+    def get_best_date_estimate(self, datetime_info, time_zone):
+        year = datetime_info.get('year', None)
+        month = datetime_info.get('month', None)
+        day = datetime_info.get('day', None)
+        hour = datetime_info.get('hour', None)
+        minute = datetime_info.get('minute', None)
+        second = datetime_info.get('second', None)
+
+        if day is None:
+            day = self.deployed_on.day
+
+        if month is None:
+            month = self.deployed_on.month
+            day = 1
+
+        if year is None:
+            if self.deployed_on.year != self.recovered_on.year:
+                message = _(
+                    'No year was provided for date estimation and couldn\'t'
+                    ' be inferred from deployment.')
+                raise ValidationError(message)
+
+            year = self.deployed_on.year
+
+        if second is None:
+            second = self.deployed_on.second
+
+        if minute is None:
+            minute = self.deployed_on.minute
+            second = self.deployed_on.second
+
+        if hour is None:
+            hour = self.deployed_on.hour
+            minute = self.deployed_on.minute
+            second = self.deployed_on.second
+
+        return datetime.datetime(year, month, day, hour, minute, second, 0, time_zone)
+
+    def get_timezone(self, time_zone=None):
+        if time_zone is None:
+            time_zone = self.sampling_event.collection_site.site.timezone
+
+        return pytz_timezone(time_zone)
+
+    def validate_date(self, date_info):
+        time_zone = self.get_timezone(time_zone=date_info.get('time_zone', None))
+        hdate = self.get_best_date_estimate(date_info, time_zone)
+        hdate_up = self.recovered_on.astimezone(time_zone)
+        hdate_down = self.deployed_on.astimezone(time_zone)
+
+        if hdate < hdate_down or hdate > hdate_up:
+            mssg = _(
+                'Date is not within the ranges in which the device was deployed: \n'
+                'Deployment: {} \t Recovery: {} \t Date: {}').format(
+                    hdate_down,
+                    hdate_up,
+                    hdate)
+            raise ValidationError(mssg)
+
     def sync_coordinates_and_georef(self):
         if self.latitude is not None and self.longitude is not None:
             self.geo_ref = Point([self.longitude, self.latitude])
@@ -170,6 +232,15 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         msg = _('Geo reference or longitude-latitude must be provided')
         raise ValidationError({'geo_ref': msg})
 
+    def save(self, *args, **kwargs):
+        if self.deployed_on is None:
+            self.deployed_on = self.sampling_event.started_on
+
+        if self.recovered_on is None:
+            self.recovered_on = self.sampling_event.ended_on
+
+        return super().save(*args, **kwargs)
+
     def clean(self):
         self.sync_coordinates_and_georef()
 
@@ -179,10 +250,8 @@ class SamplingEventDevice(IrekuaModelBaseUser):
             raise ValidationError({'licence': error})
 
         try:
-            sampling_event_type = (
-                self.sampling_event.sampling_event_type)
-            device_type = (
-                self.collection_device.physical_device.device.device_type)
+            sampling_event_type = self.sampling_event.sampling_event_type
+            device_type = self.collection_device.physical_device.device.device_type
 
             sampling_event_device_type = (
                 sampling_event_type.validate_and_get_device_type(

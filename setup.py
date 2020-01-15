@@ -25,6 +25,7 @@ setup(
         'sorl-thumbnail',
         'pycountry',
         'Pillow',
+        'timezonefinder',
     ],
     classifiers=[
         'Environment :: Web Environment',

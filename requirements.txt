@@ -1,9 +1,10 @@
 attrs==19.3.0
-Django==2.2.8
-importlib-metadata==1.1.0
+Django==2.2.7
+importlib-metadata==0.23
 irekua-dev-settings==0.1
 jsonschema==3.2.0
-more-itertools==8.0.0
+more-itertools==7.2.0
+numpy==1.18.1
 Pillow==6.2.1
 psycopg2-binary==2.8.4
 pycountry==19.8.18
@@ -12,5 +13,6 @@ pytz==2019.3
 six==1.13.0
 sorl-thumbnail==12.5.0
 sqlparse==0.3.0
+timezonefinder==4.2.0
 zipp==0.6.0
 

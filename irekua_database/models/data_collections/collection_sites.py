@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
 
 from irekua_database.models.items.items import Item
+from irekua_database.models.sampling_events.sampling_event_devices import SamplingEventDevice
 from irekua_database.models.base import IrekuaModelBaseUser
 
 
@@ -92,3 +94,7 @@ class CollectionSite(IrekuaModelBaseUser):
         queryset = Item.objects.filter(
             sampling_event_device__sampling_event__collection_site=self)
         return queryset
+
+    @cached_property
+    def deployments(self):
+        return SamplingEventDevice.objects.filter(sampling_event__collection_site=self)

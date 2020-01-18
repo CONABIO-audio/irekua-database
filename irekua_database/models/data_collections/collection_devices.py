@@ -50,11 +50,9 @@ class CollectionDevice(IrekuaModelBaseUser):
         )
 
     def __str__(self):
-        msg = 'Device %(device_id)s from collection %(collection_id)s'
-        params = dict(
-            device_id=str(self.physical_device),
-            collection_id=str(self.collection))
-        return msg % params
+        if self.internal_id:
+            return self.internal_id
+        return _('Collection device {}').format(self.id)
 
     def clean(self):
         try:

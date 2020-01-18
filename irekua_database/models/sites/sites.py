@@ -4,6 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.utils.functional import cached_property
 from timezonefinder import TimezoneFinder
 
 from irekua_database.models.base import IrekuaModelBaseUser
@@ -84,7 +85,7 @@ class Site(IrekuaModelBaseUser):
             self.longitude = self.geo_ref.x
             return
 
-        msg = _('Geo reference or longitude-latitude must be provided')
+        msg = _('No latitude or longitude was provided')
         raise ValidationError({'geo_ref': msg})
 
     def __str__(self):
@@ -141,12 +142,12 @@ class Site(IrekuaModelBaseUser):
 
         return False
 
-    @property
+    @cached_property
     def items(self):
         return Item.objects.filter(
             sampling_event_device__sampling_event__collection_site__site=self)
 
-    @property
+    @cached_property
     def sampling_events(self):
         return SamplingEvent.objects.filter(collection_site__site=self)
 

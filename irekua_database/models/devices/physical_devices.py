@@ -1,6 +1,7 @@
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
@@ -74,13 +75,18 @@ class PhysicalDevice(IrekuaModelBaseUser):
 
         super(PhysicalDevice, self).clean()
 
-    @property
+    @cached_property
     def items(self):
         return Item.objects.filter(
             sampling_event_device__collection_device__physical_device=self)
 
-    @property
+    @cached_property
     def sampling_events(self):
+        return SamplingEventDevice.objects.filter(
+            collection_device__physical_device=self)
+
+    @cached_property
+    def deployments(self):
         return SamplingEventDevice.objects.filter(
             collection_device__physical_device=self)
 

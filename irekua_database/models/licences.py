@@ -79,9 +79,9 @@ class Licence(IrekuaModelBaseUser):
         ordering = ['-created_on']
 
     def __str__(self):
-        msg = _('Licence of type {type} created on {date}').format(
+        msg = _('{type} - {date}').format(
             type=str(self.licence_type),
-            date=self.created_on)
+            date=self.created_on.strftime("%d/%m/%Y"))
         return msg
 
     def clean(self):

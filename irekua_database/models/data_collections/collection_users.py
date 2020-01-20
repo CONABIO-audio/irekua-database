@@ -46,10 +46,10 @@ class CollectionUser(IrekuaModelBaseUser):
         )
 
     def __str__(self):
-        msg = _('User %(user)s of collection %(collection)s')
+        msg = _('%(user)s (%(role)s)')
         params = dict(
             user=str(self.user),
-            collection=str(self.collection))
+            role=str(self.role))
         return msg % params
 
     def clean(self):

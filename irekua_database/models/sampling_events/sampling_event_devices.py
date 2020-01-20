@@ -111,8 +111,8 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         ordering = ['-created_on']
 
     def __str__(self):
-        msg = _('Deployed Device {id}')
-        msg = msg.format(id=str(self.id))
+        msg = _('{} (deployed)')
+        msg = msg.format(self.collection_device.internal_id)
         return msg
 
     def validate_licence(self):

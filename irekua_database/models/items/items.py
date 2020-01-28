@@ -276,7 +276,7 @@ class Item(IrekuaModelBaseUser):
                 self.captured_on_month and
                 self.captured_on_day):
 
-            captured_on.replace(
+            captured_on = captured_on.replace(
                 year=self.captured_on_year,
                 month=self.captured_on_month,
                 day=self.captured_on_day)
@@ -286,7 +286,7 @@ class Item(IrekuaModelBaseUser):
                     self.captured_on_minute and
                     self.captured_on_second):
 
-                captured_on.replace(
+                captured_on = captured_on.replace(
                     hour=self.captured_on_hour,
                     minute=self.captured_on_minute,
                     second=self.captured_on_second)

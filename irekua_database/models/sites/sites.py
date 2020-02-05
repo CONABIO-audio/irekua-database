@@ -89,11 +89,10 @@ class Site(IrekuaModelBaseUser):
         raise ValidationError({'geo_ref': msg})
 
     def __str__(self):
-        name = ''
         if self.name is not None:
-            name = ': ' + self.name
-        msg = _('Site %(id)s%(name)s')
-        params = dict(id=self.id, name=name)
+            return self.name
+        msg = _('Site %(id)s%')
+        params = dict(id=self.id)
         return msg % params
 
     def clean(self):

@@ -11,6 +11,7 @@ from irekua_database.models.base import IrekuaModelBase
 from .collection_device_types import CollectionDeviceType
 from .collection_roles import CollectionRole
 from .collection_item_types import CollectionItemType
+from irekua_database.models.data_collections.collection_users import CollectionUser
 
 
 class CollectionType(IrekuaModelBase):
@@ -451,3 +452,8 @@ class CollectionType(IrekuaModelBase):
 
     def is_admin(self, user):
         return self.administrators.filter(id=user.id).exists()
+
+    @property
+    def users(self):
+        return CollectionUser.objects.filter(
+            collection__collection_type=self)

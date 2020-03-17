@@ -12,6 +12,9 @@ from .collection_device_types import CollectionDeviceType
 from .collection_roles import CollectionRole
 from .collection_item_types import CollectionItemType
 from irekua_database.models.data_collections.collection_users import CollectionUser
+from irekua_database.models.data_collections.data_collections import Collection
+from irekua_database.models.items.items import Item
+from irekua_database.models.annotations.annotations import Annotation
 
 
 class CollectionType(IrekuaModelBase):
@@ -457,3 +460,31 @@ class CollectionType(IrekuaModelBase):
     def users(self):
         return CollectionUser.objects.filter(
             collection__collection_type=self)
+
+    @property
+    def collections(self):
+        return Collection.objects.filter(collection_type=self)
+
+    @property
+    def items(self):
+        return Item.objects.filter(
+            sampling_event_device__sampling_event__collection__collection_type=self
+        )
+
+    @property
+    def annotations(self):
+        return Annotation.objects.filter(
+            item__sampling_event_device__sampling_event__collection__collection_type=self
+        )
+
+    @property
+    def last_item(self):
+        return Item.objects.filter(
+            sampling_event_device__sampling_event__collection__collection_type=self
+        ).order_by('created_on').first()
+
+    @property
+    def last_annotation(self):
+        return Annotation.objects.filter(
+            item__sampling_event_device__sampling_event__collection__collection_type=self
+        ).order_by('created_on').first()

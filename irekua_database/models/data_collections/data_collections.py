@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.utils import empty_JSON
 from irekua_database.models.base import IrekuaModelBaseUser
 from irekua_database.models.items.items import Item
+from irekua_database.models.annotations.annotations import Annotation
 
 from .collection_users import CollectionUser
 from .collection_devices import CollectionDevice
@@ -174,9 +175,31 @@ class Collection(IrekuaModelBaseUser):
         super(Collection, self).clean()
 
     @property
+    def all_admin(self):
+        return self.administrators.all()
+
+    @property
     def items(self):
         return Item.objects.filter(
             sampling_event_device__sampling_event__collection=self)
+
+    @property
+    def last_item(self):
+        return Item.objects.filter(
+            sampling_event_device__sampling_event__collection=self
+        ).order_by('created_on').first()
+
+    @property
+    def annotations(self):
+        return Annotation.objects.filter(
+            item__sampling_event_device__sampling_event__collection=self
+        )
+
+    @property
+    def last_annotation(self):
+        return Annotation.objects.filter(
+            item__sampling_event_device__sampling_event__collection=self
+        ).order_by('created_on').first()
 
     def add_user(self, user, role, metadata):
         CollectionUser.objects.create(  # pylint: disable=E1101

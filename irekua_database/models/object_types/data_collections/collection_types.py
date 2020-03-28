@@ -481,10 +481,10 @@ class CollectionType(IrekuaModelBase):
     def last_item(self):
         return Item.objects.filter(
             sampling_event_device__sampling_event__collection__collection_type=self
-        ).order_by('created_on').first()
+        ).order_by('-created_on').first()
 
     @property
     def last_annotation(self):
         return Annotation.objects.filter(
             item__sampling_event_device__sampling_event__collection__collection_type=self
-        ).order_by('created_on').first()
+        ).order_by('-created_on').first()

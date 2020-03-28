@@ -174,6 +174,14 @@ class Collection(IrekuaModelBaseUser):
             raise ValidationError({'metadata': msg})
         super(Collection, self).clean()
 
+    def add_administrator(self, user):
+        self.administrators.add(user)
+        self.save()
+
+    def remove_administrator(self, user):
+        self.administrators.remove(user)
+        self.save()
+
     @property
     def all_admin(self):
         return self.administrators.all()

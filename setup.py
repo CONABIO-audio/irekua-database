@@ -12,10 +12,12 @@ version = {}
 with open("irekua_database/version.py") as fp:
     exec(fp.read(), version)
 
+print(version)
+
 
 setup(
     name='irekua-database',
-    version=version['version'],
+    version=version['__version__'],
     packages=find_packages(exclude=['project']),
     include_package_data=True,
     license='BSD License',
@@ -43,6 +45,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],

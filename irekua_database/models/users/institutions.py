@@ -2,10 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 import pycountry
 
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 
 
-class Institution(IrekuaModelBaseUser):
+class Institution(base.IrekuaModelBaseUser):
     COUNTRIES = (
         (country.alpha_2, country.name) for country in pycountry.countries
     )

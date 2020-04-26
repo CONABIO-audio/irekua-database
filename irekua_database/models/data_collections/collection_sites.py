@@ -8,10 +8,10 @@ from irekua_database.utils import empty_JSON
 
 from irekua_database.models.items.items import Item
 from irekua_database.models.sampling_events.sampling_event_devices import SamplingEventDevice
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 
 
-class CollectionSite(IrekuaModelBaseUser):
+class CollectionSite(base.IrekuaModelBaseUser):
     site_type = models.ForeignKey(
         'SiteType',
         on_delete=models.PROTECT,

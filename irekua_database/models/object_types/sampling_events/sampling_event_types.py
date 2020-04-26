@@ -6,12 +6,12 @@ from django.contrib.postgres.fields import JSONField
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 from .sampling_event_type_devices import SamplingEventTypeDeviceType
 
 
-class SamplingEventType(IrekuaModelBase):
+class SamplingEventType(base.IrekuaModelBase):
     name = models.CharField(
         max_length=128,
         unique=True,

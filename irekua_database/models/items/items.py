@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import hash_file
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 from sorl.thumbnail import ImageField
 
 
@@ -70,7 +70,7 @@ def get_thumbnail_path(instance, filename):
         ext=extension)
     return path
 
-class Item(IrekuaModelBaseUser):
+class Item(base.IrekuaModelBaseUser):
     hash_string = None
     item_size = None
 

@@ -6,11 +6,11 @@ from django.utils import timezone
 
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import translate_doc
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 
 
 @translate_doc
-class Licence(IrekuaModelBaseUser):
+class Licence(base.IrekuaModelBaseUser):
     help_text = _('''
     Licence Model
 

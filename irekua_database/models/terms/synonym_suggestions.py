@@ -5,10 +5,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 
 
-class SynonymSuggestion(IrekuaModelBaseUser):
+class SynonymSuggestion(base.IrekuaModelBaseUser):
     source = models.ForeignKey(
         'Term',
         on_delete=models.CASCADE,

@@ -2,10 +2,10 @@ from django.db import models
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class Role(IrekuaModelBase):
+class Role(base.IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         unique=True,

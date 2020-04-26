@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 from irekua_database.models.items.items import Item
 from irekua_database.models.annotations.annotations import Annotation
 
@@ -13,7 +13,7 @@ from .collection_devices import CollectionDevice
 from .collection_sites import CollectionSite
 
 
-class Collection(IrekuaModelBaseUser):
+class Collection(base.IrekuaModelBaseUser):
     collection_type = models.ForeignKey(
         'CollectionType',
         on_delete=models.PROTECT,

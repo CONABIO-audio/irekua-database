@@ -4,10 +4,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 
 
-class CollectionUser(IrekuaModelBaseUser):
+class CollectionUser(base.IrekuaModelBaseUser):
     collection = models.ForeignKey(
         'Collection',
         db_column='collection_id',

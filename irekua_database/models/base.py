@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from irekua_database.models.users import users
+
 
 class IrekuaModelBase(models.Model):
     created_on = models.DateTimeField(
@@ -22,7 +24,7 @@ class IrekuaModelBase(models.Model):
 
 class IrekuaModelBaseUser(IrekuaModelBase):
     created_by = models.ForeignKey(
-        'User',
+        users.User,
         on_delete=models.PROTECT,
         db_column='creator_id',
         related_name='%(class)s_created_by',
@@ -31,7 +33,7 @@ class IrekuaModelBaseUser(IrekuaModelBase):
         null=True,
         help_text=_('Creator of object'))
     modified_by = models.ForeignKey(
-        'User',
+        users.User,
         db_column='modified_by',
         on_delete=models.SET_NULL,
         editable=False,

@@ -3,14 +3,14 @@ from django.core.exceptions import ValidationError
 from django.contrib.postgres.fields import JSONField
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
 
 
-class Visualizer(IrekuaModelBase):
+class Visualizer(base.IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         db_column='name',

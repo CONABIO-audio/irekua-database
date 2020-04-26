@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class AnnotationTool(IrekuaModelBase):
+class AnnotationTool(base.IrekuaModelBase):
     annotation_type = models.ForeignKey(
         'AnnotationType',
         on_delete=models.CASCADE,

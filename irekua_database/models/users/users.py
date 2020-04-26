@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 
 from irekua_database.utils import translate_doc
-from irekua_database.models.data_collections.data_collections import Collection
 
 
 @translate_doc
@@ -56,7 +55,7 @@ class User(AbstractUser):
         verbose_name = _('User')
         verbose_name_plural = _('Users')
         unique_together = [
-            ['email',],
+            ['email', ],
         ]
 
     @property
@@ -69,6 +68,4 @@ class User(AbstractUser):
 
     @cached_property
     def managed_collections(self):
-        queryset = Collection.objects.filter(
-            collection_type__in=self.collectiontype_set.all())
-        return queryset
+        return self.collectiontype_set.all()

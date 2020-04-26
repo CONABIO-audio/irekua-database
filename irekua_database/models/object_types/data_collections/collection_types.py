@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 from .collection_device_types import CollectionDeviceType
 from .collection_roles import CollectionRole
@@ -17,7 +17,7 @@ from irekua_database.models.items.items import Item
 from irekua_database.models.annotations.annotations import Annotation
 
 
-class CollectionType(IrekuaModelBase):
+class CollectionType(base.IrekuaModelBase):
     """
     *Collection types* function as a templates for collection creation. Its
     utility stems from the fact that the configuration of a collection can be

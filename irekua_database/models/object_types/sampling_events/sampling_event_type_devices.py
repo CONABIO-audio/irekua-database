@@ -6,10 +6,10 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class SamplingEventTypeDeviceType(IrekuaModelBase):
+class SamplingEventTypeDeviceType(base.IrekuaModelBase):
     sampling_event_type = models.ForeignKey(
         'SamplingEventType',
         on_delete=models.CASCADE,

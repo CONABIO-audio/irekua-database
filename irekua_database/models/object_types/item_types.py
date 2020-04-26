@@ -3,13 +3,13 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
 mimetypes.init()
 
 
-class ItemType(IrekuaModelBase):
+class ItemType(base.IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         db_column='name',
@@ -72,7 +72,7 @@ class ItemType(IrekuaModelBase):
             msg = _(
                 'Event type %(event_type)s is invalid for item '
                 'type %(item_type)s')
-            params = dict(even_type=str(event_type), item_type=str(self))
+            params = dict(event_type=str(event_type), item_type=str(self))
             raise ValidationError(msg, params=params)
 
     def add_event_type(self, event_type):

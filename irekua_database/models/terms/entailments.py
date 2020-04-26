@@ -4,10 +4,10 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from irekua_database.models.object_types.entailment_types import EntailmentType
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class Entailment(IrekuaModelBase):
+class Entailment(base.IrekuaModelBase):
     source = models.ForeignKey(
         'Term',
         related_name='entailment_source',

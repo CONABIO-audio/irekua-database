@@ -4,10 +4,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class Synonym(IrekuaModelBase):
+class Synonym(base.IrekuaModelBase):
     source = models.ForeignKey(
         'Term',
         related_name='synonym_source',

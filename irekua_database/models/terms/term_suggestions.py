@@ -5,10 +5,10 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 
 
-class TermSuggestion(IrekuaModelBaseUser):
+class TermSuggestion(base.IrekuaModelBaseUser):
     term_type = models.ForeignKey(
         'TermType',
         on_delete=models.CASCADE,

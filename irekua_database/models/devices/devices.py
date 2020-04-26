@@ -6,10 +6,10 @@ from django.contrib.postgres.fields import JSONField
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class Device(IrekuaModelBase):
+class Device(base.IrekuaModelBase):
     device_type = models.ForeignKey(
         'DeviceType',
         on_delete=models.PROTECT,

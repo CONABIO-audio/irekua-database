@@ -6,10 +6,10 @@ from django.core.exceptions import ValidationError
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class CollectionItemType(IrekuaModelBase):
+class CollectionItemType(base.IrekuaModelBase):
     collection_type = models.ForeignKey(
         'CollectionType',
         on_delete=models.CASCADE,

@@ -4,11 +4,11 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 from irekua_database.models import Item
 
 
-class SamplingEvent(IrekuaModelBaseUser):
+class SamplingEvent(base.IrekuaModelBaseUser):
     sampling_event_type = models.ForeignKey(
         'SamplingEventType',
         on_delete=models.PROTECT,

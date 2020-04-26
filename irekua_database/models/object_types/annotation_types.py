@@ -6,10 +6,10 @@ from django.core.exceptions import ValidationError
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
-class AnnotationType(IrekuaModelBase):
+class AnnotationType(base.IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         unique=True,
@@ -53,5 +53,5 @@ class AnnotationType(IrekuaModelBase):
                 instance=annotation)
         except ValidationError as error:
             msg = _('Invalid annotation for annotation type %(type)s. Error: %(error)s')
-            params = dict(type=str(self), error=str(error))
+            params = dict(type=str(self), error=', '.join(error.messages))
             raise ValidationError(msg, params=params)

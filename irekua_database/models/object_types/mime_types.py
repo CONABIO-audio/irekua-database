@@ -8,13 +8,13 @@ from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
 
-from irekua_database.models.base import IrekuaModelBase
+from irekua_database.models import base
 
 
 mimetypes.init()
 
 
-class MimeType(IrekuaModelBase):
+class MimeType(base.IrekuaModelBase):
     MIME_TYPES = [
         (value, value) for value in
         sorted(list(set(mimetypes.types_map.values())))

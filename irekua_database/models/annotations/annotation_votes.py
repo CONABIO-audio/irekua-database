@@ -3,10 +3,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.models import base
 
 
-class AnnotationVote(IrekuaModelBaseUser):
+class AnnotationVote(base.IrekuaModelBaseUser):
     annotation = models.ForeignKey(
         'Annotation',
         on_delete=models.CASCADE,

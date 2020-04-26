@@ -7,9 +7,15 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
+
+version = {}
+with open("irekua_database/version.py") as fp:
+    exec(fp.read(), version)
+
+
 setup(
     name='irekua-database',
-    version='0.1.1',
+    version=version['version'],
     packages=find_packages(exclude=['project']),
     include_package_data=True,
     license='BSD License',

@@ -12,8 +12,6 @@ version = {}
 with open("irekua_database/version.py") as fp:
     exec(fp.read(), version)
 
-print(version)
-
 
 setup(
     name='irekua-database',

@@ -1,6 +1,6 @@
 asgiref==3.2.7
 attrs==19.3.0
-Django==3.0.5
+Django==3.0.7
 importlib-metadata==1.6.0
 irekua-dev-settings==0.1
 jsonschema==3.2.0

@@ -160,6 +160,34 @@ class SamplingEventDevice(base.IrekuaModelBaseUser):
                 "Recovery date cannot be latter that sampling event ending date")
             raise ValidationError(message)
 
+    def validate_item_datetimes(self):
+        start = self.deployed_on if self.deployed_on else None
+        end = self.recovered_on if self.recovered_on else None
+
+        if (start is None) and (end is None):
+            return
+
+        for item in self.item_set.all():
+            if not item.captured_on:
+                continue
+
+            if start is not None:
+                if item.captured_on < start:
+                    message = _(
+                        'There is an item registered in this deployment that '
+                        'was captured earlier that the registered deployment '
+                        'date.')
+                    raise ValidationError(message)
+
+            if end is not None:
+                if item.captured_on > end:
+                    message = _(
+                        'There is an item registered in this deployment that '
+                        'was captured later that the registered device '
+                        'recovery date.')
+                    raise ValidationError(message)
+
+
     def get_best_date_estimate(self, datetime_info, time_zone):
         year = datetime_info.get('year', None)
         month = datetime_info.get('month', None)
@@ -272,6 +300,11 @@ class SamplingEventDevice(base.IrekuaModelBaseUser):
 
         try:
             self.validate_recovered_on()
+        except ValidationError as error:
+            raise ValidationError({'recovered_on': error})
+
+        try:
+            self.validate_item_datetimes()
         except ValidationError as error:
             raise ValidationError({'recovered_on': error})
 

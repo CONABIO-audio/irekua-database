@@ -186,28 +186,28 @@ class Collection(base.IrekuaModelBaseUser):
     def all_admin(self):
         return self.administrators.all()
 
-    @property
-    def items(self):
-        return Item.objects.filter(
-            sampling_event_device__sampling_event__collection=self)
-
-    @property
-    def last_item(self):
-        return Item.objects.filter(
-            sampling_event_device__sampling_event__collection=self
-        ).order_by('created_on').first()
-
-    @property
-    def annotations(self):
-        return Annotation.objects.filter(
-            item__sampling_event_device__sampling_event__collection=self
-        )
-
-    @property
-    def last_annotation(self):
-        return Annotation.objects.filter(
-            item__sampling_event_device__sampling_event__collection=self
-        ).order_by('created_on').first()
+    # @property
+    # def items(self):
+    #     return Item.objects.filter(
+    #         sampling_event_device__sampling_event__collection=self)
+    #
+    # @property
+    # def last_item(self):
+    #     return Item.objects.filter(
+    #         sampling_event_device__sampling_event__collection=self
+    #     ).order_by('created_on').first()
+    #
+    # @property
+    # def annotations(self):
+    #     return Annotation.objects.filter(
+    #         item__sampling_event_device__sampling_event__collection=self
+    #     )
+    #
+    # @property
+    # def last_annotation(self):
+    #     return Annotation.objects.filter(
+    #         item__sampling_event_device__sampling_event__collection=self
+    #     ).order_by('created_on').first()
 
     def add_user(self, user, role, metadata):
         CollectionUser.objects.create(  # pylint: disable=E1101

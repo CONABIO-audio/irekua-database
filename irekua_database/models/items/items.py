@@ -2,7 +2,7 @@ import os
 import mimetypes
 import datetime
 
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from pytz import timezone as pytz_timezone

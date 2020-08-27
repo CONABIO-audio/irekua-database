@@ -1,7 +1,7 @@
 import datetime
 
 from pytz import timezone as pytz_timezone
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.contrib.gis.db.models import PointField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.gis.geos import Point

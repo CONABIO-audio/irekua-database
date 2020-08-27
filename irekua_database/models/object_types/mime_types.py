@@ -2,7 +2,7 @@ import mimetypes
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance

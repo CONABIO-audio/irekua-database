@@ -1,7 +1,7 @@
 import os
 import mimetypes
-import datetime
 
+from django.conf import settings
 from django.db.models import JSONField
 from django.core.exceptions import ValidationError
 from django.utils import timezone
@@ -45,6 +45,7 @@ def get_item_path(instance, filename):
         ext=extension)
     return path
 
+
 def get_thumbnail_path(instance, filename):
     path_fmt = os.path.join(
         'thumbnails',
@@ -69,6 +70,7 @@ def get_thumbnail_path(instance, filename):
         hash=hash_string,
         ext=extension)
     return path
+
 
 class Item(base.IrekuaModelBaseUser):
     hash_string = None
@@ -262,36 +264,37 @@ class Item(base.IrekuaModelBaseUser):
         return self.sampling_event_device.sampling_event.collection
 
     def check_captured_on(self):
+        if (
+                (self.captured_on_year is None) or
+                (self.captured_on_month is None) or
+                (self.captured_on_day is None)):
+            return
+
+        tz = timezone.get_default_timezone()
+        if self.captured_on_timezone:
+            tz = pytz_timezone(self.captured_on_timezone)
+
         if self.captured_on is not None:
-            captured_on = self.captured_on
+            captured_on = timezone.localtime(self.captured_on, timezone=tz)
         else:
-            if self.captured_on_timezone:
-                tz = pytz_timezone(self.captured_on_timezone)
-                captured_on = datetime.datetime.now(tz=tz)
-            else:
-                captured_on = timezone.now()
+            captured_on = timezone.localtime(timezone=tz)
+
+        captured_on = captured_on.replace(
+            year=self.captured_on_year,
+            month=self.captured_on_month,
+            day=self.captured_on_day)
 
         if (
-                self.captured_on_year and
-                self.captured_on_month and
-                self.captured_on_day):
+                (self.captured_on_hour is not None) and
+                (self.captured_on_minute is not None) and
+                (self.captured_on_second is not None)):
 
             captured_on = captured_on.replace(
-                year=self.captured_on_year,
-                month=self.captured_on_month,
-                day=self.captured_on_day)
+                hour=self.captured_on_hour,
+                minute=self.captured_on_minute,
+                second=self.captured_on_second)
 
-            if (
-                    self.captured_on_hour and
-                    self.captured_on_minute and
-                    self.captured_on_second):
-
-                captured_on = captured_on.replace(
-                    hour=self.captured_on_hour,
-                    minute=self.captured_on_minute,
-                    second=self.captured_on_second)
-
-            self.captured_on = captured_on
+        self.captured_on = captured_on
 
     def clean(self):
         self.check_captured_on()
@@ -315,7 +318,7 @@ class Item(base.IrekuaModelBaseUser):
                 'hour': self.captured_on_hour,
                 'minute': self.captured_on_minute,
                 'second': self.captured_on_second,
-                'timezone': self.captured_on_timezone})
+                'time_zone': self.captured_on_timezone})
         except ValidationError as error:
             raise ValidationError({'captured_on': error})
 

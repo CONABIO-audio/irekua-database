@@ -67,5 +67,16 @@ class User(AbstractUser):
         return self.collectiontype_set.exists()
 
     @cached_property
+    def admin_collections(self):
+        from irekua_database.models import Collection
+        return Collection.objects.filter(administrators=self)
+
+    @cached_property
     def managed_collections(self):
-        return self.collectiontype_set.all()
+        from irekua_database.models import Collection
+        return Collection.objects.filter(collection_type__administrators=self)
+
+    def collections_with_permissions(self, codename):
+        from irekua_database.models import Collection
+        memberships = self.collectionuser_set.filter(role__permissions__codename=codename)
+        return Collection.objects.filter(collectionuser__in=memberships)

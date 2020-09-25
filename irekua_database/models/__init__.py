@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 
 # TODO: Remove annotation tool model when migration is complete
-from .annotations.annotation_tools import AnnotationTool
+# from .annotations.annotation_tools import AnnotationTool
 # from .annotations.user_annotations import UserAnnotation
 from .annotations.annotation_votes import AnnotationVote
 from .annotations.annotations import Annotation

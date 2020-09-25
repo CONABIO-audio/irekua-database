@@ -1,4 +1,3 @@
-from django.db.models import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -8,34 +7,6 @@ from irekua_database.models import base
 
 
 class Annotation(base.IrekuaModelBaseUser):
-    LOW = 'L'
-    MEDIUM = 'M'
-    HIGH = 'H'
-    CERTAINTY_OPTIONS = [
-        (LOW, _('uncertain')),
-        (MEDIUM, _('somewhat certain')),
-        (HIGH, _('certain')),
-    ]
-    QUALITY_OPTIONS = [
-        (LOW, _('low')),
-        (MEDIUM, _('medium')),
-        (HIGH, _('high')),
-    ]
-
-    annotation_tool = models.ForeignKey(
-        'AnnotationTool',
-        on_delete=models.PROTECT,
-        db_column='annotation_tool_id',
-        verbose_name=_('annotation tool'),
-        help_text=_('Annotation tool used when annotating'),
-        blank=False)
-    visualizer = models.ForeignKey(
-        'Visualizer',
-        on_delete=models.PROTECT,
-        db_column='visualizers_id',
-        verbose_name=_('visualizer'),
-        help_text=_('Visualizer used when annotating'),
-        blank=False)
     item = models.ForeignKey(
         'Item',
         db_column='item_id',
@@ -57,42 +28,13 @@ class Annotation(base.IrekuaModelBaseUser):
         verbose_name=_('annotation type'),
         help_text=_('Type of annotation'),
         blank=False)
-    annotation = JSONField(
+    annotation = models.JSONField(
         db_column='annotation',
         verbose_name=_('annotation'),
         default=empty_JSON,
         help_text=_('Information of annotation location within item'),
         blank=True,
         null=False)
-    visualizer_configuration = JSONField(
-        db_column='visualizer_configuration',
-        verbose_name=_('visualizer configuration'),
-        default=empty_JSON,
-        help_text=_('Configuration of visualizer at annotation creation'),
-        blank=True,
-        null=False)
-    certainty = models.CharField(
-        max_length=16,
-        db_column='certainty',
-        verbose_name=_('certainty'),
-        help_text=_(
-            'Level of certainty of location or labelling '
-            'of annotation'),
-        blank=True,
-        choices=CERTAINTY_OPTIONS,
-        null=True)
-    quality = models.CharField(
-        db_column='quality',
-        verbose_name=_('quality'),
-        help_text=_('Quality of item content inside annotation'),
-        blank=True,
-        max_length=16,
-        choices=QUALITY_OPTIONS)
-    commentaries = models.TextField(
-        db_column='commentaries',
-        verbose_name=_('commentaries'),
-        help_text=_('Commentaries of annotator'),
-        blank=True)
 
     labels = models.ManyToManyField(
         'Term',
@@ -137,16 +79,6 @@ class Annotation(base.IrekuaModelBaseUser):
             self.annotation_type.validate_annotation(self.annotation)
         except ValidationError as error:
             raise ValidationError({'annotation': error})
-
-        if self.annotation_type != self.annotation_tool.annotation_type:
-            msg = _('Invalid annotation tool for this annotation type')
-            raise ValidationError({'annotation_tool': msg})
-
-        try:
-            self.visualizer.validate_configuration(
-                self.visualizer_configuration)
-        except ValidationError as error:
-            raise ValidationError({'visualizer_configuration': error})
 
         if self.id:
             try:

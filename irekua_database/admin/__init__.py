@@ -12,9 +12,10 @@ from irekua_database.admin.sampling_events import SamplingEventDeviceAdmin
 from irekua_database.admin.data_collections import CollectionAdmin
 
 
+# TODO: Remove Annotation Tool models when migration is complete
 @admin.register(
     models.Annotation,
-    models.AnnotationTool,
+    # models.AnnotationTool,
     models.AnnotationVote,
     models.CollectionDevice,
     models.CollectionSite,

@@ -15,6 +15,7 @@ class AnnotationVote(base.IrekuaModelBaseUser):
         help_text=_('Reference to annotation being voted'),
         blank=False,
         null=False)
+    # TODO: add bad annotation field
     labels = models.ManyToManyField(
         'Term',
         db_column='labels',

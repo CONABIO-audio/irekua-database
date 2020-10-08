@@ -1,10 +1,11 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class Source(base.IrekuaModelBase):
+class Source(IrekuaModelBase):
     directory = models.CharField(
         max_length=64,
         unique=True,
@@ -25,7 +26,7 @@ class Source(base.IrekuaModelBase):
         help_text=_('Parse function used to insert files and metadata to database'),
         blank=False)
     uploader = models.ForeignKey(
-        'User',
+        get_user_model(),
         on_delete=models.PROTECT,
         db_column='uploader_id',
         verbose_name=_('uploader id'),

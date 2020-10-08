@@ -38,7 +38,7 @@ class LocalityType(models.Model):
         verbose_name=_('publication date'),
         help_text=_('Date of publication of localities defined in this type'))
 
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata_schema'),
         help_text=_('JSON Schema for metadata of localities of this type'),

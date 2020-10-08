@@ -1,10 +1,11 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class MetaCollection(base.IrekuaModelBaseUser):
+class MetaCollection(IrekuaModelBaseUser):
     name = models.CharField(
         max_length=64,
         unique=True,
@@ -25,7 +26,7 @@ class MetaCollection(base.IrekuaModelBaseUser):
         help_text=_('Items belonging to MetaCollection'),
         blank=True)
     curators = models.ManyToManyField(
-        'User',
+        get_user_model(),
         related_name='metacollection_curators',
         verbose_name='curators',
         help_text=_('Curators of metacollection'),

@@ -1,13 +1,12 @@
-from django.db.models import JSONField
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase
 
 
-class Synonym(base.IrekuaModelBase):
+class Synonym(IrekuaModelBase):
     source = models.ForeignKey(
         'Term',
         related_name='synonym_source',
@@ -24,7 +23,7 @@ class Synonym(base.IrekuaModelBase):
         verbose_name=_('target'),
         help_text=_('Reference to the target of the synonym'),
         blank=False)
-    metadata = JSONField(
+    metadata = models.JSONField(
         blank=True,
         db_column='metadata',
         default=empty_JSON,

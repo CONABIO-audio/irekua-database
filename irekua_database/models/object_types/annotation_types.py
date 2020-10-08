@@ -6,10 +6,10 @@ from django.core.exceptions import ValidationError
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class AnnotationType(base.IrekuaModelBase):
+class AnnotationType(IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         unique=True,
@@ -21,7 +21,7 @@ class AnnotationType(base.IrekuaModelBase):
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of annotation type'))
-    annotation_schema = JSONField(
+    annotation_schema = models.JSONField(
         db_column='annotation_schema',
         verbose_name=_('annotation schema'),
         help_text=_('JSON Schema for annotation info'),

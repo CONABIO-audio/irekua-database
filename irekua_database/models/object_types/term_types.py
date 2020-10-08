@@ -7,10 +7,10 @@ from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class TermType(base.IrekuaModelBase):
+class TermType(IrekuaModelBase):
     name = models.CharField(
         max_length=128,
         unique=True,
@@ -38,7 +38,7 @@ class TermType(base.IrekuaModelBase):
             'a categorical variable'),
         blank=False,
         null=False)
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata schema'),
         help_text=_('JSON Schema for metadata of term info'),
@@ -46,7 +46,7 @@ class TermType(base.IrekuaModelBase):
         null=False,
         default=simple_JSON_schema,
         validators=[validate_JSON_schema])
-    synonym_metadata_schema = JSONField(
+    synonym_metadata_schema = models.JSONField(
         db_column='synonym_metadata_schema',
         verbose_name=_('synonym metadata schema'),
         help_text=_('JSON Schema for metadata of synonym info'),

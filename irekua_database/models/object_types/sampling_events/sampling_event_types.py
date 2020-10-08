@@ -6,12 +6,12 @@ from django.db.models import JSONField
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 from .sampling_event_type_devices import SamplingEventTypeDeviceType
 
 
-class SamplingEventType(base.IrekuaModelBase):
+class SamplingEventType(IrekuaModelBase):
     name = models.CharField(
         max_length=128,
         unique=True,
@@ -31,7 +31,7 @@ class SamplingEventType(base.IrekuaModelBase):
         upload_to='images/sampling_event_types/',
         blank=True,
         null=True)
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata schema'),
         help_text=_('JSON Schema for metadata of sampling event info'),

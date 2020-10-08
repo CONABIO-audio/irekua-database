@@ -7,10 +7,10 @@ from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class EntailmentType(base.IrekuaModelBase):
+class EntailmentType(IrekuaModelBase):
     source_type = models.ForeignKey(
         'TermType',
         related_name='entailment_source_type',
@@ -29,7 +29,7 @@ class EntailmentType(base.IrekuaModelBase):
         on_delete=models.CASCADE,
         blank=False,
         null=False)
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata schema'),
         help_text=_('JSON Schema for metadata of entailment info'),

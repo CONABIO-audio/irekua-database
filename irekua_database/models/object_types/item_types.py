@@ -3,13 +3,13 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 mimetypes.init()
 
 
-class ItemType(base.IrekuaModelBase):
+class ItemType(IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         db_column='name',

@@ -1,12 +1,16 @@
 import os
+from irekua_terms.settings import *
 
-IREKUA_DATABASE_APPS = [
-    'django.contrib.postgres',
-    'django.contrib.gis',
-    'irekua_database',
-]
 
-AUTH_USER_MODEL = 'irekua_database.User'
+IREKUA_DATABASE_APPS = (
+    IREKUA_TERMS_APPS +
+    [
+        'irekua_database',
+        'django.contrib.postgres',
+        'django.contrib.gis',
+    ]
+)
+
 
 DATABASES = {
     'default': {
@@ -18,3 +22,6 @@ DATABASES = {
         'PASSWORD': os.environ.get('IREKUA_DATABASE_PASSWORD', ''),
     }
 }
+
+
+AUTH_USER_MODEL = 'irekua_database.User'

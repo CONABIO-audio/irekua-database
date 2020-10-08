@@ -1,13 +1,12 @@
-from django.db.models import JSONField
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase
 
 
-class Term(base.IrekuaModelBase):
+class Term(IrekuaModelBase):
     term_type = models.ForeignKey(
         'TermType',
         on_delete=models.CASCADE,
@@ -39,7 +38,7 @@ class Term(base.IrekuaModelBase):
         verbose_name=_('term url'),
         help_text=_('URL for term description'),
         blank=True)
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to term'),

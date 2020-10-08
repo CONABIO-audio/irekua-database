@@ -8,13 +8,13 @@ from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 mimetypes.init()
 
 
-class MimeType(base.IrekuaModelBase):
+class MimeType(IrekuaModelBase):
     MIME_TYPES = [
         (value, value) for value in
         sorted(list(set(mimetypes.types_map.values())))
@@ -28,7 +28,7 @@ class MimeType(base.IrekuaModelBase):
         verbose_name=_('media type'),
         help_text=_('MIME types associated with item type'),
         blank=False)
-    media_info_schema = JSONField(
+    media_info_schema = models.JSONField(
         db_column='media_info_schema',
         verbose_name=_('media info schema'),
         help_text=_('JSON Schema for item type media info'),

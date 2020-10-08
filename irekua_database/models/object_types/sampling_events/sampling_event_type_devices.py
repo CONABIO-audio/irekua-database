@@ -6,10 +6,10 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class SamplingEventTypeDeviceType(base.IrekuaModelBase):
+class SamplingEventTypeDeviceType(IrekuaModelBase):
     sampling_event_type = models.ForeignKey(
         'SamplingEventType',
         on_delete=models.CASCADE,
@@ -30,7 +30,7 @@ class SamplingEventTypeDeviceType(base.IrekuaModelBase):
             'event of the given type'),
         null=False,
         blank=False)
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata schema'),
         help_text=_(

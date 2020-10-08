@@ -1,13 +1,12 @@
-from django.db.models import JSONField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from irekua_database.models.object_types.entailment_types import EntailmentType
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase
 
 
-class Entailment(base.IrekuaModelBase):
+class Entailment(IrekuaModelBase):
     source = models.ForeignKey(
         'Term',
         related_name='entailment_source',
@@ -24,7 +23,7 @@ class Entailment(base.IrekuaModelBase):
         help_text=_('Target of entailment'),
         on_delete=models.CASCADE,
         blank=False)
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to entailment'),

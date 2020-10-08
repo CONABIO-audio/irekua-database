@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import hash_file
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 from sorl.thumbnail import ImageField
 
 
@@ -72,7 +72,7 @@ def get_thumbnail_path(instance, filename):
     return path
 
 
-class Item(base.IrekuaModelBaseUser):
+class Item(IrekuaModelBaseUser):
     hash_string = None
     item_size = None
 
@@ -111,7 +111,7 @@ class Item(base.IrekuaModelBaseUser):
         help_text=_('Thumbnail associated to file'),
         blank=True,
         null=True)
-    media_info = JSONField(
+    media_info = models.JSONField(
         db_column='media_info',
         default=empty_JSON,
         verbose_name=_('media info'),
@@ -140,7 +140,7 @@ class Item(base.IrekuaModelBaseUser):
         help_text=_('Foreign key of file in source database'),
         max_length=64,
         blank=True)
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         default=empty_JSON,
         verbose_name=_('metadata'),

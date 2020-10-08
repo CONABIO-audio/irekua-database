@@ -4,10 +4,10 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class SiteDescriptor(base.IrekuaModelBase):
+class SiteDescriptor(IrekuaModelBase):
     descriptor_type = models.ForeignKey(
         'SiteDescriptorType',
         on_delete=models.CASCADE,
@@ -28,7 +28,7 @@ class SiteDescriptor(base.IrekuaModelBase):
         help_text=_('Description of term'),
         blank=True)
 
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to term'),

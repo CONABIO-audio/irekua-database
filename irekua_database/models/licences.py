@@ -6,11 +6,11 @@ from django.utils import timezone
 
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import translate_doc
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 @translate_doc
-class Licence(base.IrekuaModelBaseUser):
+class Licence(IrekuaModelBaseUser):
     help_text = _('''
     Licence Model
 
@@ -47,7 +47,7 @@ class Licence(base.IrekuaModelBaseUser):
         help_text=_('Legal document of licence agreement'),
         blank=True)
 
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         default=empty_JSON,

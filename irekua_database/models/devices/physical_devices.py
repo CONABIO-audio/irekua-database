@@ -5,12 +5,12 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 from irekua_database.models.items.items import Item
 from irekua_database.models.sampling_events.sampling_event_devices import SamplingEventDevice
 
 
-class PhysicalDevice(base.IrekuaModelBaseUser):
+class PhysicalDevice(IrekuaModelBaseUser):
     identifier = models.CharField(
         max_length=128,
         db_column='identifier',
@@ -33,7 +33,7 @@ class PhysicalDevice(base.IrekuaModelBaseUser):
         help_text=_('Brand and model of device'),
         blank=False,
         null=False)
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to device'),

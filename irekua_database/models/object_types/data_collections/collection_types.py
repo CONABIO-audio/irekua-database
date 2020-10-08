@@ -1,23 +1,23 @@
 from django.db import models
-from django.db.models import JSONField
+from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models import base
-
-from .collection_device_types import CollectionDeviceType
-from .collection_roles import CollectionRole
-from .collection_item_types import CollectionItemType
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 from irekua_database.models.data_collections.collection_users import CollectionUser
 from irekua_database.models.data_collections.data_collections import Collection
 from irekua_database.models.items.items import Item
 from irekua_database.models.annotations.annotations import Annotation
 
+from .collection_device_types import CollectionDeviceType
+from .collection_roles import CollectionRole
+from .collection_item_types import CollectionItemType
 
-class CollectionType(base.IrekuaModelBase):
+
+class CollectionType(IrekuaModelBase):
     """
     *Collection types* function as a templates for collection creation. Its
     utility stems from the fact that the configuration of a collection can be
@@ -59,7 +59,7 @@ class CollectionType(base.IrekuaModelBase):
         help_text=_('Logo of collection type'),
         blank=True,
         null=True)
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata schema'),
         help_text=_('JSON Schema for metadata of collection info'),
@@ -79,7 +79,7 @@ class CollectionType(base.IrekuaModelBase):
         null=False
     )
     administrators = models.ManyToManyField(
-        'User',
+        get_user_model(),
         verbose_name=_('administrators'),
         help_text=_(
             'Administrators of this collection type. Administrators can '

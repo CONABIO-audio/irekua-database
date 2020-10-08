@@ -4,11 +4,11 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 from irekua_database.models import Item
 
 
-class SamplingEvent(base.IrekuaModelBaseUser):
+class SamplingEvent(IrekuaModelBaseUser):
     sampling_event_type = models.ForeignKey(
         'SamplingEventType',
         on_delete=models.PROTECT,
@@ -31,7 +31,7 @@ class SamplingEvent(base.IrekuaModelBaseUser):
         verbose_name=_('commentaries'),
         help_text=_('Sampling event commentaries'),
         blank=True)
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to sampling event'),

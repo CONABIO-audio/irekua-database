@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class Tag(base.IrekuaModelBase):
+class Tag(IrekuaModelBase):
     name = models.CharField(
         max_length=128,
         unique=True,

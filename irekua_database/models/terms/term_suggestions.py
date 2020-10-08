@@ -1,14 +1,13 @@
-from django.db.models import JSONField
 from django.db import models
-from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBaseUser
 
 
-class TermSuggestion(base.IrekuaModelBaseUser):
+class TermSuggestion(IrekuaModelBaseUser):
     term_type = models.ForeignKey(
         'TermType',
         on_delete=models.CASCADE,
@@ -28,7 +27,7 @@ class TermSuggestion(base.IrekuaModelBaseUser):
         verbose_name=_('description'),
         help_text=_('Description of term'),
         blank=True)
-    metadata = JSONField(
+    metadata = models.JSONField(
         blank=True,
         db_column='metadata',
         default=empty_JSON,

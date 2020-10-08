@@ -6,10 +6,10 @@ from django.db.models import JSONField
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class Device(base.IrekuaModelBase):
+class Device(IrekuaModelBase):
     device_type = models.ForeignKey(
         'DeviceType',
         on_delete=models.PROTECT,
@@ -32,7 +32,7 @@ class Device(base.IrekuaModelBase):
         verbose_name=_('model'),
         help_text=_('Model of device'),
         blank=False)
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata schema'),
         help_text=_('JSON Schema for metadata of device info'),
@@ -40,7 +40,7 @@ class Device(base.IrekuaModelBase):
         null=False,
         default=simple_JSON_schema,
         validators=[validate_JSON_schema])
-    configuration_schema = JSONField(
+    configuration_schema = models.JSONField(
         db_column='configuration_schema',
         verbose_name=_('configuration schema'),
         help_text=_('JSON Schema for configuration info of device'),

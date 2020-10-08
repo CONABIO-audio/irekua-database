@@ -1,19 +1,17 @@
-from django.db.models import JSONField
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
-from irekua_database.models.items.items import Item
-from irekua_database.models.annotations.annotations import Annotation
+from irekua_database.models.base import IrekuaModelBaseUser
 
 from .collection_users import CollectionUser
 from .collection_devices import CollectionDevice
 from .collection_sites import CollectionSite
 
 
-class Collection(base.IrekuaModelBaseUser):
+class Collection(IrekuaModelBaseUser):
     collection_type = models.ForeignKey(
         'CollectionType',
         on_delete=models.PROTECT,
@@ -34,7 +32,7 @@ class Collection(base.IrekuaModelBaseUser):
         verbose_name=_('description'),
         help_text=_('Description of collection'),
         blank=False)
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to collection'),
@@ -68,13 +66,13 @@ class Collection(base.IrekuaModelBaseUser):
         through_fields=('collection', 'site'),
         blank=True)
     users = models.ManyToManyField(
-        'User',
+        get_user_model(),
         related_name='collection_users',
         through='CollectionUser',
         through_fields=('collection', 'user'),
         blank=True)
     administrators = models.ManyToManyField(
-        'User',
+        get_user_model(),
         related_name='collection_administrators',
         verbose_name=_('administrators'),
         help_text=_('Administrators of collection'),

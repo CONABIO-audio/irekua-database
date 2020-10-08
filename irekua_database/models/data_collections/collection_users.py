@@ -1,13 +1,13 @@
-from django.db.models import JSONField
-from django.core.exceptions import ValidationError
 from django.db import models
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class CollectionUser(base.IrekuaModelBaseUser):
+class CollectionUser(IrekuaModelBaseUser):
     collection = models.ForeignKey(
         'Collection',
         db_column='collection_id',
@@ -16,7 +16,7 @@ class CollectionUser(base.IrekuaModelBaseUser):
         on_delete=models.CASCADE,
         blank=False)
     user = models.ForeignKey(
-        'User',
+        get_user_model(),
         db_column='user_id',
         verbose_name=_('user'),
         help_text=_('User of collection'),
@@ -29,7 +29,7 @@ class CollectionUser(base.IrekuaModelBaseUser):
         verbose_name=_('role'),
         help_text=_('Role of user in collection'),
         blank=False)
-    metadata = JSONField(
+    metadata = models.JSONField(
         blank=True,
         db_column='metadata',
         verbose_name=_('metadata'),

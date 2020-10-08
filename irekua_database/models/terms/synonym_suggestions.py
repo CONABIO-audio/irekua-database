@@ -1,14 +1,12 @@
-from django.db.models import JSONField
 from django.db import models
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBaseUser
 
 
-class SynonymSuggestion(base.IrekuaModelBaseUser):
+class SynonymSuggestion(IrekuaModelBaseUser):
     source = models.ForeignKey(
         'Term',
         on_delete=models.CASCADE,
@@ -25,7 +23,7 @@ class SynonymSuggestion(base.IrekuaModelBaseUser):
         verbose_name=_('description'),
         help_text=_('Description of synonym'),
         blank=True)
-    metadata = JSONField(
+    metadata = models.JSONField(
         blank=True,
         db_column='metadata',
         verbose_name=_('metadata'),

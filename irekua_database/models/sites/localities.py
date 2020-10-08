@@ -32,7 +32,7 @@ class Locality(models.Model):
         verbose_name=_('geometry'),
         help_text=_('Geometry of locality'),
         spatial_index=True)
-    metadata = JSONField(
+    metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to locality'),

@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import hash_file
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 mimetypes.init()
@@ -43,7 +43,7 @@ def get_item_path(instance, filename):
     return path
 
 
-class SecondaryItem(base.IrekuaModelBase):
+class SecondaryItem(IrekuaModelBase):
     hash = models.CharField(
         max_length=64,
         unique=True,
@@ -74,7 +74,7 @@ class SecondaryItem(base.IrekuaModelBase):
         on_delete=models.CASCADE,
         blank=False,
         null=False)
-    media_info = JSONField(
+    media_info = models.JSONField(
         db_column='media_info',
         verbose_name=_('media info'),
         help_text=_('Media information of secondary item file'),

@@ -7,10 +7,10 @@ from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
 
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class SiteType(base.IrekuaModelBase):
+class SiteType(IrekuaModelBase):
     name = models.CharField(
         max_length=128,
         unique=True,
@@ -23,7 +23,7 @@ class SiteType(base.IrekuaModelBase):
         verbose_name=_('description'),
         help_text=_('Description of site type'),
         blank=False)
-    metadata_schema = JSONField(
+    metadata_schema = models.JSONField(
         db_column='metadata_schema',
         verbose_name=_('metadata schema'),
         help_text=_('JSON Schema for metadata of site info'),

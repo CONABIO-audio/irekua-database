@@ -3,10 +3,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import base
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class Annotation(base.IrekuaModelBaseUser):
+class Annotation(IrekuaModelBaseUser):
     item = models.ForeignKey(
         'Item',
         db_column='item_id',

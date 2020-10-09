@@ -2,8 +2,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from irekua_database.models.object_types.entailment_types import EntailmentType
-from irekua_database.base import IrekuaModelBase
+from irekua_database.models.base import IrekuaModelBase
+
+from irekua_terms.models.entailment_types import EntailmentType
 
 
 class Entailment(IrekuaModelBase):

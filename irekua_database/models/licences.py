@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import translate_doc
-from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 @translate_doc

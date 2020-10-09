@@ -7,7 +7,7 @@ from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
 
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 class TermType(IrekuaModelBase):

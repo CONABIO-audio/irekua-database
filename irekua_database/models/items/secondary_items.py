@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import hash_file
-from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 mimetypes.init()

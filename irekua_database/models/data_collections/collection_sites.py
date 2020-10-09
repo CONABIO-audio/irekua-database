@@ -8,7 +8,7 @@ from irekua_database.utils import empty_JSON
 
 from irekua_database.models.items.items import Item
 from irekua_database.models.sampling_events.sampling_event_devices import SamplingEventDevice
-from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 class CollectionSite(IrekuaModelBaseUser):

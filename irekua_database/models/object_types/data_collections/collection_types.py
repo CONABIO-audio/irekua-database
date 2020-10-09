@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from irekua_database.utils import validate_JSON_schema
 from irekua_database.utils import validate_JSON_instance
 from irekua_database.utils import simple_JSON_schema
-from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
 from irekua_database.models.data_collections.collection_users import CollectionUser
 from irekua_database.models.data_collections.data_collections import Collection
 from irekua_database.models.items.items import Item

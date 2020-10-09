@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.models.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
 
 
 class MetaCollection(IrekuaModelBaseUser):

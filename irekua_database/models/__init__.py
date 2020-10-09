@@ -1,6 +1,8 @@
 from django.contrib.auth.models import Group
 
-# TODO: Remove annotation tool model when migration is complete
+# NOTE: Import User model before all others!
+from .users.users import User
+
 from .annotations.annotation_votes import AnnotationVote
 from .annotations.annotations import Annotation
 from .data_collections.collection_devices import CollectionDevice
@@ -45,7 +47,7 @@ from .terms.term_suggestions import TermSuggestion
 from .terms.terms import Term
 from .users.institutions import Institution
 from .users.roles import Role
-from .users.users import User
+
 
 
 __all__ = [

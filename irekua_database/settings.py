@@ -1,9 +1,11 @@
 import os
-from irekua_terms.settings import *
+# from irekua_terms.settings import *
+
+AUTH_USER_MODEL = 'irekua_database.User'
 
 
 IREKUA_DATABASE_APPS = (
-    IREKUA_TERMS_APPS +
+    # IREKUA_TERMS_APPS +
     [
         'irekua_database',
         'django.contrib.postgres',
@@ -22,6 +24,3 @@ DATABASES = {
         'PASSWORD': os.environ.get('IREKUA_DATABASE_PASSWORD', ''),
     }
 }
-
-
-AUTH_USER_MODEL = 'irekua_database.User'

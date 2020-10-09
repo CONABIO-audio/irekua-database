@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBaseUser
 
 
 class TermSuggestion(IrekuaModelBaseUser):

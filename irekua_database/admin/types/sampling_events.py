@@ -13,12 +13,12 @@ class SiteTypeInline(admin.TabularInline):
     classes = ('collapse', )
 
 
-class DeviceTypeInline(admin.TabularInline):
+class DeploymentTypeInline(admin.TabularInline):
     extra = 0
-    model = SamplingEventType.device_types.through
-    autocomplete_fields = ('device_type',)
-    verbose_name = _('Device type')
-    verbose_name_plural = _('Device types')
+    model = SamplingEventType.deployment_types.through
+    autocomplete_fields = ('deploymenttype',)
+    verbose_name = _('Deployment type')
+    verbose_name_plural = _('Deployment types')
     classes = ('collapse', )
 
 
@@ -29,10 +29,10 @@ class SamplingEventTypeAdmin(admin.ModelAdmin):
         'id',
         'name',
         'restrict_site_types',
-        'restrict_device_types',
+        'restrict_deployment_types',
         'created_on')
     list_display_links = ('id', 'name')
-    list_filter = ('created_on', 'restrict_site_types', 'restrict_device_types')
+    list_filter = ('created_on', 'restrict_site_types', 'restrict_deployment_types')
 
     fieldsets = (
         (None, {
@@ -50,7 +50,7 @@ class SamplingEventTypeAdmin(admin.ModelAdmin):
             'fields': (
                 (
                     'restrict_site_types',
-                    'restrict_device_types',
+                    'restrict_deployment_types',
                 ),
             ),
         }),
@@ -58,5 +58,5 @@ class SamplingEventTypeAdmin(admin.ModelAdmin):
 
     inlines = [
         SiteTypeInline,
-        DeviceTypeInline,
+        DeploymentTypeInline,
     ]

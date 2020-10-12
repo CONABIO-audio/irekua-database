@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from irekua_core.utils import empty_JSON
 
 from irekua_database.models.items.items import Item
-from irekua_database.models.sampling_events.sampling_event_devices import SamplingEventDevice
-from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.models.deployments import Deployment
+from irekua_core.models import IrekuaModelBaseUser
 
 
 class CollectionSite(IrekuaModelBaseUser):
@@ -97,4 +97,4 @@ class CollectionSite(IrekuaModelBaseUser):
 
     @cached_property
     def deployments(self):
-        return SamplingEventDevice.objects.filter(sampling_event__collection_site=self)
+        return Deployment.objects.filter(sampling_event__collection_site=self)

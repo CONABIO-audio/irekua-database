@@ -13,7 +13,15 @@ from irekua_core.utils import empty_JSON
 from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
 
 
-class SamplingEventDevice(IrekuaModelBaseUser):
+class Deployment(IrekuaModelBaseUser):
+    deployment_type = models.ForeignKey(
+        'DeploymentType',
+        on_delete=models.PROTECT,
+        db_column='deployment_type_id',
+        verbose_name=_('deployment type'),
+        help_text=_('Type of deployment'),
+        null=False,
+        blank=False)
     sampling_event = models.ForeignKey(
         'SamplingEvent',
         on_delete=models.PROTECT,
@@ -22,7 +30,6 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         help_text=_('Sampling event in which this device was deployed'),
         blank=False,
         null=False)
-
     deployed_on = models.DateTimeField(
         db_column='deployed_on',
         verbose_name=_('deployed on'),
@@ -35,7 +42,6 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         help_text=_('Date at which the device stoped capturing information.'),
         blank=True,
         null=True)
-
     geo_ref = PointField(
         blank=True,
         null=True,
@@ -63,7 +69,6 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         verbose_name=_('altitude'),
         help_text=_('Altitude of deployed device (in meters)'),
         null=True)
-
     collection_device = models.ForeignKey(
         'CollectionDevice',
         db_column='collection_device_id',
@@ -101,8 +106,8 @@ class SamplingEventDevice(IrekuaModelBaseUser):
         null=True)
 
     class Meta:
-        verbose_name = _('Sampling Event Device')
-        verbose_name_plural = _('Sampling Event Devices')
+        verbose_name = _('Deployment')
+        verbose_name_plural = _('Deployments')
 
         unique_together = (
             ('sampling_event', 'collection_device'),

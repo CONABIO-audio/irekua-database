@@ -7,6 +7,7 @@ from .devices import DeviceTypeAdmin
 from .items import ItemTypeAdmin
 from .sites import SiteTypeAdmin
 from .sampling_events import SamplingEventTypeAdmin
+from .deployments import DeploymentTypeAdmin
 
 
 class AnnotationTypeAdmin(admin.ModelAdmin):

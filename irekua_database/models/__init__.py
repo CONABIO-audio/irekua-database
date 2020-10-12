@@ -1,7 +1,7 @@
 from django.contrib.auth.models import Group
 
 # NOTE: Import User model before all others!
-from .users.users import User
+from .users import User
 
 from .annotations.annotation_votes import AnnotationVote
 from .annotations.annotations import Annotation
@@ -24,29 +24,22 @@ from .object_types.data_collections.collection_item_types import CollectionItemT
 from .object_types.data_collections.collection_roles import CollectionRole
 from .object_types.data_collections.collection_types import CollectionType
 from .object_types.device_types import DeviceType
-# from .object_types.entailment_types import EntailmentType
 from .object_types.event_types import EventType
 from .object_types.item_types import ItemType
 from .object_types.licence_types import LicenceType
 from .object_types.locality_types import LocalityType
 from .object_types.mime_types import MimeType
-from .object_types.sampling_events.sampling_event_type_devices import SamplingEventTypeDeviceType
-from .object_types.sampling_events.sampling_event_types import SamplingEventType
+from .object_types.deployment_types import DeploymentType
+from .object_types.sampling_event_types import SamplingEventType
 from .object_types.site_descriptor_types import SiteDescriptorType
 from .object_types.site_types import SiteType
-# from .object_types.term_types import TermType
-from .sampling_events.sampling_event_devices import SamplingEventDevice
-from .sampling_events.sampling_events import SamplingEvent
+from .deployments import Deployment
+from .sampling_events import SamplingEvent
 from .sites.localities import Locality
 from .sites.site_descriptors import SiteDescriptor
 from .sites.sites import Site
-# from .terms.entailments import Entailment
-# from .terms.synonym_suggestions import SynonymSuggestion
-# from .terms.synonyms import Synonym
-# from .terms.term_suggestions import TermSuggestion
-# from .terms.terms import Term
-from .users.institutions import Institution
-from .users.roles import Role
+from .institutions import Institution
+from .roles import Role
 
 
 
@@ -65,8 +58,6 @@ __all__ = [
     'Device',
     'DeviceBrand',
     'DeviceType',
-    # 'Entailment',
-    # 'EntailmentType',
     'EventType',
     'Group',
     'Institution',
@@ -81,20 +72,15 @@ __all__ = [
     'PhysicalDevice',
     'Role',
     'SamplingEvent',
-    'SamplingEventDevice',
+    'Deployment',
     'SamplingEventType',
-    'SamplingEventTypeDeviceType',
+    'DeploymentType',
     'SecondaryItem',
     'Site',
     'SiteDescriptor',
     'SiteDescriptorType',
     'SiteType',
     'Source',
-    # 'Synonym',
-    # 'SynonymSuggestion',
     'Tag',
-    # 'Term',
-    # 'TermSuggestion',
-    # 'TermType',
     'User',
 ]

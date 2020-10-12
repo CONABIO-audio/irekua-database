@@ -2,13 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-
 from irekua_core.utils import validate_JSON_schema
 from irekua_core.utils import validate_JSON_instance
 from irekua_core.utils import simple_JSON_schema
-from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
-
-from .sampling_event_type_devices import SamplingEventTypeDeviceType
+from irekua_core.models import IrekuaModelBase
 
 
 class SamplingEventType(IrekuaModelBase):
@@ -39,12 +36,11 @@ class SamplingEventType(IrekuaModelBase):
         null=False,
         default=simple_JSON_schema,
         validators=[validate_JSON_schema])
-
-    restrict_device_types = models.BooleanField(
-        db_column='restrict_device_types',
-        verbose_name=_('restrict device types'),
+    restrict_deployment_types = models.BooleanField(
+        db_column='restrict_deployment_types',
+        verbose_name=_('restrict deployment types'),
         help_text=_(
-            'Flag indicating whether to restrict device types '
+            'Flag indicating whether to restrict deployment types '
             'associated with this sampling event type'),
         default=False,
         blank=False,
@@ -58,13 +54,10 @@ class SamplingEventType(IrekuaModelBase):
         default=False,
         blank=False,
         null=False)
-
-    device_types = models.ManyToManyField(
-        'DeviceType',
-        through='SamplingEventTypeDeviceType',
-        through_fields=('sampling_event_type', 'device_type'),
-        verbose_name=_('device types'),
-        help_text=_('Valid device types for this sampling event type'),
+    deployment_types = models.ManyToManyField(
+        'DeploymentType',
+        verbose_name=_('deployment types'),
+        help_text=_('Valid deployment types for this sampling event type'),
         blank=True)
     site_types = models.ManyToManyField(
         'SiteType',
@@ -75,11 +68,10 @@ class SamplingEventType(IrekuaModelBase):
     class Meta:
         verbose_name = _('Sampling Event Type')
         verbose_name_plural = _('Sampling Event Types')
-
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def validate_metadata(self, metadata):
         try:
@@ -94,7 +86,7 @@ class SamplingEventType(IrekuaModelBase):
             raise ValidationError(str(msg), params=params)
 
     def validate_and_get_device_type(self, device_type):
-        if not self.restrict_device_types:
+        if not self.restrict_deployment_types:
             return None
 
         try:
@@ -121,22 +113,3 @@ class SamplingEventType(IrekuaModelBase):
                 'sampling event of type %(type)s')
             params = dict(site_type=str(site_type), type=str(self))
             raise ValidationError(str(msg), params=params)
-
-    def add_device_type(self, device_type, metadata_schema):
-        SamplingEventTypeDeviceType.objects.create(
-            sampling_event_type=self,
-            device_type=device_type,
-            metadata_schema=metadata_schema)
-        self.save()
-
-    def add_site_type(self, site_type):
-        self.site_types.add(site_type)
-        self.save()
-
-    def remove_device_type(self, device_type):
-        self.device_types.remove(device_type)
-        self.save()
-
-    def remove_site_type(self, site_type):
-        self.site_types.remove(site_type)
-        self.save()

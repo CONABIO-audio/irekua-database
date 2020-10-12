@@ -6,28 +6,37 @@ from django.utils.translation import gettext_lazy as _
 from irekua_core.utils import validate_JSON_schema
 from irekua_core.utils import validate_JSON_instance
 from irekua_core.utils import simple_JSON_schema
-from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_core.models import IrekuaModelBase
 
 
-class SamplingEventTypeDeviceType(IrekuaModelBase):
-    sampling_event_type = models.ForeignKey(
-        'SamplingEventType',
-        on_delete=models.CASCADE,
-        db_column='sampling_event_type_id',
-        verbose_name=_('sampling event type'),
-        help_text=_(
-            'Sampling event type in which this device '
-            'types can be placed'),
-        null=False,
+class DeploymentType(IrekuaModelBase):
+    name = models.CharField(
+        max_length=128,
+        unique=True,
+        db_column='name',
+        verbose_name=_('name'),
+        help_text=_('Name of deployment type'),
         blank=False)
+    description = models.TextField(
+        db_column='description',
+        verbose_name=_('description'),
+        help_text=_('Description of deployment type'),
+        blank=True)
+    icon = models.ImageField(
+        db_column='icon',
+        verbose_name=_('icon'),
+        help_text=_('Icon for deployment type'),
+        upload_to='images/deployment_types/',
+        blank=True,
+        null=True)
     device_type = models.ForeignKey(
         'DeviceType',
         on_delete=models.PROTECT,
         db_column='device_type_id',
         verbose_name=_('device type'),
         help_text=_(
-            'Type of device that can be used in sampling '
-            'event of the given type'),
+            'Type of device that can be used in the '
+            'deployment of the given type'),
         null=False,
         blank=False)
     metadata_schema = models.JSONField(
@@ -42,13 +51,8 @@ class SamplingEventTypeDeviceType(IrekuaModelBase):
         validators=[validate_JSON_schema])
 
     class Meta:
-        verbose_name = _('Sampling Event Type Device Type')
-        verbose_name_plural = _('Sampling Event Type Device Types')
-
-        ordering = ['sampling_event_type']
-        unique_together = (
-            ('sampling_event_type', 'device_type'),
-        )
+        verbose_name = _('Deployment Type')
+        verbose_name_plural = _('Deployment Types')
 
     def validate_metadata(self, metadata):
         try:

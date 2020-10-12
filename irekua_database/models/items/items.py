@@ -118,11 +118,11 @@ class Item(IrekuaModelBaseUser):
         help_text=_('Information of resource file'),
         blank=True,
         null=False)
-    sampling_event_device = models.ForeignKey(
-        'SamplingEventDevice',
-        db_column='sampling_event_device_id',
-        verbose_name=_('sampling event device'),
-        help_text=_('Sampling event device used to create item'),
+    deployment = models.ForeignKey(
+        'Deployment',
+        db_column='deployment_id',
+        verbose_name=_('deployment'),
+        help_text=_('Deployment of device in which this item was captured'),
         on_delete=models.PROTECT,
         blank=False,
         null=False)

@@ -1,7 +1,7 @@
 import datetime
 
 from pytz import timezone as pytz_timezone
-from django.db.models import JSONField
+
 from django.contrib.gis.db.models import PointField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.gis.geos import Point
@@ -9,8 +9,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_core.utils import empty_JSON
+from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
 
 
 class SamplingEventDevice(IrekuaModelBaseUser):

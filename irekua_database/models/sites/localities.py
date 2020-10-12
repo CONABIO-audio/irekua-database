@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.gis.db.models import MultiPolygonField
-from django.db.models import JSONField
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
+from irekua_core.utils import empty_JSON
 
 
 class Locality(models.Model):

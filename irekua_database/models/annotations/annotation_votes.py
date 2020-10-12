@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_terms.models import Term
+from irekua_core.models import IrekuaModelBaseUser
 
 
 class AnnotationVote(IrekuaModelBaseUser):
@@ -17,7 +17,7 @@ class AnnotationVote(IrekuaModelBaseUser):
         null=False)
     # TODO: add bad annotation field
     labels = models.ManyToManyField(
-        'Term',
+        Term,
         db_column='labels',
         verbose_name=_('labels'),
         help_text=_('Labels associated with annotation'),

@@ -7,8 +7,8 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 from timezonefinder import TimezoneFinder
 
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
-from irekua_database.utils import translate_doc
+from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_core.utils import translate_doc
 
 from irekua_database.models.data_collections.collection_users import CollectionUser
 from irekua_database.models.items.items import Item

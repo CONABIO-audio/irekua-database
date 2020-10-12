@@ -2,7 +2,7 @@ import os
 import mimetypes
 
 from django.conf import settings
-from django.db.models import JSONField
+
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from pytz import timezone as pytz_timezone
@@ -10,9 +10,9 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
-from irekua_database.utils import hash_file
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_core.utils import empty_JSON
+from irekua_core.utils import hash_file
+from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
 from sorl.thumbnail import ImageField
 
 

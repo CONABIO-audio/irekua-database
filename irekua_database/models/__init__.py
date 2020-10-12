@@ -24,7 +24,7 @@ from .object_types.data_collections.collection_item_types import CollectionItemT
 from .object_types.data_collections.collection_roles import CollectionRole
 from .object_types.data_collections.collection_types import CollectionType
 from .object_types.device_types import DeviceType
-from .object_types.entailment_types import EntailmentType
+# from .object_types.entailment_types import EntailmentType
 from .object_types.event_types import EventType
 from .object_types.item_types import ItemType
 from .object_types.licence_types import LicenceType
@@ -34,17 +34,17 @@ from .object_types.sampling_events.sampling_event_type_devices import SamplingEv
 from .object_types.sampling_events.sampling_event_types import SamplingEventType
 from .object_types.site_descriptor_types import SiteDescriptorType
 from .object_types.site_types import SiteType
-from .object_types.term_types import TermType
+# from .object_types.term_types import TermType
 from .sampling_events.sampling_event_devices import SamplingEventDevice
 from .sampling_events.sampling_events import SamplingEvent
 from .sites.localities import Locality
 from .sites.site_descriptors import SiteDescriptor
 from .sites.sites import Site
-from .terms.entailments import Entailment
-from .terms.synonym_suggestions import SynonymSuggestion
-from .terms.synonyms import Synonym
-from .terms.term_suggestions import TermSuggestion
-from .terms.terms import Term
+# from .terms.entailments import Entailment
+# from .terms.synonym_suggestions import SynonymSuggestion
+# from .terms.synonyms import Synonym
+# from .terms.term_suggestions import TermSuggestion
+# from .terms.terms import Term
 from .users.institutions import Institution
 from .users.roles import Role
 
@@ -65,8 +65,8 @@ __all__ = [
     'Device',
     'DeviceBrand',
     'DeviceType',
-    'Entailment',
-    'EntailmentType',
+    # 'Entailment',
+    # 'EntailmentType',
     'EventType',
     'Group',
     'Institution',
@@ -90,11 +90,11 @@ __all__ = [
     'SiteDescriptorType',
     'SiteType',
     'Source',
-    'Synonym',
-    'SynonymSuggestion',
+    # 'Synonym',
+    # 'SynonymSuggestion',
     'Tag',
-    'Term',
-    'TermSuggestion',
-    'TermType',
+    # 'Term',
+    # 'TermSuggestion',
+    # 'TermType',
     'User',
 ]

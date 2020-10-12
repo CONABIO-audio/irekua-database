@@ -1,16 +1,6 @@
 from django.contrib import admin
 
 
-class TermAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'term_type',
-        'value',
-    )
-    search_fields = ['term_type__name', 'value']
-    autocomplete_fields = ['term_type']
-
-
 class EntailmentAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -35,10 +25,6 @@ class EntailmentAdmin(admin.ModelAdmin):
     get_target_type.short_description = 'Target Type'
     get_target_type.admin_order_field = 'target__term_type__name'
 
-
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.prefetch_related('source', 'target')
-
-class TagAdmin(admin.ModelAdmin):
-    search_fields = ['name']

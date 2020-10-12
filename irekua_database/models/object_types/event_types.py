@@ -2,7 +2,9 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_core.models import IrekuaModelBase
+from irekua_terms.models import TermType
+from irekua_terms.models import Term
 
 
 class EventType(IrekuaModelBase):
@@ -27,7 +29,7 @@ class EventType(IrekuaModelBase):
         null=True)
 
     term_types = models.ManyToManyField(
-        'TermType',
+        TermType,
         db_column='term_types',
         verbose_name=_('term types'),
         help_text=_(
@@ -35,7 +37,7 @@ class EventType(IrekuaModelBase):
             'of events'),
         blank=True)
     should_imply = models.ManyToManyField(
-        'Term',
+        Term,
         db_column='should_imply',
         verbose_name='should imply',
         help_text=_(

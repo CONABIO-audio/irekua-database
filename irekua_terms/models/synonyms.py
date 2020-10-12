@@ -2,8 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
-from irekua_database.models.base import IrekuaModelBase
+from irekua_core.utils import empty_JSON
+from irekua_core.models import IrekuaModelBase
 
 
 class Synonym(IrekuaModelBase):

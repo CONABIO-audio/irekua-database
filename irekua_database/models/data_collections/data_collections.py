@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
-from irekua_database.base import IrekuaModelBaseUser
+from irekua_core.utils import empty_JSON
+from irekua_core.models import IrekuaModelBaseUser
 
 from .collection_users import CollectionUser
 from .collection_devices import CollectionDevice

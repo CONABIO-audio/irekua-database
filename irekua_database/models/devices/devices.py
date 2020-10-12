@@ -1,12 +1,12 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
-from django.db.models import JSONField
 
-from irekua_database.utils import validate_JSON_schema
-from irekua_database.utils import validate_JSON_instance
-from irekua_database.utils import simple_JSON_schema
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+
+from irekua_core.utils import validate_JSON_schema
+from irekua_core.utils import validate_JSON_instance
+from irekua_core.utils import simple_JSON_schema
+from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
 
 
 class Device(IrekuaModelBase):

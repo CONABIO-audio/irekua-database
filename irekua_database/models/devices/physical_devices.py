@@ -1,11 +1,11 @@
-from django.db.models import JSONField
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_core.utils import empty_JSON
+from irekua_core.models import IrekuaModelBase, IrekuaModelBaseUser
 from irekua_database.models.items.items import Item
 from irekua_database.models.sampling_events.sampling_event_devices import SamplingEventDevice
 

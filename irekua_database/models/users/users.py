@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 
-from irekua_database.utils import translate_doc
+from irekua_core.utils import translate_doc
 
 
 @translate_doc

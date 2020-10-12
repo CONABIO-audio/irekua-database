@@ -28,13 +28,9 @@ class AnnotationTypeAdmin(admin.ModelAdmin):
     )
 
 
-class EntailmentTypeAdmin(admin.ModelAdmin):
+class TagAdmin(admin.ModelAdmin):
     search_fields = ['name']
-    list_display = ('id', 'name', 'source_type', 'target_type', 'created_on')
-    list_display_links = ('id', 'name')
 
-    def name(self, obj):
-        return str(obj)
 
 class LicenceTypeAdmin(admin.ModelAdmin):
     search_fields = ['name']
@@ -113,26 +109,6 @@ class SiteDescriptorTypeAdmin(admin.ModelAdmin):
         ('Additional metadata', {
             'classes': ('collapse', ),
             'fields': ('metadata_schema',)
-        }),
-    )
-
-
-class TermTypeAdmin(admin.ModelAdmin):
-    search_fields = ['name']
-    list_display = ('id', 'name', 'is_categorical', 'created_on')
-    list_display_links = ('id', 'name')
-
-    fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'icon'),
-                'description',
-                'is_categorical',
-            ),
-        }),
-        ('Additional metadata', {
-            'classes': ('collapse', ),
-            'fields': ('metadata_schema', 'synonym_metadata_schema')
         }),
     )
 

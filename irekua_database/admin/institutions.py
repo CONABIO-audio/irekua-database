@@ -1,7 +1,7 @@
-from irekua_database.admin.base import IrekuaAdmin
+from irekua_database.admin.base import IrekuaUserAdmin
 
 
-class InstitutionAdmin(IrekuaAdmin):
+class InstitutionAdmin(IrekuaUserAdmin):
     search_fields = [
         'institution_name',
     ]

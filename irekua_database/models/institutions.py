@@ -15,6 +15,7 @@ class Institution(IrekuaModelBaseUser):
         db_column='institution_name',
         verbose_name=_('institution name'),
         help_text=_('Name of institution'),
+        unique=True,
         blank=False)
     institution_code = models.CharField(
         max_length=64,
@@ -22,13 +23,6 @@ class Institution(IrekuaModelBaseUser):
         verbose_name=_('institution code'),
         help_text=_('Code of institution'),
         blank=True)
-    subdependency = models.CharField(
-        max_length=256,
-        db_column='subdependency',
-        verbose_name=_('subdependency'),
-        help_text=_('Subdependency at institution'),
-        blank=True,
-        null=True)
     country = models.CharField(
         max_length=2,
         choices=COUNTRIES,
@@ -61,19 +55,15 @@ class Institution(IrekuaModelBaseUser):
         null=True)
 
     class Meta:
-        ordering = ['institution_name']
         verbose_name = _('Institution')
         verbose_name_plural = _('Institutions')
-        unique_together = (('institution_name', 'subdependency'))
+
+        ordering = [
+            'institution_name',
+        ]
 
     def __str__(self):
-        name = self.institution_code
-        if name is None or name == '':
-            name = self.institution_name
-
-        if self.subdependency is not None and self.subdependency != '':
-            name += ' - ' + self.subdependency
-        return name
+        return str(self.institution_name)
 
     def has_user(self, user):
         queryset = self.user_set.filter(id=user.id)

@@ -21,14 +21,6 @@ class User(AbstractUser):
     annotate data (:model:`irekua_database.Annotation`), and more.
     ''')
 
-    institution = models.ForeignKey(
-        'Institution',
-        on_delete=models.PROTECT,
-        db_column='institution_id',
-        verbose_name=_('institution'),
-        help_text=_('Institution to which user belongs'),
-        blank=True,
-        null=True)
     is_developer = models.BooleanField(
         db_column='is_developer',
         verbose_name=_('is developer'),
@@ -50,6 +42,13 @@ class User(AbstractUser):
         blank=False,
         null=False,
         default=False)
+
+    institutions = models.ManyToManyField(
+        'Institution',
+        through='UserInstitution',
+        through_fields=('user', 'institution'),
+        verbose_name=_('user institutions'),
+        help_text=_('Institutions to which the user belongs'))
 
     class Meta:
         verbose_name = _('User')

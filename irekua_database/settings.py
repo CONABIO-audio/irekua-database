@@ -1,6 +1,4 @@
 import os
-from irekua_terms.settings import *
-from irekua_core.settings import *
 
 AUTH_USER_MODEL = 'irekua_database.User'
 
@@ -10,8 +8,7 @@ IREKUA_DATABASE_APPS = (
         'irekua_database',
         'django.contrib.postgres',
         'django.contrib.gis',
-    ] +
-    IREKUA_TERMS_APPS
+    ]
 )
 
 

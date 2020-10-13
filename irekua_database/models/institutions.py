@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 import pycountry
 
-from irekua_core.models import IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBaseUser
 
 
 class Institution(IrekuaModelBaseUser):

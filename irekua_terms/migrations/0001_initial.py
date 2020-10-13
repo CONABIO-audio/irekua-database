@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import irekua_core.utils
+import irekua_database.utils
 
 
 class Migration(migrations.Migration):
@@ -28,8 +28,8 @@ class Migration(migrations.Migration):
                         ('description', models.TextField(db_column='description', help_text='Description of term type', verbose_name='description')),
                         ('icon', models.ImageField(blank=True, db_column='icon', help_text='Term type icon', null=True, upload_to='images/term_types/', verbose_name='icon')),
                         ('is_categorical', models.BooleanField(db_column='is_categorical', help_text='Flag indicating whether the term type represents a categorical variable', verbose_name='is categorical')),
-                        ('metadata_schema', models.JSONField(blank=True, db_column='metadata_schema', default=irekua_core.utils.simple_JSON_schema, help_text='JSON Schema for metadata of term info', validators=[irekua_core.utils.validate_JSON_schema], verbose_name='metadata schema')),
-                        ('synonym_metadata_schema', models.JSONField(blank=True, db_column='synonym_metadata_schema', default=irekua_core.utils.simple_JSON_schema, help_text='JSON Schema for metadata of synonym info', validators=[irekua_core.utils.validate_JSON_schema], verbose_name='synonym metadata schema')),
+                        ('metadata_schema', models.JSONField(blank=True, db_column='metadata_schema', default=irekua_database.utils.simple_JSON_schema, help_text='JSON Schema for metadata of term info', validators=[irekua_database.utils.validate_JSON_schema], verbose_name='metadata schema')),
+                        ('synonym_metadata_schema', models.JSONField(blank=True, db_column='synonym_metadata_schema', default=irekua_database.utils.simple_JSON_schema, help_text='JSON Schema for metadata of synonym info', validators=[irekua_database.utils.validate_JSON_schema], verbose_name='synonym metadata schema')),
                     ],
                     options={
                         'verbose_name': 'Term Type',
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
                         ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
                         ('value', models.CharField(db_column='value', help_text='Value of term', max_length=128, verbose_name='value')),
                         ('description', models.TextField(blank=True, db_column='description', help_text='Description of term', verbose_name='description')),
-                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_core.utils.empty_JSON, help_text='Metadata associated to term', null=True, verbose_name='metadata')),
+                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_database.utils.empty_JSON, help_text='Metadata associated to term', null=True, verbose_name='metadata')),
                         ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='termsuggestion_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
                         ('modified_by', models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='termsuggestion_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by')),
                         ('term_type', models.ForeignKey(db_column='term_type', help_text='Type of term', on_delete=django.db.models.deletion.CASCADE, to='irekua_terms.termtype', verbose_name='term type')),
@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                         ('scope', models.CharField(blank=True, db_column='scope', help_text='Scope of term. Use for disambiguation.', max_length=128, verbose_name='scope')),
                         ('description', models.TextField(blank=True, db_column='description', help_text='Description of term', verbose_name='description')),
                         ('url', models.URLField(blank=True, db_column='url', help_text='URL for term description', verbose_name='term url')),
-                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_core.utils.empty_JSON, help_text='Metadata associated to term', null=True, verbose_name='metadata')),
+                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_database.utils.empty_JSON, help_text='Metadata associated to term', null=True, verbose_name='metadata')),
                         ('term_type', models.ForeignKey(db_column='term_type', help_text='Type of term', limit_choices_to={'is_categorical': True}, on_delete=django.db.models.deletion.CASCADE, to='irekua_terms.termtype', verbose_name='term type')),
                     ],
                     options={
@@ -83,7 +83,7 @@ class Migration(migrations.Migration):
                         ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
                         ('synonym', models.CharField(db_column='synonym', help_text='Suggestion of synonym', max_length=128, verbose_name='synonym')),
                         ('description', models.TextField(blank=True, db_column='description', help_text='Description of synonym', verbose_name='description')),
-                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_core.utils.empty_JSON, help_text='Metadata associated to synonym', null=True, verbose_name='metadata')),
+                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_database.utils.empty_JSON, help_text='Metadata associated to synonym', null=True, verbose_name='metadata')),
                         ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='synonymsuggestion_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
                         ('modified_by', models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='synonymsuggestion_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by')),
                         ('source', models.ForeignKey(db_column='source_id', on_delete=django.db.models.deletion.CASCADE, to='irekua_terms.term', verbose_name='')),
@@ -99,7 +99,7 @@ class Migration(migrations.Migration):
                         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                         ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
                         ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_core.utils.empty_JSON, help_text='Metadata associated to the synonym', null=True, verbose_name='metadata')),
+                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_database.utils.empty_JSON, help_text='Metadata associated to the synonym', null=True, verbose_name='metadata')),
                         ('source', models.ForeignKey(db_column='source_id', help_text='Reference to the source of synonym', on_delete=django.db.models.deletion.CASCADE, related_name='synonym_source', to='irekua_terms.term', verbose_name='source')),
                         ('target', models.ForeignKey(db_column='target_id', help_text='Reference to the target of the synonym', on_delete=django.db.models.deletion.CASCADE, related_name='synonym_target', to='irekua_terms.term', verbose_name='target')),
                     ],
@@ -131,7 +131,7 @@ class Migration(migrations.Migration):
                         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                         ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
                         ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('metadata_schema', models.JSONField(blank=True, db_column='metadata_schema', default=irekua_core.utils.simple_JSON_schema, help_text='JSON Schema for metadata of entailment info', validators=[irekua_core.utils.validate_JSON_schema], verbose_name='metadata schema')),
+                        ('metadata_schema', models.JSONField(blank=True, db_column='metadata_schema', default=irekua_database.utils.simple_JSON_schema, help_text='JSON Schema for metadata of entailment info', validators=[irekua_database.utils.validate_JSON_schema], verbose_name='metadata schema')),
                         ('source_type', models.ForeignKey(db_column='source_type_id', help_text='Term type of source of entailment', on_delete=django.db.models.deletion.CASCADE, related_name='entailment_source_type', to='irekua_terms.termtype', verbose_name='source type')),
                         ('target_type', models.ForeignKey(db_column='target_type_id', help_text='Term type of target of entailment', on_delete=django.db.models.deletion.CASCADE, related_name='entailment_target_type', to='irekua_terms.termtype', verbose_name='target type')),
                     ],

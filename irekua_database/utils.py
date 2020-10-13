@@ -1,15 +1,8 @@
-import warnings
 from hashlib import sha256
+import jsonschema
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-import jsonschema
-
-# NOTE: Do not erase for migration backwards compatibility
-warnings.warn(
-    'Please use irekua_core.utils instead of this module. Ignore if '
-    'you see this warning when applying old migrations.',
-    category=DeprecationWarning)
 
 GENERIC_SAMPLING_EVENT = _('generic sampling event')
 GENERIC_SITE = _('generic site')

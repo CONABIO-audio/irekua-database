@@ -1,0 +1,149 @@
+[
+  {
+    "model": "irekua_database.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$PYfGSOChhf6d$Qfj++pemgofTFK0gStxQc+lOkouDJR2ZCoUpGKzPqOg=",
+      "last_login": "2020-10-17T23:52:01.441Z",
+      "is_superuser": true,
+      "username": "superuser",
+      "first_name": "Super",
+      "last_name": "User",
+      "email": "superuser@irekua.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2019-11-25T05:37:51.994Z",
+      "is_developer": false,
+      "is_curator": false,
+      "is_model": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "irekua_database.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$PYfGSOChhf6d$Qfj++pemgofTFK0gStxQc+lOkouDJR2ZCoUpGKzPqOg=",
+      "last_login": "2020-10-17T23:52:01.441Z",
+      "is_superuser": false,
+      "username": "staff",
+      "first_name": "Staff",
+      "last_name": "User",
+      "email": "staff@irekua.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2019-11-25T05:37:51.994Z",
+      "is_developer": false,
+      "is_curator": false,
+      "is_model": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "irekua_database.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$PYfGSOChhf6d$Qfj++pemgofTFK0gStxQc+lOkouDJR2ZCoUpGKzPqOg=",
+      "last_login": "2020-10-17T23:52:01.441Z",
+      "is_superuser": false,
+      "username": "developer",
+      "first_name": "Developer",
+      "last_name": "User",
+      "email": "developer@irekua.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2019-11-25T05:37:51.994Z",
+      "is_developer": true,
+      "is_curator": false,
+      "is_model": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "irekua_database.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$PYfGSOChhf6d$Qfj++pemgofTFK0gStxQc+lOkouDJR2ZCoUpGKzPqOg=",
+      "last_login": "2020-10-17T23:52:01.441Z",
+      "is_superuser": false,
+      "username": "curator",
+      "first_name": "Curator",
+      "last_name": "User",
+      "email": "curator@irekua.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2019-11-25T05:37:51.994Z",
+      "is_developer": false,
+      "is_curator": true,
+      "is_model": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "irekua_database.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$PYfGSOChhf6d$Qfj++pemgofTFK0gStxQc+lOkouDJR2ZCoUpGKzPqOg=",
+      "last_login": "2020-10-17T23:52:01.441Z",
+      "is_superuser": false,
+      "username": "model",
+      "first_name": "Model",
+      "last_name": "User",
+      "email": "model@irekua.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2019-11-25T05:37:51.994Z",
+      "is_developer": false,
+      "is_curator": false,
+      "is_model": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "irekua_database.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$PYfGSOChhf6d$Qfj++pemgofTFK0gStxQc+lOkouDJR2ZCoUpGKzPqOg=",
+      "last_login": "2020-10-17T23:52:01.441Z",
+      "is_superuser": false,
+      "username": "regular",
+      "first_name": "Regular",
+      "last_name": "User",
+      "email": "regular@irekua.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2019-11-25T05:37:51.994Z",
+      "is_developer": false,
+      "is_curator": false,
+      "is_model": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "irekua_database.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$216000$PYfGSOChhf6d$Qfj++pemgofTFK0gStxQc+lOkouDJR2ZCoUpGKzPqOg=",
+      "last_login": "2020-10-17T23:52:01.441Z",
+      "is_superuser": false,
+      "username": "inactive",
+      "first_name": "Inactive",
+      "last_name": "User",
+      "email": "inactive@irekua.com",
+      "is_staff": false,
+      "is_active": false,
+      "date_joined": "2019-11-25T05:37:51.994Z",
+      "is_developer": false,
+      "is_curator": false,
+      "is_model": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  }
+]

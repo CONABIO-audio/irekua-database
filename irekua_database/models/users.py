@@ -61,6 +61,7 @@ class User(AbstractUser):
     def is_special(self):
         return self.is_developer | self.is_curator | self.is_model | self.is_superuser
 
+    # TODO: Remove methods that import models from derived irekua-modules.
     @cached_property
     def is_collection_type_admin(self):
         return self.collectiontype_set.exists()

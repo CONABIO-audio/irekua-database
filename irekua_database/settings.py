@@ -17,7 +17,7 @@ DATABASES = {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'HOST': os.environ.get('IREKUA_DATABASE_HOST', 'localhost'),
         'PORT': os.environ.get('IREKUA_DATABASE_PORT', '5432'),
-        'NAME': os.environ.get('IREKUA_DATABASE_NAME', 'irekua_dummy'),
+        'NAME': os.environ.get('IREKUA_DATABASE_NAME', 'irekua'),
         'USER': os.environ.get('IREKUA_DATABASE_USER', 'irekua'),
         'PASSWORD': os.environ.get('IREKUA_DATABASE_PASSWORD', ''),
     }

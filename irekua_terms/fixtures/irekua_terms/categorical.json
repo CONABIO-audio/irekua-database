@@ -1,0 +1,237 @@
+[
+  {
+    "model": "irekua_schemas.schema",
+    "pk": 10,
+    "fields": {
+      "created_on": "2020-10-18T00:56:01.300Z",
+      "modified_on": "2020-10-18T00:56:01.300Z",
+      "name": "categorical_metadata",
+      "description": "Schema for term metadata of categorical test type.",
+      "schema": {
+        "$id": "http://irekua.com/cat_metadata.json",
+        "type": "object",
+        "title": "Categorical Metadata",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "prop1": {
+            "type": "string"
+          }
+        },
+        "required": ["prop1"]
+      }
+    }
+  },
+  {
+    "model": "irekua_schemas.schema",
+    "pk": 11,
+    "fields": {
+      "created_on": "2020-10-18T00:56:01.300Z",
+      "modified_on": "2020-10-18T00:56:01.300Z",
+      "name": "synonym_metadata",
+      "description": "Schema for term synonym metadata of categorical test type.",
+      "schema": {
+        "$id": "http://irekua.com/cat_synonym.json",
+        "type": "object",
+        "title": "Categorical Synoynm Metadata",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "prop2": {
+            "type": "string"
+          }
+        },
+        "required": ["prop2"]
+      }
+    }
+  },
+  {
+    "model": "irekua_schemas.schema",
+    "pk": 12,
+    "fields": {
+      "created_on": "2020-10-18T00:56:01.300Z",
+      "modified_on": "2020-10-18T00:56:01.300Z",
+      "name": "entailment_metadata",
+      "description": "Schema for entailment metadata between categorical test types.",
+      "schema": {
+        "$id": "http://irekua.com/cat_entailment.json",
+        "type": "object",
+        "title": "Categorical Synoynm Metadata",
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "properties": {
+          "prop3": {
+            "type": "string"
+          }
+        },
+        "required": ["prop3"]
+      }
+    }
+  },
+  {
+    "model": "irekua_terms.termtype",
+    "pk": 1,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.115Z",
+      "modified_on": "2020-10-18T00:56:01.301Z",
+      "name": "categorical1",
+      "description": "Categorical term type",
+      "icon": "",
+      "is_categorical": true,
+      "is_numerical": false,
+      "is_integer": false,
+      "is_boolean": false,
+      "metadata_schema": 10,
+      "synonym_metadata_schema": 11
+    }
+  },
+  {
+    "model": "irekua_terms.termtype",
+    "pk": 2,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.115Z",
+      "modified_on": "2020-10-18T00:56:01.301Z",
+      "name": "categorical2",
+      "description": "Categorical term type",
+      "icon": "",
+      "is_categorical": true,
+      "is_numerical": false,
+      "is_integer": false,
+      "is_boolean": false,
+      "metadata_schema": 10,
+      "synonym_metadata_schema": 11
+    }
+  },
+  {
+    "model": "irekua_terms.termtype",
+    "pk": 3,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.115Z",
+      "modified_on": "2020-10-18T00:56:01.301Z",
+      "name": "categorical_no_metadata",
+      "description": "Categorical term type",
+      "icon": "",
+      "is_categorical": true,
+      "is_numerical": false,
+      "is_integer": false,
+      "is_boolean": false,
+      "metadata_schema": null,
+      "synonym_metadata_schema": null
+    }
+  },
+  {
+    "model": "irekua_terms.entailmenttype",
+    "pk": 1,
+    "fields": {
+      "created_on": "2019-11-25T01:34:05.500Z",
+      "modified_on": "2020-10-18T00:56:01.379Z",
+      "source_type": 1,
+      "target_type": 2,
+      "metadata_schema": 12
+    }
+  },
+  {
+    "model": "irekua_terms.entailmenttype",
+    "pk": 2,
+    "fields": {
+      "created_on": "2019-11-25T01:34:05.500Z",
+      "modified_on": "2020-10-18T00:56:01.379Z",
+      "source_type": 1,
+      "target_type": 3,
+      "metadata_schema": null
+    }
+  },
+  {
+    "model": "irekua_terms.term",
+    "pk": 1,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.130Z",
+      "modified_on": "2019-11-25T01:19:01.130Z",
+      "term_type": 1,
+      "value": "value1",
+      "scope": "",
+      "description": "Test term",
+      "url": "",
+      "metadata": {
+        "prop1": "value1"
+      }
+    }
+  },
+  {
+    "model": "irekua_terms.term",
+    "pk": 2,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.130Z",
+      "modified_on": "2019-11-25T01:19:01.130Z",
+      "term_type": 1,
+      "value": "value2",
+      "scope": "",
+      "description": "Test term",
+      "url": "",
+      "metadata": {
+        "prop1": "value2"
+      }
+    }
+  },
+  {
+    "model": "irekua_terms.term",
+    "pk": 3,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.130Z",
+      "modified_on": "2019-11-25T01:19:01.130Z",
+      "term_type": 1,
+      "value": "value3",
+      "scope": "",
+      "description": "Test term",
+      "url": "",
+      "metadata": {
+        "prop1": "value3"
+      }
+    }
+  },
+  {
+    "model": "irekua_terms.term",
+    "pk": 4,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.130Z",
+      "modified_on": "2019-11-25T01:19:01.130Z",
+      "term_type": 2,
+      "value": "value1",
+      "scope": "",
+      "description": "Test term",
+      "url": "",
+      "metadata": {
+        "prop2": "value1"
+      }
+    }
+  },
+  {
+    "model": "irekua_terms.term",
+    "pk": 5,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.130Z",
+      "modified_on": "2019-11-25T01:19:01.130Z",
+      "term_type": 2,
+      "value": "value2",
+      "scope": "",
+      "description": "Test term",
+      "url": "",
+      "metadata": {
+        "prop2": "value2"
+      }
+    }
+  },
+  {
+    "model": "irekua_terms.term",
+    "pk": 6,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.130Z",
+      "modified_on": "2019-11-25T01:19:01.130Z",
+      "term_type": 2,
+      "value": "value3",
+      "scope": "",
+      "description": "Test term",
+      "url": "",
+      "metadata": {
+        "prop2": "value3"
+      }
+    }
+  }
+]

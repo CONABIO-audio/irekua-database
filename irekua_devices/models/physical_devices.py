@@ -9,12 +9,13 @@ from irekua_database.base import IrekuaModelBaseUser
 
 
 class PhysicalDevice(IrekuaModelBaseUser):
-    identifier = models.CharField(
+    name = models.CharField(
         max_length=128,
-        db_column='identifier',
+        db_column='name',
         verbose_name=_('name'),
-        help_text=_('Simple device identifier (visible only to owner)'),
+        help_text=_('Device name (visible only to owner)'),
         blank=True)
+
     serial_number = models.CharField(
         max_length=128,
         db_column='serial_number',
@@ -22,6 +23,7 @@ class PhysicalDevice(IrekuaModelBaseUser):
         help_text=_('Serial number of device'),
         blank=True,
         null=True)
+
     device = models.ForeignKey(
         'Device',
         on_delete=models.PROTECT,
@@ -30,6 +32,7 @@ class PhysicalDevice(IrekuaModelBaseUser):
         help_text=_('Brand and model of device'),
         blank=False,
         null=False)
+
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
@@ -37,17 +40,12 @@ class PhysicalDevice(IrekuaModelBaseUser):
         default=empty_JSON,
         null=True,
         blank=True)
-    bundle = models.BooleanField(
-        db_column='bundle',
-        verbose_name=_('bundle'),
-        help_text=_(
-            'Does this device possibly represents many '
-            'physical devices?'),
-        blank=False)
 
     class Meta:
         verbose_name = _('Physical Device')
+
         verbose_name_plural = _('Physical Devices')
+
         unique_together = (
             ('serial_number', 'device'),
         )
@@ -55,8 +53,8 @@ class PhysicalDevice(IrekuaModelBaseUser):
         ordering = ['-created_on']
 
     def __str__(self):
-        if self.identifier:
-            return self.identifier
+        if self.name:
+            return self.name
 
         msg = _('Device %(id)s of type %(device)s')
         params = dict(
@@ -65,19 +63,20 @@ class PhysicalDevice(IrekuaModelBaseUser):
         return msg % params
 
     def clean(self):
+        super().clean()
+
         try:
+            # pylint: disable=no-member
             self.device.validate_metadata(self.metadata)
         except ValidationError as error:
-            raise ValidationError({'metadata': error})
-
-        super(PhysicalDevice, self).clean()
+            raise ValidationError({'metadata': error}) from error
 
     @cached_property
     def items(self):
-        from irekua_items.models import Item
+        from irekua_collections.models import DeploymentItem
 
-        return Item.objects.filter(
-            sampling_event_device__collection_device__physical_device=self)
+        return DeploymentItem.objects.filter(
+            deployment__collection_device__physical_device=self)
 
     @cached_property
     def sampling_events(self):
@@ -92,6 +91,3 @@ class PhysicalDevice(IrekuaModelBaseUser):
 
         return Deployment.objects.filter(
             sampling_event__collection_device__physical_device=self)
-
-    def validate_configuration(self, configuration):
-        self.device.validate_configuration(configuration)

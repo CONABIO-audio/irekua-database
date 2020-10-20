@@ -53,6 +53,12 @@ class Institution(IrekuaModelBaseUser):
         upload_to='images/institutions/',
         blank=True,
         null=True)
+    users = models.ManyToManyField(
+        'User',
+        through='UserInstitution',
+        through_fields=('institution', 'user'),
+        verbose_name=_("Institution's user"),
+        help_text=_('Users belonging to this institution'))
 
     class Meta:
         verbose_name = _('Institution')
@@ -64,7 +70,3 @@ class Institution(IrekuaModelBaseUser):
 
     def __str__(self):
         return str(self.institution_name)
-
-    def has_user(self, user):
-        queryset = self.user_set.filter(id=user.id)
-        return queryset.exists()

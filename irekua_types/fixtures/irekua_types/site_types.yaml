@@ -1,0 +1,140 @@
+# Example Schemas
+- model: irekua_schemas.schema
+  pk: 15
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example metadata schema of site descriptors.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: site_descriptor_metadata
+    schema:
+      $id: http://irekua.com/site_descriptor_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        descriptor_property:
+          $id: '#/properties/descriptor_property'
+          description: Sample property for site descriptor metadata
+          title: Descriptor property
+          type: string
+      required:
+      - descriptor_property
+      title: Example site descriptor metadata schema
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 16
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example site metadata schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: site_metadata
+    schema:
+      $id: http://irekua.com/site_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        site_property:
+          $id: '#/properties/descriptor_property'
+          description: Sample property for site metadata
+          title: Descriptor property
+          type: string
+      required:
+      - site_property
+      title: Example site metadata schema
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 17
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example locality metadata schema
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: locality_metadata_schema
+    schema:
+      $id: http://irekua.com/locality_metadata_schema.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        locality_property:
+          $id: '#/properties/locality_property'
+          description: Sample property for locality metadata
+          title: Locality property
+          type: string
+      required:
+      - locality_property
+      title: Example locality metadata schema
+      type: object
+
+# Site Descriptors
+- model: irekua_types.sitedescriptortype
+  pk: 1
+  fields:
+    created_on: '2019-11-27T01:07:19.550Z'
+    description: Example site descriptor type with metadata schema
+    icon: ''
+    metadata: ''
+    metadata_schema: 15
+    modified_on: '2020-10-19T03:20:40.441Z'
+    name: schema descriptor type
+    source: ''
+
+- model: irekua_types.sitedescriptortype
+  pk: 2
+  fields:
+    created_on: '2019-11-27T01:07:19.550Z'
+    description: Example site descriptor type with no metadata schema
+    icon: ''
+    metadata: ''
+    metadata_schema: null
+    modified_on: '2020-10-19T03:20:40.441Z'
+    name: no schema descriptor type
+    source: ''
+
+# Site Types
+- model: irekua_types.sitetype
+  pk: 1
+  fields:
+    created_on: '2019-11-25T04:13:10.936Z'
+    description: Example site type
+    metadata_schema: 16
+    modified_on: '2020-10-19T03:20:40.772Z'
+    name: schema site type
+    site_descriptor_types:
+    - 1
+    - 2
+
+- model: irekua_types.sitetype
+  pk: 2
+  fields:
+    created_on: '2019-11-25T04:13:10.936Z'
+    description: Example site type with no metadata schema
+    metadata_schema: null
+    modified_on: '2020-10-19T03:20:40.772Z'
+    name: no schema site type
+    site_descriptor_types:
+    - 2
+
+# Locality Types
+- model: irekua_types.localitytype
+  pk: 1
+  fields:
+    created_on: '2020-10-19T03:19:12.385Z'
+    description: Sample locality type with metadata schema
+    metadata_schema: 17
+    modified_on: '2020-10-19T03:20:39.550Z'
+    name: schema locality type
+    original_datum: ''
+    publication_date: ''
+    source: ''
+
+- model: irekua_types.localitytype
+  pk: 2
+  fields:
+    created_on: '2020-10-19T03:19:12.385Z'
+    description: Sample locality type with no metadata schema
+    metadata_schema: null
+    modified_on: '2020-10-19T03:20:39.550Z'
+    name: no schema locality type
+    original_datum: ''
+    publication_date: ''
+    source: ''

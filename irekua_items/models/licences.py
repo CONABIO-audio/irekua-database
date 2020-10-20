@@ -4,14 +4,12 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 from irekua_database.utils import empty_JSON
-from irekua_database.utils import translate_doc
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_types.models import LicenceType
 
 
-@translate_doc
 class Licence(IrekuaModelBaseUser):
-    help_text = _('''
+    '''
     Licence Model
 
     A licence is a legal document expressing detail about ownership and
@@ -30,7 +28,7 @@ class Licence(IrekuaModelBaseUser):
     licences belonging to a single collection is recommended to be small.
 
     Additional metadata, as specified by the licence type, is also stored.
-    ''')
+    '''
 
     licence_type = models.ForeignKey(
         LicenceType,
@@ -40,12 +38,14 @@ class Licence(IrekuaModelBaseUser):
         help_text=_('Type of licence used'),
         blank=False,
         null=False)
+
     document = models.FileField(
         upload_to='documents/licences/',
         db_column='document',
         verbose_name=_('document'),
         help_text=_('Legal document of licence agreement'),
         blank=True)
+
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
@@ -53,6 +53,7 @@ class Licence(IrekuaModelBaseUser):
         help_text=_('Metadata associated with licence'),
         blank=True,
         null=True)
+
     is_active = models.BooleanField(
         editable=False,
         db_column='is_active',
@@ -74,12 +75,15 @@ class Licence(IrekuaModelBaseUser):
         return msg
 
     def clean(self):
+        super().clean()
+
         self.update_is_active()
+
+        # Check that metadata is valid
         try:
             self.licence_type.validate_metadata(self.metadata)
         except ValidationError as error:
-            raise ValidationError({'metadata': error})
-        super(Licence, self).clean()
+            raise ValidationError({'metadata': error}) from error
 
     def update_is_active(self):
         """Modify active state if licence is outdated"""

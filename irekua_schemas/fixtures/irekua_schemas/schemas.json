@@ -1,0 +1,269 @@
+[{
+  "model": "irekua_schemas.schema",
+  "pk": 1,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "null",
+    "description": "Null schema. This schema should accept null values.",
+    "schema": {
+      "$id": "http://irekua.com/null.json",
+      "type": "null",
+      "title": "Null schema",
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 2,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "object",
+    "description": "Object schema. This schema should accept any object.",
+    "schema": {
+      "$id": "http://irekua.com/object.json",
+      "type": "object",
+      "title": "Object schema",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [],
+      "properties": {},
+      "definitions": {}
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 3,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "empty object",
+    "description": "Empty object schema. This schema should only accept an empty object.",
+    "schema": {
+      "$id": "http://irekua.com/strict_null.json",
+      "type": "object",
+      "title": "Empty object schema",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "required": [],
+      "properties": {},
+      "definitions": {},
+      "additionalProperties": false
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 4,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "string",
+    "description": "String schema. This schema should only accept strings.",
+    "schema": {
+      "$id": "http://irekua.com/string.json",
+      "type": "string",
+      "title": "String schema",
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 5,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "integer",
+    "description": "Integer schema. This schema should only accept integers.",
+    "schema": {
+      "$id": "http://irekua.com/integer.json",
+      "type": "integer",
+      "title": "Integer schema",
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 6,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "number",
+    "description": "Number schema. This schema should only accept floating numbers.",
+    "schema": {
+      "$id": "http://irekua.com/number.json",
+      "type": "number",
+      "title": "Number schema",
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 7,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "boolean",
+    "description": "Boolean schema. This schema should only accept booleans.",
+    "schema": {
+      "$id": "http://irekua.com/boolean.json",
+      "type": "boolean",
+      "title": "Boolean schema",
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 8,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "array",
+    "description": "Integer array schema. This schema should only accept arrays of integers.",
+    "schema": {
+      "$id": "http://irekua.com/integer_array.json",
+      "type": "array",
+      "title": "Integer Array schema",
+      "items": {
+        "type": "integer"
+      },
+      "$schema": "http://json-schema.org/draft-07/schema#"
+    }
+  }
+},
+{
+  "model": "irekua_schemas.schema",
+  "pk": 9,
+  "fields": {
+    "created_on": "2020-10-18T00:56:01.300Z",
+    "modified_on": "2020-10-18T00:56:01.300Z",
+    "name": "example",
+    "description": "Example schema. This example schema was provided by JSONschema.net.",
+    "schema": {
+      "$schema": "http://json-schema.org/draft-07/schema",
+      "$id": "http://example.com/root.json",
+      "type": "object",
+      "title": "The Root Schema",
+      "description": "The root schema is the schema that comprises the entire JSON document.",
+      "default": {},
+      "required": [
+        "checked",
+        "dimensions",
+        "id",
+        "name",
+        "price",
+        "tags"
+      ],
+      "properties": {
+        "checked": {
+          "$id": "#/properties/checked",
+          "type": "boolean",
+          "title": "The Checked Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": false,
+          "examples": [
+            false
+          ]
+        },
+        "dimensions": {
+          "$id": "#/properties/dimensions",
+          "type": "object",
+          "title": "The Dimensions Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "height": 10.0,
+              "width": 5.0
+            }
+          ],
+          "required": [
+            "width",
+            "height"
+          ],
+          "properties": {
+            "width": {
+              "$id": "#/properties/dimensions/properties/width",
+              "type": "integer",
+              "title": "The Width Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                5
+              ]
+            },
+            "height": {
+              "$id": "#/properties/dimensions/properties/height",
+              "type": "integer",
+              "title": "The Height Schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": 0,
+              "examples": [
+                10
+              ]
+            }
+          }
+        },
+        "id": {
+          "$id": "#/properties/id",
+          "type": "integer",
+          "title": "The Id Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            1
+          ]
+        },
+        "name": {
+          "$id": "#/properties/name",
+          "type": "string",
+          "title": "The Name Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "A green door"
+          ]
+        },
+        "price": {
+          "$id": "#/properties/price",
+          "type": "number",
+          "title": "The Price Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": 0,
+          "examples": [
+            12.5
+          ]
+        },
+        "tags": {
+          "$id": "#/properties/tags",
+          "type": "array",
+          "title": "The Tags Schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": [],
+          "examples": [
+            [
+              "home",
+              "green"
+            ]
+          ],
+          "items": {
+            "$id": "#/properties/tags/items",
+            "type": "string",
+            "title": "The Items Schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+              "home",
+              "green"
+            ]
+          }
+        }
+      }
+    }
+  }
+}]

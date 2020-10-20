@@ -40,7 +40,7 @@ class Role(IrekuaModelBase):
         ordering = ['name']
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def add_permission_from_codename(self, codename):
         if not isinstance(codename, (tuple, list)):
@@ -49,17 +49,9 @@ class Role(IrekuaModelBase):
         for code in codename:
             try:
                 permission = Permission.objects.get(codename=code)
-                self.add_permission(permission)
+                self.permissions.add(permission)
             except:
                 pass
-
-    def add_permission(self, permission):
-        self.permissions.add(permission)
-        self.save()
-
-    def remove_permission(self, permission):
-        self.permissions.remove(permission)
-        self.save()
 
     def has_permission(self, codename):
         return self.permissions.filter(codename=codename).exists()

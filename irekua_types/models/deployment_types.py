@@ -3,13 +3,11 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import validate_JSON_schema
-from irekua_database.utils import validate_JSON_instance
-from irekua_database.utils import simple_JSON_schema
 from irekua_database.base import IrekuaModelBase
+from irekua_schemas.mixins import MetadataSchemaMixin
 
 
-class DeploymentType(IrekuaModelBase):
+class DeploymentType(IrekuaModelBase, MetadataSchemaMixin):
     name = models.CharField(
         max_length=128,
         unique=True,
@@ -17,11 +15,13 @@ class DeploymentType(IrekuaModelBase):
         verbose_name=_('name'),
         help_text=_('Name of deployment type'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of deployment type'),
         blank=True)
+
     icon = models.ImageField(
         db_column='icon',
         verbose_name=_('icon'),
@@ -29,6 +29,7 @@ class DeploymentType(IrekuaModelBase):
         upload_to='images/deployment_types/',
         blank=True,
         null=True)
+
     device_type = models.ForeignKey(
         'DeviceType',
         on_delete=models.PROTECT,
@@ -39,32 +40,53 @@ class DeploymentType(IrekuaModelBase):
             'deployment of the given type'),
         null=False,
         blank=False)
-    metadata_schema = models.JSONField(
-        db_column='metadata_schema',
-        verbose_name=_('metadata schema'),
+
+    restrict_item_types = models.BooleanField(
+        db_column='restrict_item_types',
+        verbose_name=_('restrict item types'),
         help_text=_(
-            'JSON schema for metadata associated to device '
-            'in sampling event'),
-        blank=True,
-        null=False,
-        default=simple_JSON_schema,
-        validators=[validate_JSON_schema])
+            'Flag indicating whether to restrict item '
+            'types apt for this deployment type'),
+        default=False,
+        blank=False,
+        null=False)
+
+    item_types = models.ManyToManyField(
+        'ItemType',
+        verbose_name=_('item types'),
+        help_text=_('Valid item types for this deployment type'),
+        blank=True)
 
     class Meta:
         verbose_name = _('Deployment Type')
+
         verbose_name_plural = _('Deployment Types')
 
-    def validate_metadata(self, metadata):
-        try:
-            validate_JSON_instance(
-                schema=self.metadata_schema,
-                instance=metadata)
-        except ValidationError as error:
+        ordering = ['-created_on']
+
+    def __str__(self):
+        return self.name
+
+    def validate_device_type(self, device_type):
+        if self.device_type != device_type:
             msg = _(
-                'Invalid metadata for device of type %(device)s in sampling'
-                'event of type %(sampling_event)s. Error: %(error)')
+                'The deployment type %(deployment_type)s is for devices of '
+                'type %(this)s not %(other)s.')
             params = dict(
-                device=str(self.device_type),
-                sampling_event=str(self.sampling_event_type),
-                error=str(error))
-            raise ValidationError(msg, params=params)
+                deployment_type=self,
+                this=self.device_type,
+                other=device_type)
+            raise ValidationError(msg % params)
+
+    def validate_item_type(self, item_type):
+        if not self.restrict_item_types:
+            return
+
+        if not self.item_types.filter(pk=item_type.pk).exists():
+            msg = _(
+                'This deployment type %(deployment_type)s does not admit '
+                'items of type %(item_type)s')
+            params = dict(
+                deployment_type=str(self),
+                item_type=str(item_type))
+            raise ValidationError(msg % params)

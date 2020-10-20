@@ -1,0 +1,35 @@
+[
+  {
+    "model": "irekua_terms.termtype",
+    "pk": 4,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.115Z",
+      "modified_on": "2020-10-18T00:56:01.301Z",
+      "name": "numeric",
+      "description": "Numeric term type",
+      "icon": "",
+      "is_categorical": false,
+      "is_numerical": true,
+      "is_integer": false,
+      "is_boolean": false,
+      "metadata_schema": null,
+      "synonym_metadata_schema": null
+    }
+  },
+  {
+    "model": "irekua_terms.term",
+    "pk": 7,
+    "fields": {
+      "created_on": "2019-11-25T01:19:01.130Z",
+      "modified_on": "2019-11-25T01:19:01.130Z",
+      "term_type": 4,
+      "value": 1.2,
+      "scope": "",
+      "description": "Test term",
+      "url": "",
+      "metadata": {
+        "prop4": 1.2
+      }
+    }
+  }
+]

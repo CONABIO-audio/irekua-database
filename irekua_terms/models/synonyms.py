@@ -33,7 +33,12 @@ class Synonym(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Synonym')
+
         verbose_name_plural = _('Synonyms')
+
+        unique_together = [
+            ['source', 'target']
+        ]
 
         ordering = ['source']
 
@@ -45,13 +50,18 @@ class Synonym(IrekuaModelBase):
         return msg % params
 
     def clean(self):
+        super().clean()
+
         if self.source.term_type != self.target.term_type:
             msg = _('Source and target terms are not of the same type')
             raise ValidationError({'target': msg})
 
+        if not self.source.term_type.is_categorical:
+            msg = _('Cannot create synonyms between non-categorical terms')
+            raise ValidationError({'source': msg})
+
         try:
             self.source.term_type.validate_synonym_metadata(self.metadata)
-        except ValidationError as error:
-            raise ValidationError({'metadata': error})
 
-        super(Synonym, self).clean()
+        except ValidationError as error:
+            raise ValidationError({'metadata': error}) from error

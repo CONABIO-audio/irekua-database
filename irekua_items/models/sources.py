@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.base import IrekuaModelBase, IrekuaModelBaseUser
+from irekua_database.base import IrekuaModelBase
 
 
 class Source(IrekuaModelBase):
@@ -13,18 +13,21 @@ class Source(IrekuaModelBase):
         verbose_name=_('directory'),
         help_text=_('Directory containing all files in source'),
         blank=False)
+
     source_file = models.CharField(
         max_length=64,
         db_column='source_file',
         verbose_name=_('source file'),
         help_text=_('File containing metadata for files in source directory'),
         blank=False)
+
     parse_function = models.CharField(
         max_length=64,
         db_column='parse_function',
         verbose_name=_('parse function'),
         help_text=_('Parse function used to insert files and metadata to database'),
         blank=False)
+
     uploader = models.ForeignKey(
         get_user_model(),
         on_delete=models.PROTECT,

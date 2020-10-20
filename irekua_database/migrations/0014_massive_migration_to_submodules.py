@@ -704,6 +704,10 @@ class Migration(migrations.Migration):
                     table='irekua_devices_physicaldevice',
                 ),
                 migrations.AlterModelTable(
+                    name='SamplingEvent',
+                    table='irekua_collections_samplingevent',
+                ),
+                migrations.AlterModelTable(
                     name='SamplingEventItem',
                     table='irekua_collections_samplingeventitem',
                 ),

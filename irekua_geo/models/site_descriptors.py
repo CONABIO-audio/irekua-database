@@ -17,17 +17,20 @@ class SiteDescriptor(IrekuaModelBase):
         help_text=_('Type of site descriptor'),
         blank=False,
         null=False)
+
     value = models.CharField(
         max_length=128,
         db_column='value',
         verbose_name=_('value'),
         help_text=_('Value of descriptor'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of term'),
         blank=True)
+
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
@@ -37,10 +40,18 @@ class SiteDescriptor(IrekuaModelBase):
         null=True)
 
     class Meta:
-        ordering = ['descriptor_type', 'value']
         verbose_name = _('Site Descriptor')
+
         verbose_name_plural = _('Site Descriptors')
-        unique_together = (('descriptor_type', 'value'))
+
+        ordering = [
+            'descriptor_type',
+            'value'
+        ]
+
+        unique_together = (
+            ('descriptor_type', 'value')
+        )
 
     def __str__(self):
         msg = '{descriptor_type}: {value}'.format(
@@ -49,9 +60,10 @@ class SiteDescriptor(IrekuaModelBase):
         return msg
 
     def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+
+        # Check metadata is valid for descriptor type
         try:
             self.descriptor_type.validate_metadata(self.metadata)
         except ValidationError as error:
-            raise ValidationError({'metadata': error})
-
-        super().clean(*args, **kwargs)
+            raise ValidationError({'metadata': error}) from error

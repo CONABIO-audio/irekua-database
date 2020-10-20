@@ -1,14 +1,13 @@
 from django.db import models
-
 from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_types.models import SiteType
-from irekua_geo.models import Site
 from irekua_geo.models import SiteDescriptor
+from irekua_geo.models import Site
 
 
 class CollectionSite(IrekuaModelBaseUser):
@@ -20,6 +19,7 @@ class CollectionSite(IrekuaModelBaseUser):
         help_text=_('Type of site'),
         blank=False,
         null=False)
+
     site = models.ForeignKey(
         Site,
         on_delete=models.PROTECT,
@@ -28,6 +28,7 @@ class CollectionSite(IrekuaModelBaseUser):
         help_text=_('Reference to Site'),
         blank=False,
         null=False)
+
     collection = models.ForeignKey(
         'Collection',
         on_delete=models.CASCADE,
@@ -36,18 +37,26 @@ class CollectionSite(IrekuaModelBaseUser):
         help_text=_('Collection to which the site belongs'),
         blank=False,
         null=False)
+
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
-        help_text=_('Metadata associated to site in collection'),
-        default=empty_JSON,
+        help_text=_('Metadata associated to site'),
         blank=True,
         null=True)
-    internal_id = models.CharField(
+
+    collection_metadata = models.JSONField(
+        db_column='collection_metadata',
+        verbose_name=_('collection metadata'),
+        help_text=_('Additional metadata associated to site in collection'),
+        blank=True,
+        null=True)
+
+    collection_name = models.CharField(
         max_length=64,
-        db_column='internal_id',
-        verbose_name=_('ID within collection'),
-        help_text=_('ID of site within the collection (visible to all collection users)'),
+        db_column='collection_name',
+        verbose_name=_('collection name'),
+        help_text=_('Name of site within the collection (visible to all collection users)'),
         blank=True)
 
     site_descriptors = models.ManyToManyField(
@@ -56,16 +65,17 @@ class CollectionSite(IrekuaModelBaseUser):
 
     class Meta:
         verbose_name = _('Collection Site')
+
         verbose_name_plural = _('Collection Sites')
 
         unique_together = (
             ('collection', 'site'),
-            ('collection', 'internal_id'),
+            ('collection', 'collection_name'),
         )
 
     def __str__(self):
-        if self.internal_id:
-            return self.internal_id
+        if self.collection_name:
+            return self.collection_name
 
         if self.site.name:
             return self.site.name
@@ -75,19 +85,50 @@ class CollectionSite(IrekuaModelBaseUser):
         return msg % params
 
     def clean(self):
+        super().clean()
+
+        # Check that metadata is valid for site type
+        self.clean_metadata()
+
+        # pylint: disable=no-member
+        collection_type = self.collection.collection_type
+
+        # If collection does not restrict site types
+        # no further validation is required
+        if not collection_type.restrict_site_types:
+            return
+
+        # Check if site type is registered for collection type
+        site_type_config = self.clean_site_type(collection_type)
+
+        # Check if additional collection metadata is valid for this site type
+        self.clean_collection_metadata(site_type_config)
+
+    def clean_metadata(self):
         try:
-            self.collection.validate_and_get_site_type(self.site_type)
+            self.site_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
-            raise ValidationError({'site': error})
+            raise ValidationError({'metadata': str(error)}) from error
 
-        super(CollectionSite, self).clean()
+    def clean_site_type(self, collection_type):
+        try:
+             return collection_type.get_site_type(self.site_type)
+        except ObjectDoesNotExist as error:
+            msg = _(
+                'Sites of type %(site_type)s are not allowed in '
+                'collections of type %(collection_type)s')
+            params = dict(
+                site_type=self.site_type,
+                collection_type=collection_type)
+            raise ValidationError({'site_type': msg % params}) from error
 
-    def add_descriptor(self, descriptor):
-        self.site_type.validate_descriptor_type(descriptor)
-        self.site_descriptors.add(descriptor)
+    def clean_collection_metadata(self, site_type_config):
+        try:
+            site_type_config.validate_metadata(self.collection_metadata)
 
-    def remove_descriptor(self, descriptor):
-        self.site_descriptors.remove(descriptor)
+        except ValidationError as error:
+            raise ValidationError({'collection_metadata': str(error)}) from error
 
     @property
     def items(self):

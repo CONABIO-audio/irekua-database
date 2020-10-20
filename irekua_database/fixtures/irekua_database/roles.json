@@ -1,0 +1,10 @@
+[{
+  "model": "irekua_database.role",
+  "pk": 1,
+  "fields": {
+    "name": "No-Permission",
+    "description": "Role with no permissions.",
+    "icon": "",
+    "permissions": []
+  }
+}]

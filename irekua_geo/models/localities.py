@@ -1,24 +1,26 @@
 from django.db import models
-from django.contrib.gis.db.models import MultiPolygonField
-
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
+from django.contrib.gis.db.models import MultiPolygonField
 
+from irekua_database.base import IrekuaModelBase
 from irekua_database.utils import empty_JSON
 from irekua_types.models import LocalityType
 
 
-class Locality(models.Model):
+class Locality(IrekuaModelBase):
     name = models.CharField(
         max_length=128,
         db_column='name',
         help_text=_('Name of locality'),
         blank=False)
+
     description = models.TextField(
         blank=True,
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of the locality'))
+
     locality_type = models.ForeignKey(
         LocalityType,
         on_delete=models.PROTECT,
@@ -27,12 +29,14 @@ class Locality(models.Model):
         help_text=_('Type of locality'),
         blank=False,
         null=False)
+
     geometry = MultiPolygonField(
         blank=True,
         db_column='geometry',
         verbose_name=_('geometry'),
         help_text=_('Geometry of locality'),
         spatial_index=True)
+
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
@@ -53,12 +57,13 @@ class Locality(models.Model):
         ordering = ['-name']
 
     def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+
+        # Check metdata is valid for locality type
         try:
             self.locality_type.validate_metadata(self.metadata)
         except ValidationError as error:
-            raise ValidationError({'metadata': error})
-
-        super().clean(*args, **kwargs)
+            raise ValidationError({'metadata': error}) from error
 
     def validate_point(self, point):
         if not self.geometry.contains(point):

@@ -1,0 +1,33 @@
+[{
+  "model": "irekua_database.institution",
+  "pk": 1,
+  "fields": {
+    "created_on": "2019-12-01T03:00:51.441Z",
+    "modified_on": "2019-12-01T03:16:10.337Z",
+    "created_by": 1,
+    "modified_by": 1,
+    "institution_name": "Comisión Nacional para el Conocimiento y Uso de la Biodiversidad",
+    "institution_code": "CONABIO",
+    "country": "MX",
+    "postal_code": "14010",
+    "address": "Liga Periférico-Insurgentes Sur No. 4903, Parques del Pedregal, Tlalpan",
+    "website": "https://www.biodiversidad.gob.mx/",
+    "logo": ""
+  }
+}, {
+  "model": "irekua_database.institution",
+  "pk": 2,
+  "fields": {
+    "created_on": "2019-12-05T05:33:02.004Z",
+    "modified_on": "2019-12-05T05:33:02.004Z",
+    "created_by": 1,
+    "modified_by": 1,
+    "institution_name": "Irekua",
+    "institution_code": "irekua",
+    "country": "MX",
+    "postal_code": "06100",
+    "address": "Liga Periférico-Insurgentes Sur No. 4903, Parques del Pedregal, Tlalpan",
+    "website": "https://www.biodiversidad.gob.mx/",
+    "logo": ""
+  }
+}]

@@ -1,0 +1,128 @@
+# Example schemas
+- model: irekua_schemas.schema
+  pk: 13
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Schema for media info of audio/x-wav files.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: wav_media_info
+    schema:
+      $id: http://irekua.com/wav_media_info.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        samplewidth:
+          $id: '#/properties/samplewidth'
+          description: The sample width refers to the number of bits occupied by each
+            sample.
+          title: Samplewidth
+          type: integer
+        samplerate:
+          $id: '#/properties/samplerate'
+          description: Sample rate of the recording.
+          title: Samplerate
+          type: integer
+      required:
+      - samplerate
+      - sampleWidth
+      title: audio/x-wav media info
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 14
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Schema for media info of image files.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: image_media_info
+    schema:
+      $id: http://irekua.com/image_media_info.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        height:
+          $id: '#/properties/height'
+          description: Image height in pixels.
+          title: height
+          type: integer
+        width:
+          $id: '#/properties/width'
+          description: Image width in pixels.
+          title: width
+          type: integer
+      required:
+      - width
+      - height
+      title: Image media info
+      type: object
+
+# MIME Types
+- model: irekua_types.mimetype
+  pk: 1
+  fields:
+    created_on: '2019-11-25T04:13:10.619Z'
+    media_info_schema: 13
+    mime_type: audio/x-wav
+    modified_on: '2020-10-19T03:20:39.798Z'
+
+- model: irekua_types.mimetype
+  pk: 2
+  fields:
+    created_on: '2019-11-25T04:13:10.619Z'
+    media_info_schema: 14
+    mime_type: image/png
+    modified_on: '2020-10-19T03:20:39.798Z'
+
+
+- model: irekua_types.mimetype
+  pk: 3
+  fields:
+    created_on: '2019-11-25T04:13:10.619Z'
+    media_info_schema: 14
+    mime_type: image/jpeg
+    modified_on: '2020-10-19T03:20:39.798Z'
+
+
+- model: irekua_types.mimetype
+  pk: 4
+  fields:
+    created_on: '2019-11-25T04:13:10.619Z'
+    media_info_schema: null
+    mime_type: text/plain
+    modified_on: '2020-10-19T03:20:39.798Z'
+
+
+# Device Types
+- model: irekua_types.devicetype
+  pk: 1
+  fields:
+    created_on: '2019-11-25T04:13:10.629Z'
+    description: Camera device
+    icon: ''
+    mime_types:
+    - 2
+    - 3
+    modified_on: '2020-06-09T18:38:00.030Z'
+    name: camera
+
+- model: irekua_types.devicetype
+  pk: 2
+  fields:
+    created_on: '2019-11-25T04:13:10.629Z'
+    description: Recorder device
+    icon: ''
+    mime_types:
+    - 1
+    modified_on: '2020-06-09T18:38:00.030Z'
+    name: recorder
+
+- model: irekua_types.devicetype
+  pk: 3
+  fields:
+    created_on: '2019-11-25T04:13:10.629Z'
+    description: Text editor
+    icon: ''
+    mime_types:
+    - 4
+    modified_on: '2020-06-09T18:38:00.030Z'
+    name: editor

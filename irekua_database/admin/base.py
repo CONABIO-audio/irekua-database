@@ -65,17 +65,18 @@ class IrekuaUserAdmin(IrekuaAdmin):
         'modified_by',
     ]
 
-def get_fieldsets(self, request, obj=None):
-    fieldsets = list(super().get_fieldsets(request, obj=obj))
-    fieldsets.append(
-        (_('Creation'), {
-            'fields': (
-                ('created_on', 'created_by',),
-                ('modified_on', 'modified_by',),
-            ),
-        })
-    )
-    return tuple(fieldsets)
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = list(super().get_fieldsets(request, obj=obj))
+        fieldsets.pop()
+        fieldsets.append(
+            (_('Creation'), {
+                'fields': (
+                    ('created_on', 'created_by',),
+                    ('modified_on', 'modified_by',),
+                ),
+            })
+        )
+        return tuple(fieldsets)
 
     def save_model(self, request, obj, form, change):
         obj.modified_by = request.user

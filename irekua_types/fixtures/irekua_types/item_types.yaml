@@ -1,0 +1,298 @@
+# Example Schemas
+- model: irekua_schemas.schema
+  pk: 18
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example licence metadata schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: licence_metadata
+    schema:
+      $id: http://irekua.com/licence_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        licence_property:
+          $id: '#/properties/licence_property'
+          description: Sample property for licence metadata
+          title: Licence property
+          type: string
+      required:
+      - licence_property
+      title: Example licence metadata schema
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 19
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example annotation schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: annotation
+    schema:
+      $id: http://irekua.com/annotation.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        annotation_property:
+          $id: '#/properties/annotation_property'
+          description: Sample property for annotation
+          title: Annotation property
+          type: string
+      required:
+      - annotation_property
+      title: Example annotation schema
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 20
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example annotation metadata schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: annotation_metadata
+    schema:
+      $id: http://irekua.com/annotation_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        annotation_property:
+          $id: '#/properties/annotation_property'
+          description: Sample property for annotation metadata
+          title: Annotation property
+          type: string
+      required:
+      - annotation_property
+      title: Example annotation metadata schema
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 21
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example event metadata schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: event_metadata
+    schema:
+      $id: http://irekua.com/event_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        event_property:
+          $id: '#/properties/event_property'
+          description: Sample property for event metadata
+          title: Event property
+          type: string
+      required:
+      - event_property
+      title: Example event metadata schema
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 22
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example item metadata schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: item_metadata
+    schema:
+      $id: http://irekua.com/item_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        item_property:
+          $id: '#/properties/item_property'
+          description: Sample property for item metadata
+          title: Item property
+          type: string
+      required:
+      - item_property
+      title: Example item metadata schema
+      type: object
+
+# Licence Types
+- model: irekua_types.licencetype
+  pk: 1
+  fields:
+    created_on: 2019-11-25 04:13:10.877817+00:00
+    modified_on: 2020-10-19 03:20:39.202351+00:00
+    metadata_schema: 18
+    name: schema open licence type
+    description: Example licence type with metadata schema.
+    icon: ''
+    document_template: ''
+    years_valid_for: 9999
+    can_view: true
+    can_download: true
+    can_view_annotations: true
+    can_annotate: true
+    can_vote_annotations: true
+
+- model: irekua_types.licencetype
+  pk: 2
+  fields:
+    created_on: 2019-11-25 04:13:10.877817+00:00
+    modified_on: 2020-10-19 03:20:39.202351+00:00
+    metadata_schema: 18
+    name: schema closed licence type
+    description: Example licence type with metadata schema.
+    icon: ''
+    document_template: ''
+    years_valid_for: 9999
+    can_view: false
+    can_download: false
+    can_view_annotations: false
+    can_annotate: false
+    can_vote_annotations: false
+
+- model: irekua_types.licencetype
+  pk: 3
+  fields:
+    created_on: 2019-11-25 04:13:10.877817+00:00
+    modified_on: 2020-10-19 03:20:39.202351+00:00
+    metadata_schema: null
+    name: no schema open licence type
+    description: Example licence type with metadata schema.
+    icon: ''
+    document_template: ''
+    years_valid_for: 9999
+    can_view: true
+    can_download: true
+    can_view_annotations: true
+    can_annotate: true
+    can_vote_annotations: true
+
+- model: irekua_types.licencetype
+  pk: 4
+  fields:
+    created_on: 2019-11-25 04:13:10.877817+00:00
+    modified_on: 2020-10-19 03:20:39.202351+00:00
+    metadata_schema: null
+    name: no schema closed licence type
+    description: Example licence type with metadata schema.
+    icon: ''
+    document_template: ''
+    years_valid_for: 9999
+    can_view: false
+    can_download: false
+    can_view_annotations: false
+    can_annotate: false
+    can_vote_annotations: false
+
+# Annotation Types
+- model: irekua_types.annotationtype
+  pk: 1
+  fields:
+    created_on: 2019-11-25 04:13:10.606208+00:00
+    modified_on: 2020-10-19 03:20:38.267490+00:00
+    metadata_schema: 20
+    name: schema annotation type
+    description: Example annotation type with metadata schema
+    annotation_schema: 19
+    icon: ''
+
+- model: irekua_types.annotationtype
+  pk: 2
+  fields:
+    created_on: 2019-11-25 04:13:10.606208+00:00
+    modified_on: 2020-10-19 03:20:38.267490+00:00
+    metadata_schema: null
+    name: no schema annotation type
+    description: Example annotation type with metadata schema
+    annotation_schema: 19
+    icon: ''
+
+# Event Types
+- model: irekua_types.eventtype
+  pk: 1
+  fields:
+    created_on: 2019-11-25 04:13:10.692280+00:00
+    modified_on: 2019-11-25 04:13:10.755754+00:00
+    metadata_schema: 21
+    name: schema event type
+    description: Example event type with metadata schema
+    icon: ''
+    restrict_annotation_types: false
+    term_types:
+    - 1 # These refer to the fixture irekua_terms/categorical
+    should_imply: []
+    annotation_types: []
+
+- model: irekua_types.eventtype
+  pk: 2
+  fields:
+    created_on: 2019-11-25 04:13:10.692280+00:00
+    modified_on: 2019-11-25 04:13:10.755754+00:00
+    metadata_schema: null
+    name: no schema event type
+    description: Example event type with no metadata schema
+    icon: ''
+    restrict_annotation_types: false
+    term_types:
+    - 1 # These refer to the fixture irekua_terms/categorical
+    should_imply: []
+    annotation_types: []
+
+- model: irekua_types.eventtype
+  pk: 3
+  fields:
+    created_on: 2019-11-25 04:13:10.692280+00:00
+    modified_on: 2019-11-25 04:13:10.755754+00:00
+    metadata_schema: null
+    name: no schema restrictive event type
+    description: Example event type with no metadata schema and annotation type restrictions
+    icon: ''
+    restrict_annotation_types: true
+    term_types:
+    - 1 # These refer to the fixture irekua_terms/categorical
+    should_imply: []
+    annotation_types:
+    - 2
+
+- model: irekua_types.eventtype
+  pk: 4
+  fields:
+    created_on: 2019-11-25 04:13:10.692280+00:00
+    modified_on: 2019-11-25 04:13:10.755754+00:00
+    metadata_schema: null
+    name: no schema restrictive event type
+    description: Example event type with no metadata schema and annotation type restrictions
+    icon: ''
+    restrict_annotation_types: true
+    term_types:
+    - 1 # These refer to the fixture irekua_terms/categorical
+    should_imply: []
+    annotation_types:
+    - 2
+
+# Item Types
+- model: irekua_types.itemtype
+  pk: 1
+  fields:
+    created_on: 2019-11-25 04:13:10.967353+00:00
+    modified_on: 2019-11-25 04:13:10.983565+00:00
+    metadata_schema: 22
+    name: schema item type
+    description:  Example item type with metadata schema
+    icon: ''
+    mime_types:
+    - 2
+    - 3
+    event_types:
+    - 1
+    - 2
+
+- model: irekua_types.itemtype
+  pk: 2
+  fields:
+    created_on: 2019-11-25 04:13:10.967353+00:00
+    modified_on: 2019-11-25 04:13:10.983565+00:00
+    metadata_schema: null
+    name: no schema item type
+    description:  Example item type with metadata schema
+    icon: ''
+    mime_types:
+    - 2
+    - 3
+    event_types:
+    - 1
+    - 2

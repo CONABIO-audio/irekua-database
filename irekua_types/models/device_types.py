@@ -13,11 +13,13 @@ class DeviceType(IrekuaModelBase):
         verbose_name=_('name'),
         help_text=_('Name for device type'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of device type'),
         blank=False)
+
     icon = models.ImageField(
         db_column='icon',
         verbose_name=_('icon'),
@@ -42,9 +44,7 @@ class DeviceType(IrekuaModelBase):
         ordering = ['name']
 
     def validate_mime_type(self, mime_type):
-        try:
-            self.mime_types.get(mime_type=mime_type)
-        except self.mime_types.model.DoesNotExist:
+        if not self.mime_types.filter(pk=mime_type.pk).exists():
             msg = _(
                 'Device type %(device_type)s does not '
                 'support files of mime type %(mime_type)s'
@@ -52,7 +52,7 @@ class DeviceType(IrekuaModelBase):
             params = dict(
                 device_type=self.name,
                 mime_type=mime_type)
-            raise ValidationError(msg, params=params)
+            raise ValidationError(msg % params)
 
     def __str__(self):
         return self.name

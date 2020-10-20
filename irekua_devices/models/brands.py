@@ -12,12 +12,14 @@ class DeviceBrand(IrekuaModelBase):
         help_text=_('Name of device brand'),
         unique=True,
         blank=False)
+
     website = models.URLField(
         db_column='website',
         verbose_name=_('website'),
         help_text=_('Brand\'s website'),
         blank=True,
         null=True)
+
     logo = models.ImageField(
         db_column='logo',
         verbose_name=_('logo'),
@@ -28,6 +30,7 @@ class DeviceBrand(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Device Brand')
+
         verbose_name_plural = _('Device Brands')
 
         ordering = ['name']

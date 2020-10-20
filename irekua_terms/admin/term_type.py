@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
+from irekua_database.admin.base import IrekuaAdmin
 from irekua_terms.models import EntailmentType
 
 
@@ -14,17 +15,44 @@ class EntailmentTypeInline(admin.TabularInline):
     classes = ('collapse', )
 
 
-class TermTypeAdmin(admin.ModelAdmin):
-    search_fields = ['name']
-    list_display = ('id', 'name', 'is_categorical', 'created_on')
-    list_display_links = ('id', 'name')
+class TermTypeAdmin(IrekuaAdmin):
+    search_fields = [
+        'name'
+    ]
+
+    list_display = (
+        'id',
+        'name',
+        'is_categorical',
+        'is_integer',
+        'is_numerical',
+        'is_boolean',
+        'created_on',
+    )
+
+    list_filter = [
+        'is_categorical',
+        'is_integer',
+        'is_numerical',
+        'is_boolean',
+    ]
+
+    list_display_links = (
+        'id',
+        'name'
+    )
 
     fieldsets = (
         (None, {
             'fields': (
                 ('name', 'icon'),
                 'description',
-                'is_categorical',
+                (
+                    'is_categorical',
+                    'is_integer',
+                    'is_numerical',
+                    'is_boolean',
+                ),
             ),
         }),
         ('Additional metadata', {

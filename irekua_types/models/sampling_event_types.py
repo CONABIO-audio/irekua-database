@@ -2,13 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from irekua_database.utils import validate_JSON_schema
-from irekua_database.utils import validate_JSON_instance
-from irekua_database.utils import simple_JSON_schema
 from irekua_database.base import IrekuaModelBase
+from irekua_schemas.mixins import MetadataSchemaMixin
 
 
-class SamplingEventType(IrekuaModelBase):
+class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
     name = models.CharField(
         max_length=128,
         unique=True,
@@ -16,11 +14,13 @@ class SamplingEventType(IrekuaModelBase):
         verbose_name=_('name'),
         help_text=_('Name fo sampling event type'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of sampling event type'),
         blank=True)
+
     icon = models.ImageField(
         db_column='icon',
         verbose_name=_('icon'),
@@ -28,14 +28,7 @@ class SamplingEventType(IrekuaModelBase):
         upload_to='images/sampling_event_types/',
         blank=True,
         null=True)
-    metadata_schema = models.JSONField(
-        db_column='metadata_schema',
-        verbose_name=_('metadata schema'),
-        help_text=_('JSON Schema for metadata of sampling event info'),
-        blank=True,
-        null=False,
-        default=simple_JSON_schema,
-        validators=[validate_JSON_schema])
+
     restrict_deployment_types = models.BooleanField(
         db_column='restrict_deployment_types',
         verbose_name=_('restrict deployment types'),
@@ -45,6 +38,7 @@ class SamplingEventType(IrekuaModelBase):
         default=False,
         blank=False,
         null=False)
+
     restrict_site_types = models.BooleanField(
         db_column='restrict_site_types',
         verbose_name=_('restrict site types'),
@@ -54,15 +48,33 @@ class SamplingEventType(IrekuaModelBase):
         default=False,
         blank=False,
         null=False)
+
+    restrict_item_types = models.BooleanField(
+        db_column='restrict_item_types',
+        verbose_name=_('restrict item types'),
+        help_text=_(
+            'Flag indicating whether to restrict item '
+            'types apt for this sampling event type'),
+        default=False,
+        blank=False,
+        null=False)
+
     deployment_types = models.ManyToManyField(
         'DeploymentType',
         verbose_name=_('deployment types'),
         help_text=_('Valid deployment types for this sampling event type'),
         blank=True)
+
     site_types = models.ManyToManyField(
         'SiteType',
         verbose_name=_('site types'),
         help_text=_('Valid site types for this sampling event type'),
+        blank=True)
+
+    item_types = models.ManyToManyField(
+        'ItemType',
+        verbose_name=_('item types'),
+        help_text=_('Valid item types for this sampling event type'),
         blank=True)
 
     class Meta:
@@ -71,45 +83,46 @@ class SamplingEventType(IrekuaModelBase):
         ordering = ['name']
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
-    def validate_metadata(self, metadata):
-        try:
-            validate_JSON_instance(
-                schema=self.metadata_schema,
-                instance=metadata)
-        except ValidationError as error:
-            msg = _(
-                'Invalid metadata for sampling event of type '
-                '%(type)s. Error: %(error)s')
-            params = dict(type=str(self), error=str(error))
-            raise ValidationError(str(msg), params=params)
-
-    def validate_and_get_device_type(self, device_type):
+    def validate_deployment_type(self, deployment_type):
         if not self.restrict_deployment_types:
-            return None
+            return
 
-        try:
-            device_type = self.samplingeventtypedevicetype_set.get(
-                device_type=device_type)
-        except self.device_types.model.DoesNotExist:
-            msg = _(
-                'Device type %(device_type)s is not valid for sampling '
-                'event of type %(type)s')
-            params = dict(device_type=str(device_type), type=str(self))
-            raise ValidationError(str(msg), params=params)
+        if self.deployment_types.filter(pk=deployment_type.pk).exists():
+            return
 
-        return device_type
+        msg = _(
+            'Deployment type %(deployment_type)s is not admitted '
+            'for sampling events of type %(sampling_event_type)s.')
+        params = dict(
+            deployment_type=deployment_type,
+            sampling_event_type=self,
+        )
+        raise ValidationError(msg % params)
 
     def validate_site_type(self, site_type):
         if not self.restrict_site_types:
             return
 
-        try:
-            self.site_types.get(name=site_type.name)
-        except self.site_types.model.DoesNotExist:
+        if not self.site_types.filter(pk=site_type.pk).exists():
             msg = _(
-                'Site type %(site_type)s is not valid for '
-                'sampling event of type %(type)s')
-            params = dict(site_type=str(site_type), type=str(self))
-            raise ValidationError(str(msg), params=params)
+                'Site type %(site_type)s is not admitted for '
+                'sampling events of type %(sampling_event_type)s')
+            params = dict(
+                site_type=site_type,
+                type=self)
+            raise ValidationError(msg % params)
+
+    def validate_item_type(self, item_type):
+        if not self.restrict_item_types:
+            return
+
+        if not self.item_types.filter(pk=item_type.pk).exists():
+            msg = _(
+                'Item type %(item_type)s is not admitted for '
+                'sampling events of type %(sampling_event_type)s')
+            params = dict(
+                item_types=item_type,
+                type=self)
+            raise ValidationError(msg % params)

@@ -1,0 +1,16 @@
+[run]
+
+branch = True
+
+omit =
+  manage.py
+  setup.py
+  project/*
+  */tests/*
+  */migrations/*
+  */admin/*
+  */__init__.py
+  */apps.py
+  */settings.py
+  */version.py
+

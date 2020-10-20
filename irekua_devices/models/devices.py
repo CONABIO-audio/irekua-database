@@ -2,15 +2,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from irekua_database.utils import validate_JSON_schema
-from irekua_database.utils import validate_JSON_instance
-from irekua_database.utils import simple_JSON_schema
 from irekua_database.base import IrekuaModelBase
-
+from irekua_schemas.mixins import MetadataSchemaMixin
+from irekua_schemas.models import Schema
 from irekua_types.models import DeviceType
 
 
-class Device(IrekuaModelBase):
+class Device(IrekuaModelBase, MetadataSchemaMixin):
     device_type = models.ForeignKey(
         DeviceType,
         on_delete=models.PROTECT,
@@ -19,6 +17,7 @@ class Device(IrekuaModelBase):
         verbose_name=_('device type'),
         help_text=_('Type of device'),
         blank=False)
+
     brand = models.ForeignKey(
         'DeviceBrand',
         on_delete=models.PROTECT,
@@ -27,33 +26,32 @@ class Device(IrekuaModelBase):
         verbose_name=_('brand'),
         help_text=_('Brand of device'),
         blank=False)
+
     model = models.CharField(
         max_length=64,
         db_column='model',
         verbose_name=_('model'),
         help_text=_('Model of device'),
         blank=False)
-    metadata_schema = models.JSONField(
-        db_column='metadata_schema',
-        verbose_name=_('metadata schema'),
-        help_text=_('JSON Schema for metadata of device info'),
-        blank=True,
-        null=False,
-        default=simple_JSON_schema,
-        validators=[validate_JSON_schema])
-    configuration_schema = models.JSONField(
-        db_column='configuration_schema',
+
+    configuration_schema = models.ForeignKey(
+        Schema,
+        models.PROTECT,
+        related_name='configuration_schema',
+        db_column='configuration schema',
         verbose_name=_('configuration schema'),
         help_text=_('JSON Schema for configuration info of device'),
-        blank=True,
-        null=False,
-        default=simple_JSON_schema,
-        validators=[validate_JSON_schema])
+        null=True,
+        blank=True)
 
     class Meta:
         verbose_name = _('Device')
+
         verbose_name_plural = _('Devices')
-        unique_together = (('brand', 'model'))
+
+        unique_together = (
+            ('brand', 'model')
+        )
 
         ordering = ['brand', 'model']
 
@@ -66,21 +64,12 @@ class Device(IrekuaModelBase):
         return msg % params
 
     def validate_configuration(self, configuration):
+        if self.configuration_schema is None:
+            return
+
         try:
-            validate_JSON_instance(
-                schema=self.configuration_schema,
-                instance=configuration)
+            self.configuration_schema.validate(configuration)
         except ValidationError as error:
             msg = _('Invalid device configuration. Error: %(error)s')
             params = dict(error=str(error))
-            raise ValidationError(msg, params=params)
-
-    def validate_metadata(self, metadata):
-        try:
-            validate_JSON_instance(
-                schema=self.metadata_schema,
-                instance=metadata)
-        except ValidationError as error:
-            msg = _('Invalid device metadata. Error: %(error)s')
-            params = dict(error=str(error))
-            raise ValidationError(msg, params=params)
+            raise ValidationError(msg, params=params) from error

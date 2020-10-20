@@ -2,10 +2,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from irekua_database.utils import validate_JSON_schema
-from irekua_database.utils import validate_JSON_instance
-from irekua_database.utils import simple_JSON_schema
 from irekua_database.base import IrekuaModelBase
+from irekua_schemas.models import Schema
 
 
 class EntailmentType(IrekuaModelBase):
@@ -27,19 +25,22 @@ class EntailmentType(IrekuaModelBase):
         on_delete=models.CASCADE,
         blank=False,
         null=False)
-    metadata_schema = models.JSONField(
-        db_column='metadata_schema',
+    metadata_schema = models.ForeignKey(
+        Schema,
+        models.PROTECT,
+        db_column='metadata_schema_id',
         verbose_name=_('metadata schema'),
         help_text=_('JSON Schema for metadata of entailment info'),
-        blank=True,
-        null=False,
-        default=simple_JSON_schema,
-        validators=[validate_JSON_schema])
+        null=True,
+        blank=True)
 
     class Meta:
         verbose_name = _('Entailment Type')
         verbose_name_plural = _('Entailment Types')
-        unique_together = (('source_type', 'target_type'))
+
+        unique_together = (
+            ('source_type', 'target_type'),
+        )
 
         ordering = ['source_type']
 
@@ -57,11 +58,11 @@ class EntailmentType(IrekuaModelBase):
 
     def validate_metadata(self, metadata):
         try:
-            validate_JSON_instance(
-                schema=self.metadata_schema,
-                instance=metadata)
+            self.metadata_schema.validate(metadata)
         except ValidationError as error:
-            msg = _('Invalid metadata for entailment between terms of types %(entailment)s. Error: %(error)s')
+            msg = _(
+                'Invalid metadata for entailment between terms of types '
+                '%(entailment)s. Error: %(error)s')
             params = dict(
                 entailment=str(self),
                 error=str(error))

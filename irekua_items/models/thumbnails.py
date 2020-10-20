@@ -40,6 +40,7 @@ class ItemThumbnail(IrekuaModelBase):
         db_column='item_id',
         verbose_name=_('item'),
         help_text=_('Item whose thumbnail is this.'))
+
     thumbnail = ImageField(
         upload_to=get_thumbnail_path,
         db_column='thumbnail',
@@ -50,5 +51,7 @@ class ItemThumbnail(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Item Thumbnail')
+
         verbose_name_plural = _('Items Thumbnails')
+        
         ordering = ['created_on']

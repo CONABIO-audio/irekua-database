@@ -32,9 +32,14 @@ class Entailment(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Entailment')
+
         verbose_name_plural = _('Entailments')
 
         ordering = ['source']
+
+        unique_together = [
+            ['source', 'target']
+        ]
 
     def __str__(self):
         msg = '%(source)s => %(target)s'
@@ -44,22 +49,26 @@ class Entailment(IrekuaModelBase):
         return msg % params
 
     def clean(self):
+        super().clean()
+
         try:
             entailment_type = EntailmentType.objects.get(
                 source_type=self.source.term_type,
                 target_type=self.target.term_type)
-        except EntailmentType.DoesNotExist:
-            msg = _('Entailment between types %(source_type)s and %(target_type)s is not possible')
+
+        except EntailmentType.DoesNotExist as error:
+            msg = _(
+                'Entailment between types %(source_type)s and '
+                '%(target_type)s is not possible')
             params = dict(
                 source_type=self.source.term_type,
                 target_type=self.target.term_type)
-            raise ValidationError({'target': msg % params})
+            raise ValidationError({'target': msg % params}) from error
 
         try:
             entailment_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
             msg = _('Invalid entailment metadata. Error %(error)s')
             params = dict(error=str(error))
-            raise ValidationError({'metadata': msg % params})
-
-        super(Entailment, self).clean()
+            raise ValidationError({'metadata': msg % params}) from error

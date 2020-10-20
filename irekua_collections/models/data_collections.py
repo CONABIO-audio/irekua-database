@@ -3,15 +3,10 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_database.models import Institution
 from irekua_devices.models import PhysicalDevice
 from irekua_geo.models import Site
-
-from .collection_users import CollectionUser
-from .collection_devices import CollectionDevice
-from .collection_sites import CollectionSite
 
 
 class Collection(IrekuaModelBaseUser):
@@ -23,6 +18,7 @@ class Collection(IrekuaModelBaseUser):
         help_text=_('Type of collection'),
         blank=False,
         null=False)
+
     name = models.CharField(
         max_length=128,
         unique=True,
@@ -30,18 +26,20 @@ class Collection(IrekuaModelBaseUser):
         verbose_name=_('name'),
         help_text=_('Name of collection'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of collection'),
         blank=False)
+
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to collection'),
         blank=True,
-        default=empty_JSON,
         null=False)
+
     institution = models.ForeignKey(
         Institution,
         on_delete=models.PROTECT,
@@ -50,6 +48,7 @@ class Collection(IrekuaModelBaseUser):
         help_text=_('Institution to which the collection belogs'),
         blank=True,
         null=True)
+
     logo = models.ImageField(
         db_column='logo',
         verbose_name=_('logo'),
@@ -63,17 +62,20 @@ class Collection(IrekuaModelBaseUser):
         through='CollectionDevice',
         through_fields=('collection', 'physical_device'),
         blank=True)
+
     sites = models.ManyToManyField(
         Site,
         through='CollectionSite',
         through_fields=('collection', 'site'),
         blank=True)
+
     users = models.ManyToManyField(
         get_user_model(),
         related_name='collection_users',
         through='CollectionUser',
         through_fields=('collection', 'user'),
         blank=True)
+
     administrators = models.ManyToManyField(
         get_user_model(),
         related_name='collection_administrators',
@@ -163,154 +165,54 @@ class Collection(IrekuaModelBaseUser):
         return str(self.name)
 
     def clean(self):
+        super().clean()
+
+        # Check that metadata is valid for this collection type
+        self.clean_metadata()
+
+    def clean_metadata(self):
         try:
-            self.collection_type.validate_metadata(self.metadata)  # pylint: disable=no-member
+            # pylint: disable=no-member
+            self.collection_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
-            msg = _(
-                'Invalid metadata for collection of type {type}. '
-                'Error: {error}')
-            msg = msg.format(  # pylint: disable=no-member
-                type=str(self.collection_type),
-                error=str(error))
-            raise ValidationError({'metadata': msg})
-        super(Collection, self).clean()
-
-    def add_administrator(self, user):
-        self.administrators.add(user)
-        self.save()
-
-    def remove_administrator(self, user):
-        self.administrators.remove(user)
-        self.save()
+            raise ValidationError({'metadata': error}) from error
 
     @property
     def all_admin(self):
         return self.administrators.all()
 
-    # @property
-    # def items(self):
-    #     return Item.objects.filter(
-    #         sampling_event_device__sampling_event__collection=self)
-    #
-    # @property
-    # def last_item(self):
-    #     return Item.objects.filter(
-    #         sampling_event_device__sampling_event__collection=self
-    #     ).order_by('created_on').first()
-    #
-    # @property
-    # def annotations(self):
-    #     return Annotation.objects.filter(
-    #         item__sampling_event_device__sampling_event__collection=self
-    #     )
-    #
-    # @property
-    # def last_annotation(self):
-    #     return Annotation.objects.filter(
-    #         item__sampling_event_device__sampling_event__collection=self
-    #     ).order_by('created_on').first()
-
-    def add_user(self, user, role, metadata):
-        CollectionUser.objects.create(  # pylint: disable=no-member
-            collection=self,
-            user=user,
-            role=role,
-            metadata=metadata)
-
-    def add_site(self, site, internal_id, site_type=None, metadata=None):
-        if metadata is None:
-            metadata = {}
-
-        CollectionSite.objects.create(  # pylint: disable=no-member
-            collection=self,
-            site=site,
-            internal_id=internal_id,
-            site_type=site_type,
-            metadata=metadata)
-
-    def add_device(self, physical_device, internal_id, metadata):
-        CollectionDevice.objects.create(  # pylint: disable=no-member
-            collection=self,
-            physical_device=physical_device,
-            internal_id=internal_id,
-            metadata=metadata)
-
-    def validate_and_get_annotation_type(self, annotation_type):
-        return self.collection_type.validate_and_get_annotation_type(  # pylint: disable=no-member
-            annotation_type)
-
-    def validate_and_get_event_type(self, event_type):
-        return self.collection_type.validate_and_get_event_type(event_type)  # pylint: disable=no-member
-
-    def validate_and_get_site_type(self, site_type):
-        return self.collection_type.validate_and_get_site_type(site_type)  # pylint: disable=no-member
-
-    def validate_and_get_device_type(self, device_type):
-        return self.collection_type.validate_and_get_device_type(device_type)  # pylint: disable=no-member
-
-    def validate_and_get_item_type(self, item_type):
-        return self.collection_type.validate_and_get_item_type(item_type)  # pylint: disable=no-member
-
-    def validate_and_get_sampling_event_type(self, sampling_event_type):
-        return self.collection_type.validate_and_get_sampling_event_type(  # pylint: disable=no-member
-            sampling_event_type)
-
-    def validate_and_get_licence_type(self, licence_type):
-        return self.collection_type.validate_and_get_licence_type(licence_type)  # pylint: disable=no-member
-
-    def validate_and_get_role(self, role):
-        return self.collection_type.validate_and_get_role(role)  # pylint: disable=no-member
-
-    def validate_and_get_licence(self, licence):
-        try:
-            licence = self.licence_set.get(pk=licence.pk)  # pylint: disable=no-member
-        except self.licences.model.DoesNotExist:  # pylint: disable=no-member
-            msg = _(
-                'Licence %(licence)s is not part of collection '
-                '%(collection)s.')
-            params = dict(
-                licence=str(licence),
-                collection=str(self))
-            raise ValidationError(msg, params=params)
-
     def is_admin(self, user):
-        queryset = self.administrators.filter(id=user.id)  # pylint: disable=no-member
+        queryset = self.administrators.filter(id=user.id)
         return queryset.exists()
 
-    def is_user(self, user):
-        try:
-            self.users.get(pk=user.pk)
-            return True
-        except self.users.model.DoesNotExist:
-            return False
-
     def has_user(self, user):
-        return CollectionUser.objects.filter(  # pylint: disable=no-member
-            collection=self,
-            user=user).exists()
+        return self.users.filter(pk=user.pk).exists()
 
     def has_permission(self, user, codename):
         try:
-            collectionuser = CollectionUser.objects.get(  # pylint: disable=no-member
+            collectionuser = self.users.through.objects.get(
                 collection=self,
                 user=user)
             role = collectionuser.role
-        except CollectionUser.DoesNotExist:  # pylint: disable=no-member
+
+        except self.users.through.DoesNotExist:
             return False
 
         return role.has_permission(codename)
 
     def get_user_role(self, user):
         try:
-            collection_user = CollectionUser.objects.get(  # pylint: disable=no-member
+            collection_user = self.users.through.objects.get(
                 collection=self,
                 user=user)
             return collection_user.role
-        except CollectionUser.DoesNotExist:  # pylint: disable=no-member
+
+        except self.users.through.DoesNotExist:
             return None
 
     def update_is_open(self):
-        restrictive_licences = self.licence_set.filter(  # pylint: disable=no-member
+        restrictive_licences = self.licence_set.filter(
             is_active=True,
             licence_type__can_view=False)
 

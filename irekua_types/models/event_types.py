@@ -5,9 +5,10 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.base import IrekuaModelBase
 from irekua_terms.models import TermType
 from irekua_terms.models import Term
+from irekua_schemas.mixins import MetadataSchemaMixin
 
 
-class EventType(IrekuaModelBase):
+class EventType(IrekuaModelBase, MetadataSchemaMixin):
     name = models.CharField(
         max_length=64,
         unique=True,
@@ -15,11 +16,13 @@ class EventType(IrekuaModelBase):
         verbose_name=_('name'),
         help_text=_('Name of event type'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of event type'),
         blank=False)
+
     icon = models.ImageField(
         db_column='icon',
         verbose_name=_('icon'),
@@ -36,6 +39,7 @@ class EventType(IrekuaModelBase):
             'Valid term types with which to label this type '
             'of events'),
         blank=True)
+
     should_imply = models.ManyToManyField(
         Term,
         db_column='should_imply',
@@ -43,6 +47,22 @@ class EventType(IrekuaModelBase):
         help_text=_(
             'Terms that should be implied (if meaningful) by '
             'any terms used to describe this event type.'),
+        blank=True)
+
+    restrict_annotation_types = models.BooleanField(
+        db_column='restrict_annotation_types',
+        verbose_name=_('restrict annotation types'),
+        help_text=_(
+            'Flag indicating whether to restrict annotation '
+            'types apt for this event type'),
+        default=False,
+        blank=False,
+        null=False)
+
+    annotation_types = models.ManyToManyField(
+        'AnnotationType',
+        verbose_name=_('annotation types'),
+        help_text=_('Valid annotation types for this event type'),
         blank=True)
 
     class Meta:
@@ -55,17 +75,34 @@ class EventType(IrekuaModelBase):
         return self.name
 
     def validate_term_type(self, term_type):
-        try:
-            self.term_types.get(name=term_type)
-        except self.term_types.model.DoesNotExist:
+        if not self.term_types.filter(pk=term_type.pk).exists():
             msg = _(
                 'Term type %(term_type)s is invalid for event '
                 'type %(event_type)s')
             params = dict(term_type=str(term_type), event_type=str(self))
             raise ValidationError(msg, params=params)
 
-    def add_term_type(self, term_type):
-        self.term_types.add(term_type)
+    def validate_term(self, term):
+        for implication in self.should_imply.all():
+            if not term.entails(implication):
+                msg = _(
+                    'Only terms that entail %(implication)s can be used '
+                    'to describe events of type %(event_type)s.'
+                )
+                params = dict(
+                    implication=str(implication),
+                    event_type=str(self))
+                raise ValidationError(msg % params)
 
-    def remove_term_type(self, term_type):
-        self.term_types.remove(term_type)
+    def validate_annotation_type(self, annotation_type):
+        if not self.restrict_annotation_types:
+            return
+
+        if not self.annotation_types.filter(pk=annotation_type.pk).exists():
+            msg = _(
+                'Annotation type %(annotation_type)s not valid for event '
+                'of type %(event_type)s')
+            params = dict(
+                annotation_type=str(annotation_type),
+                event_type=str(self))
+            raise ValidationError(msg % params)

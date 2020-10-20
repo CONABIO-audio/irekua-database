@@ -40,16 +40,23 @@ class TermSuggestion(IrekuaModelBaseUser):
         verbose_name = _('Term Suggestions')
 
     def __str__(self):
-        msg = _('Suggestion: %(term_type)s: %(value)s')
+        msg = _('%(term_type)s: %(value)s')
         params = dict(
             term_type=str(self.term_type),
             value=self.value)
         return msg % params
 
     def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+
+        if not self.term_type.is_categorical:
+            msg = _(
+                'Cannot create a term suggestion for a non-categorical term'
+            )
+            raise ValidationError({'term_type': msg})
+
         try:
             self.term_type.validate_metadata(self.metadata)
-        except ValidationError as error:
-            raise ValidationError({'metadata': error})
 
-        super(TermSuggestion, self).clean(*args, **kwargs)
+        except ValidationError as error:
+            raise ValidationError({'metadata': error}) from error

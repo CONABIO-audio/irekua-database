@@ -1,0 +1,170 @@
+# Example Schemas
+- model: irekua_schemas.schema
+  pk: 23
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example sampling event metadata schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: sampling_event_metadata
+    schema:
+      $id: http://irekua.com/sampling_event_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        sampling_event_property:
+          $id: '#/properties/sampling_event_property'
+          description: Sample property for sampling event metadata
+          title: Sampling event property
+          type: string
+      required:
+      - sampling_event_property
+      title: Example sampling event metadata schema
+      type: object
+
+- model: irekua_schemas.schema
+  pk: 24
+  fields:
+    created_on: '2020-10-18T00:56:01.300Z'
+    description: Example deployment metadata schema.
+    modified_on: '2020-10-18T00:56:01.300Z'
+    name: deployment_metadata
+    schema:
+      $id: http://irekua.com/deployment_metadata.json
+      $schema: http://json-schema.org/draft-07/schema#
+      additionalProperties: true
+      properties:
+        deployment_property:
+          $id: '#/properties/deployment_property'
+          description: Sample property for deployment metadata
+          title: Deployment property
+          type: string
+      required:
+      - deployment_property
+      title: Example deployment metadata schema
+      type: object
+
+# Deployment Types
+- model: irekua_types.deploymenttype
+  pk: 1
+  fields:
+    created_on: 2020-01-17 01:26:08.150562+00:00
+    modified_on: 2020-10-19 03:20:38.642755+00:00
+    metadata_schema: 24
+    name: schema deployment type
+    description: Example deployment type with metadata schema
+    icon: ''
+    device_type: 1 # Camera device as defined in the fixture irekua_types/device_types
+    restrict_item_types: false
+    item_types: []
+
+- model: irekua_types.deploymenttype
+  pk: 2
+  fields:
+    created_on: 2020-01-17 01:26:08.150562+00:00
+    modified_on: 2020-10-19 03:20:38.642755+00:00
+    metadata_schema: null
+    name: no schema deployment type
+    description: Example deployment type with no metadata schema
+    icon: ''
+    device_type: 1 # Camera device as defined in the fixture irekua_types/device_types
+    restrict_item_types: false
+    item_types: []
+
+- model: irekua_types.deploymenttype
+  pk: 3
+  fields:
+    created_on: 2020-01-17 01:26:08.150562+00:00
+    modified_on: 2020-10-19 03:20:38.642755+00:00
+    metadata_schema: 24
+    name: schema restrictive deployment type
+    description: Example deployment type with metadata schema and restrictions
+    icon: ''
+    device_type: 1 # Camera device as defined in the fixture irekua_types/device_types
+    restrict_item_types: true
+    item_types:
+    - 2 # Item type as defined in the fixture irekua_types/item_types
+
+- model: irekua_types.deploymenttype
+  pk: 4
+  fields:
+    created_on: 2020-01-17 01:26:08.150562+00:00
+    modified_on: 2020-10-19 03:20:38.642755+00:00
+    metadata_schema: null
+    name: no schema restrictive deployment type
+    description: Example deployment type with no metadata schema and restrictions
+    icon: ''
+    device_type: 1 # Camera device as defined in the fixture irekua_types/device_types
+    restrict_item_types: true
+    item_types:
+    - 2 # Item type as defined in the fixture irekua_types/item_types
+
+# Sampling Event Type
+- model: irekua_types.samplingeventtype
+  pk: 1
+  fields:
+    created_on: 2019-11-25 04:13:10.947956+00:00
+    modified_on: 2020-10-19 03:20:40.170767+00:00
+    metadata_schema: 23
+    name: schema sampling event type
+    description: Example sampling event type with metadata schema
+    icon: ''
+    restrict_deployment_types: false
+    restrict_site_types: false
+    restrict_item_types: false
+    deployment_types: []
+    site_types: []
+    item_types: []
+
+- model: irekua_types.samplingeventtype
+  pk: 2
+  fields:
+    created_on: 2019-11-25 04:13:10.947956+00:00
+    modified_on: 2020-10-19 03:20:40.170767+00:00
+    metadata_schema: null
+    name: no schema sampling event type
+    description: Example sampling event type with no metadata schema
+    icon: ''
+    restrict_deployment_types: false
+    restrict_site_types: false
+    restrict_item_types: false
+    deployment_types: []
+    site_types: []
+    item_types: []
+
+- model: irekua_types.samplingeventtype
+  pk: 3
+  fields:
+    created_on: 2019-11-25 04:13:10.947956+00:00
+    modified_on: 2020-10-19 03:20:40.170767+00:00
+    metadata_schema: 23
+    name: schema restrictive sampling event type
+    description: Example sampling event type with metadata schema and restrictions
+    icon: ''
+    restrict_deployment_types: true
+    restrict_site_types: true
+    restrict_item_types: true
+    deployment_types:
+    - 2
+    site_types:
+    - 2 # Site type (no metadata schema) as defined by the fixture irekua_types/site_types
+    item_types:
+    - 2 # Item type as defined in the fixture irekua_types/item_types
+
+- model: irekua_types.samplingeventtype
+  pk: 4
+  fields:
+    created_on: 2019-11-25 04:13:10.947956+00:00
+    modified_on: 2020-10-19 03:20:40.170767+00:00
+    metadata_schema: null
+    name: no schema restrictive sampling event type
+    description: Example sampling event type with no metadata schema and restrictions
+    icon: ''
+    restrict_deployment_types: true
+    restrict_site_types: true
+    restrict_item_types: true
+    deployment_types:
+    - 2
+    site_types:
+    - 2 # Site type (no metadata schema) as defined by the fixture irekua_types/site_types
+    item_types:
+    - 2 # Item type as defined in the fixture irekua_types/item_types

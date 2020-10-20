@@ -59,9 +59,17 @@ class Term(IrekuaModelBase):
         return msg
 
     def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+
+        try:
+            self.term_type.validate_value(self.value)
+        except ValidationError as error:
+            raise ValidationError({'value': error}) from error
+
         try:
             self.term_type.validate_metadata(self.metadata)
         except ValidationError as error:
-            raise ValidationError({'metadata': error})
+            raise ValidationError({'metadata': error}) from error
 
-        super(Term, self).clean(*args, **kwargs)
+    def entails(self, term):
+        return self.entailment_source.filter(target=term).exists()

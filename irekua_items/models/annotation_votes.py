@@ -15,7 +15,15 @@ class AnnotationVote(IrekuaModelBaseUser):
         help_text=_('Reference to annotation being voted'),
         blank=False,
         null=False)
-    # TODO: add bad annotation field
+
+    incorrect_geometry = models.BooleanField(
+        db_column='incorrect_geometry',
+        verbose_name=_('incorrect geometry'),
+        help_text=_('Is the annotation geometry incorrect?'),
+        blank=True,
+        default=False,
+        null=False)
+
     labels = models.ManyToManyField(
         Term,
         db_column='labels',
@@ -24,13 +32,21 @@ class AnnotationVote(IrekuaModelBaseUser):
         blank=True)
 
     class Meta:
-        ordering = ['-modified_on']
         verbose_name = _('Annotation Vote')
+
         verbose_name_plural = _('Annotation Votes')
+
+        unique_together = [
+            ['annotation', 'created_by'],
+        ]
+
+        ordering = ['-created_on']
 
     def __str__(self):
         msg = _('Vote %(id)s on annotation %(annotation)s')
-        params = dict(id=self.id, annotation=self.annotation.id)
+        params = dict(
+            id=self.id,
+            annotation=self.annotation.id)
         return msg % params
 
     def clean(self):
@@ -38,7 +54,7 @@ class AnnotationVote(IrekuaModelBaseUser):
             try:
                 self.validate_labels(self.labels.all())
             except ValidationError as error:
-                raise ValidationError({'labels': error})
+                raise ValidationError({'labels': error}) from error
 
         super().clean()
 
@@ -47,9 +63,9 @@ class AnnotationVote(IrekuaModelBaseUser):
             term_type = term.term_type.name
             try:
                 self.annotation.event_type.validate_term_type(term_type)
-            except ValidationError:
+            except ValidationError as error:
                 msg = _(
                         'Labels contain a term (of type %(type)s) that is not '
                         'valid for the event type')
                 params = dict(type=term_type)
-                raise ValidationError(msg, params=params)
+                raise ValidationError(msg, params=params) from error

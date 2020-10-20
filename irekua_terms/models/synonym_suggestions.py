@@ -37,15 +37,15 @@ class SynonymSuggestion(IrekuaModelBaseUser):
         verbose_name = _('Synonym Suggestions')
 
     def __str__(self):
-        msg = _('Suggestion: {term} = {suggestion}').format(
+        msg = _('{term} = {suggestion}').format(
             term=str(self.source),
             suggestion=self.synonym)
         return msg
 
     def clean(self):
+        super().clean()
+
         try:
             self.source.term_type.validate_synonym_metadata(self.metadata)
         except ValidationError as error:
-            raise ValidationError({'metadata': error})
-
-        super(SynonymSuggestion, self).clean()
+            raise ValidationError({'metadata': error}) from error

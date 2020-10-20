@@ -17,6 +17,7 @@ class Annotation(IrekuaModelBaseUser):
         help_text=_('Annotated item'),
         on_delete=models.PROTECT,
         blank=False)
+
     event_type = models.ForeignKey(
         EventType,
         on_delete=models.PROTECT,
@@ -24,6 +25,7 @@ class Annotation(IrekuaModelBaseUser):
         verbose_name=_('event type'),
         help_text=_('Type of event being annotated'),
         blank=False)
+
     annotation_type = models.ForeignKey(
         AnnotationType,
         on_delete=models.PROTECT,
@@ -31,6 +33,7 @@ class Annotation(IrekuaModelBaseUser):
         verbose_name=_('annotation type'),
         help_text=_('Type of annotation'),
         blank=False)
+
     annotation = models.JSONField(
         db_column='annotation',
         verbose_name=_('annotation'),
@@ -38,6 +41,21 @@ class Annotation(IrekuaModelBaseUser):
         help_text=_('Information of annotation location within item'),
         blank=True,
         null=False)
+
+    annotation_metadata = models.JSONField(
+        db_column='annotation_metadata',
+        verbose_name=_('annotation metadata'),
+        help_text=_('Additional annotation metadata'),
+        blank=True,
+        null=True)
+
+    event_metadata = models.JSONField(
+        db_column='event_metadata',
+        verbose_name=_('event metadata'),
+        help_text=_('Additional metadata on event occurence'),
+        blank=True,
+        null=True)
+
     labels = models.ManyToManyField(
         Term,
         db_column='labels',
@@ -47,6 +65,7 @@ class Annotation(IrekuaModelBaseUser):
 
     class Meta:
         verbose_name = _('Annotation')
+
         verbose_name_plural = _('Annotations')
 
         ordering = ['-modified_on']
@@ -56,39 +75,45 @@ class Annotation(IrekuaModelBaseUser):
         )
 
     def __str__(self):
-        msg = _('Annotation of item %(item_id)s')
-        params = dict(item_id=self.item)
+        msg = _('Annotation %(id)s (item %(item_id)s)')
+        params = dict(id=self.id, item_id=self.item)
         return msg % params
 
     def clean(self):
-        try:
-            self.item.validate_and_get_event_type(self.event_type)
-        except ValidationError as error:
-            raise ValidationError({'event_type': error})
+        super().clean()
 
-        collection = self.item.sampling_event_device.sampling_event.collection
+        # Check event type is valid for item type
         try:
-            collection.validate_and_get_event_type(self.event_type)
+            # pylint: disable=no-member
+            self.item.item_type.validate_event_type(self.event_type)
         except ValidationError as error:
-            raise ValidationError({'event_type': error})
+            raise ValidationError({'event_type': error}) from error
 
+        # Check annotation type is valid for event type
         try:
-            collection.validate_and_get_annotation_type(self.annotation_type)
+            self.event_type.validate_annotation_type(self.annotation_type)
         except ValidationError as error:
-            raise ValidationError({'annotation_type': error})
+            raise ValidationError({'annotation_type': error}) from error
 
+        # Check annotation is valid for Annotation Type
         try:
             self.annotation_type.validate_annotation(self.annotation)
         except ValidationError as error:
-            raise ValidationError({'annotation': error})
+            raise ValidationError({'annotation': error}) from error
 
-        if self.id:
-            try:
-                self.validate_labels(self.labels.all())
-            except ValidationError as error:
-                raise ValidationError({'labels': error})
+        # Check annotation metadata is valid
+        try:
+            self.annotation_type.validate_metadata(self.annotation_metadata)
+        except ValidationError as error:
+            raise ValidationError({'annotation_metadata': error}) from error
 
-        super(Annotation, self).clean()
+        # Check event metadata is valid
+        try:
+            self.event_type.validate_metadata(self.event_metadata)
+        except ValidationError as error:
+            raise ValidationError({'event_metadata': error}) from error
+
+        # Labels
 
     def validate_labels(self, labels):
         for term in labels:

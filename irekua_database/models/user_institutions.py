@@ -40,6 +40,10 @@ class UserInstitution(IrekuaModelBase):
         verbose_name = _('User Institution')
         verbose_name_plural = _('User Institutions')
 
+        unique_together = [
+            ['institution', 'user'],
+        ]
+
         ordering = [
             '-created_on'
         ]
@@ -48,4 +52,4 @@ class UserInstitution(IrekuaModelBase):
         if self.position:
             return str(self.position)
 
-        return self.name
+        return str(self.institution)

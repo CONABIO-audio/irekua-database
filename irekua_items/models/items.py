@@ -9,14 +9,65 @@ from django.utils.translation import gettext_lazy as _
 
 from pytz import timezone as pytz_timezone
 
+from irekua_database.base import IrekuaModelBaseUser
 from irekua_database.utils import empty_JSON
 from irekua_database.utils import hash_file
-from irekua_database.base import IrekuaModelBaseUser
+
 from irekua_types.models import ItemType
+from irekua_types.models import MimeType
 from irekua_types.models import EventType
 
 
 mimetypes.init()
+
+
+def infer_datetime(
+        year=None,
+        month=None,
+        day=None,
+        hour=None,
+        minute=None,
+        second=None,
+        tz_info=None,
+        dt=None):
+    """
+    Infer datetime object from partial information.
+
+    This function can be used to reconstruct the item's captured_on datetime field.
+    The inference can be based on a known datetime and replace the datetime attributes
+    with the provided information. This is based on the assumption that the date-time
+    partial fields (year, hour, etc..) are more reliable than the single datetime field.
+    """
+    if (year is None) or (month is None) or (day is None):
+        msg = _('Year, month and day have to be provided')
+        raise ValueError(msg)
+
+    if tz_info is None:
+        tz = timezone.get_default_timezone()
+    else:
+        tz = pytz_timezone(tz_info)
+
+    if dt is None:
+        dt = timezone.localtime(timezone=tz).replace(hour=0, minute=0, second=0)
+    else:
+        dt = timezone.localtime(dt, timezone=tz)
+
+    dt = dt.replace(year=year, month=month, day=day)
+
+    if hour is None:
+        return dt
+
+    dt = dt.replace(hour=hour)
+
+    if minute is  None:
+        return dt
+
+    dt = dt.replace(minute=minute)
+
+    if second is None:
+        return dt
+
+    return dt.replace(second=second)
 
 
 def get_item_path(instance, filename):
@@ -27,7 +78,7 @@ def get_item_path(instance, filename):
         '{sampling_event_device}',
         '{hash}{ext}')
 
-    mime_type, __ = mimetypes.guess_type(filename)
+    mime_type, _ = mimetypes.guess_type(filename)
     extension = mimetypes.guess_extension(mime_type)
 
     sampling_event_device = instance.sampling_event_device
@@ -45,32 +96,6 @@ def get_item_path(instance, filename):
         ext=extension)
     return path
 
-# TODO: move to migrations
-# def get_thumbnail_path(instance, filename):
-#     path_fmt = os.path.join(
-#         'thumbnails',
-#         '{collection}',
-#         '{sampling_event}',
-#         '{sampling_event_device}',
-#         '{hash}{ext}')
-#
-#     mime_type, __ = mimetypes.guess_type(filename)
-#     extension = 'jpg'
-#
-#     sampling_event_device = instance.sampling_event_device
-#     sampling_event = sampling_event_device.sampling_event
-#     collection = sampling_event.collection
-#
-#     hash_string = instance.hash
-#
-#     path = path_fmt.format(
-#         collection=collection.pk,
-#         sampling_event=sampling_event.pk,
-#         sampling_event_device=sampling_event_device.pk,
-#         hash=hash_string,
-#         ext=extension)
-#     return path
-
 
 class Item(IrekuaModelBaseUser):
     hash_string = None
@@ -79,9 +104,10 @@ class Item(IrekuaModelBaseUser):
     filesize = models.IntegerField(
         db_column='filesize',
         verbose_name=_('file size'),
-        help_text=_('Size of resource in Bytes'),
+        help_text=_('Size of resource in bytes'),
         blank=True,
         null=True)
+
     hash = models.CharField(
         db_column='hash',
         verbose_name=_('hash'),
@@ -90,6 +116,7 @@ class Item(IrekuaModelBaseUser):
         unique=True,
         blank=True,
         null=False)
+
     item_type = models.ForeignKey(
         ItemType,
         on_delete=models.PROTECT,
@@ -97,6 +124,7 @@ class Item(IrekuaModelBaseUser):
         verbose_name=_('item type'),
         help_text=_('Type of resource'),
         blank=False)
+
     item_file = models.FileField(
         upload_to=get_item_path,
         db_column='item_file',
@@ -104,6 +132,7 @@ class Item(IrekuaModelBaseUser):
         help_text=_('Upload file associated to file'),
         blank=True,
         null=True)
+
     media_info = models.JSONField(
         db_column='media_info',
         default=empty_JSON,
@@ -111,6 +140,7 @@ class Item(IrekuaModelBaseUser):
         help_text=_('Information of resource file'),
         blank=True,
         null=False)
+
     source = models.ForeignKey(
         'Source',
         db_column='source_id',
@@ -119,12 +149,14 @@ class Item(IrekuaModelBaseUser):
         on_delete=models.PROTECT,
         blank=True,
         null=True)
+
     source_foreign_key = models.CharField(
         db_column='source_foreign_key',
         verbose_name=_('source foreign key'),
         help_text=_('Foreign key of file in source database'),
         max_length=64,
         blank=True)
+
     metadata = models.JSONField(
         db_column='metadata',
         default=empty_JSON,
@@ -132,12 +164,14 @@ class Item(IrekuaModelBaseUser):
         help_text=_('Metadata associated to item'),
         blank=True,
         null=True)
+
     captured_on = models.DateTimeField(
         db_column='captured_on',
         verbose_name=_('captured on'),
         help_text=_('Date on which item was produced'),
         blank=True,
         null=True)
+
     captured_on_year = models.IntegerField(
         db_column='captured_on_year',
         verbose_name=_('year'),
@@ -147,6 +181,7 @@ class Item(IrekuaModelBaseUser):
         validators=[
             MinValueValidator(1800),
             MaxValueValidator(3000)])
+
     captured_on_month = models.IntegerField(
         db_column='captured_on_month',
         verbose_name=_('month'),
@@ -156,6 +191,7 @@ class Item(IrekuaModelBaseUser):
         validators=[
             MinValueValidator(0),
             MaxValueValidator(12)])
+
     captured_on_day = models.IntegerField(
         db_column='captured_on_day',
         verbose_name=_('day'),
@@ -165,6 +201,7 @@ class Item(IrekuaModelBaseUser):
         validators=[
             MinValueValidator(0),
             MaxValueValidator(32)])
+
     captured_on_hour = models.IntegerField(
         db_column='captured_on_hour',
         verbose_name=_('hour'),
@@ -174,6 +211,7 @@ class Item(IrekuaModelBaseUser):
         validators=[
             MinValueValidator(0),
             MaxValueValidator(23)])
+
     captured_on_minute = models.IntegerField(
         db_column='captured_on_minute',
         verbose_name=_('minute'),
@@ -183,6 +221,7 @@ class Item(IrekuaModelBaseUser):
         validators=[
             MinValueValidator(0),
             MaxValueValidator(59)])
+
     captured_on_second = models.IntegerField(
         db_column='captured_on_second',
         verbose_name=_('second'),
@@ -192,6 +231,7 @@ class Item(IrekuaModelBaseUser):
         validators=[
             MinValueValidator(0),
             MaxValueValidator(59)])
+
     captured_on_timezone = models.CharField(
         max_length=256,
         db_column='captured_on_timezone',
@@ -199,6 +239,7 @@ class Item(IrekuaModelBaseUser):
         help_text=_('Timezone corresponding to date fields'),
         blank=True,
         null=True)
+
     licence = models.ForeignKey(
         'Licence',
         db_column='licence_id',
@@ -207,11 +248,13 @@ class Item(IrekuaModelBaseUser):
         on_delete=models.PROTECT,
         blank=True,
         null=True)
+
     tags = models.ManyToManyField(
         'Tag',
         verbose_name=_('tags'),
         help_text=_('Tags for item'),
         blank=True)
+
     ready_event_types = models.ManyToManyField(
         EventType,
         verbose_name=_('ready event types'),
@@ -220,156 +263,52 @@ class Item(IrekuaModelBaseUser):
 
     class Meta:
         verbose_name = _('Item')
+
         verbose_name_plural = _('Items')
+
         ordering = ['created_on']
+
         permissions = (
             ("download_item", _("Can download item")),
             ("annotate_item", _("Can annotate item")),
         )
 
     def __str__(self):
-        return str(self.id)  # pylint: disable=E1101
-
-    def validate_user(self):
-        if self.created_by is None:
-            self.created_by = self.sampling_event_device.created_by  # pylint: disable=E1101
-
-        if self.created_by is None:
-            msg = _(
-                'Item creator was not specified and is not determined '
-                'by sampling event device.')
-            raise ValidationError(msg)
-
-    @property
-    def collection(self):
-        return self.sampling_event_device.sampling_event.collection
-
-    def check_captured_on(self):
-        if (
-                (self.captured_on_year is None) or
-                (self.captured_on_month is None) or
-                (self.captured_on_day is None)):
-            return
-
-        tz = timezone.get_default_timezone()
-        if self.captured_on_timezone:
-            tz = pytz_timezone(self.captured_on_timezone)
-
-        if self.captured_on is not None:
-            captured_on = timezone.localtime(self.captured_on, timezone=tz)
-        else:
-            captured_on = timezone.localtime(timezone=tz)
-
-        captured_on = captured_on.replace(
-            year=self.captured_on_year,
-            month=self.captured_on_month,
-            day=self.captured_on_day)
-
-        if (
-                (self.captured_on_hour is not None) and
-                (self.captured_on_minute is not None) and
-                (self.captured_on_second is not None)):
-
-            captured_on = captured_on.replace(
-                hour=self.captured_on_hour,
-                minute=self.captured_on_minute,
-                second=self.captured_on_second)
-
-        self.captured_on = captured_on
+        return str(self.id)
 
     def clean(self):
-        self.check_captured_on()
+        super().clean()
 
-        try:
-            self.validate_hash_and_filesize()
-        except ValidationError as error:
-            raise ValidationError({'hash': error})
+        # Check that reported hash and filesize (if any) coincide with
+        # uploaded file.
+        self.clean_hash_and_filesize()
 
-        try:
-            self.validate_user()
-        except ValidationError as error:
-            raise ValidationError({'created_by': error})
+        # Check MIME type is valid and registered in the database
+        mime_type = self.clean_mime_type()
 
-        sampling_event_device = self.sampling_event_device
-        try:
-            self.sampling_event_device.validate_date({
-                'year': self.captured_on_year,
-                'month': self.captured_on_month,
-                'day': self.captured_on_day,
-                'hour': self.captured_on_hour,
-                'minute': self.captured_on_minute,
-                'second': self.captured_on_second,
-                'time_zone': self.captured_on_timezone})
-        except ValidationError as error:
-            raise ValidationError({'captured_on': error})
+        # Check that media info is valid for MIME type
+        self.clean_media_info(mime_type)
 
-        sampling_event = sampling_event_device.sampling_event
-        collection = sampling_event.collection
+        # Check that mime type is valid for item type
+        self.clean_compatible_mime_and_item_types(mime_type)
 
-        try:
-            collection.validate_and_get_sampling_event_type(
-                self.sampling_event_device.sampling_event.sampling_event_type)  # pylint: disable=E1101
-        except ValidationError as error:
-            raise ValidationError({'sampling': error})
+        # Check that metadata is valid for item type.
+        self.clean_metadata()
 
-        try:
-            collection_item_type = collection.validate_and_get_item_type(
-                self.item_type)
-        except ValidationError as error:
-            raise ValidationError({'item_type': error})
+        # Synchronize captured on individual fields with datetime field.
+        self.sync_captured_on()
 
-        if collection_item_type is not None:
-            try:
-                collection_item_type.validate_metadata(self.metadata)
-            except ValidationError as error:
-                raise ValidationError({'metadata': error})
-
-        try:
-            self.validate_licence()
-        except ValidationError as error:
-            raise ValidationError({'licence': error})
-
-        try:
-            self.item_type.validate_item_type(self)  # pylint: disable=E1101
-        except ValidationError as error:
-            raise ValidationError({'media_info': error})
-
-        try:
-            self.validate_mime_type()
-        except ValidationError as error:
-            raise ValidationError({'item_file': error})
-
-        super(Item, self).clean()
-
-    def validate_and_get_event_type(self, event_type):
-        return self.item_type.validate_and_get_event_type(event_type)  # pylint: disable=E1101
-
-    def validate_licence(self):
-        if self.licence is not None:
-            return
-
-        if self.sampling_event_device.licence is None:  # pylint: disable=E1101
-            msg = _(
-                'Licence was not provided to item nor to sampling event')
-            raise ValidationError({'licence': msg})
-
-        self.licence = self.sampling_event_device.licence  # pylint: disable=E1101
-
-        collection = self.sampling_event_device.sampling_event.collection  # pylint: disable=E1101
-        collection.validate_and_get_licence(self.licence)
-
-    def validate_hash_and_filesize(self):
+    def clean_hash_and_filesize(self):
         if self.item_file.name is None and self.hash is None:
-            msg = _(
-                'If no file is provided, a hash must be given')
-            raise ValidationError(msg)
+            msg = _('If no file is provided, a hash must be given')
+            raise ValidationError({'hash': msg})
 
         if self.item_file.name is None:
             return
 
-        self.item_file.open() # pylint: disable=E1101
+        self.item_file.open()
         hash_string = hash_file(self.item_file)
-        item_size = self.item_file.size  # pylint: disable=E1101
+        item_size = self.item_file.size
 
         if not self.hash:
             self.hash = hash_string
@@ -377,33 +316,58 @@ class Item(IrekuaModelBaseUser):
 
         if self.hash != hash_string:
             msg = _('Hash of file and recorded hash do not coincide')
-            raise ValidationError(msg)
+            raise ValidationError({'hash': msg})
 
-    def validate_mime_type(self):
-        physical_device = self.sampling_event_device.collection_device.physical_device
-        device_type = physical_device.device.device_type
-        mime_type, _ = mimetypes.guess_type(self.item_file.name)
-        device_type.validate_mime_type(mime_type)
+    def clean_mime_type(self):
+        try:
+            return MimeType.infer(file=self.item_file)
 
-    def add_ready_event_type(self, event_type):
-        self.ready_event_types.add(event_type)  # pylint: disable=E1101
-        self.save()
+        except MimeType.DoesNotExist as error:
+            msg = _(
+                'No MIME type could be infered or not registered')
+            raise ValidationError({'item_file': msg}) from error
 
-    def remove_ready_event_type(self, event_type):
-        self.ready_event_types.remove(event_type)  # pylint: disable=E1101
-        self.save()
+    def clean_media_info(self, mime_type):
+        try:
+            mime_type.validate_media_info(self.media_info)
 
-    def add_tag(self, tag):
-        self.tags.add(tag)  # pylint: disable=E1101
-        self.save()
+        except ValidationError as error:
+            raise ValidationError({'media_info': error}) from error
 
-    def remove_tag(self, tag):
-        self.tags.remove(tag)  # pylint: disable=E1101
-        self.save()
+    def clean_compatible_mime_and_item_types(self, mime_type):
+        try:
+            self.item_type.validate_mime_type(mime_type)
+
+        except ValidationError as error:
+            raise ValidationError({'item_file': error}) from error
+
+    def clean_metadata(self):
+        try:
+            self.item_type.validate_metadata(self.metadata)
+
+        except ValidationError as error:
+            raise ValidationError({'metadata': error}) from error
+
+    def sync_captured_on(self):
+        try:
+            captured_on = infer_datetime(
+                year=self.captured_on_year,
+                month=self.captured_on_month,
+                day=self.captured_on_day,
+                hour=self.captured_on_hour,
+                minute=self.captured_on_minute,
+                second=self.captured_on_second,
+                tz_info=self.captured_on_timezone)
+        except ValueError:
+            return
+
+        self.captured_on = captured_on
 
     def delete(self, *args, **kwargs):
         try:
             self.item_file.delete()
+
         except ValueError:
             pass
+
         super().delete(*args, **kwargs)

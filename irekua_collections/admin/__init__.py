@@ -13,6 +13,8 @@ from .deployment_items import DeploymentItemAdmin
 from .deployments import DeploymentAdmin
 from .sampling_event_items import SamplingEventItemAdmin
 from .sampling_events import SamplingEventAdmin
+from .deployment_types import DeploymentTypeAdmin
+from .sampling_event_types import SamplingEventTypeAdmin
 
 
 admin.site.register(models.CollectionDevice, CollectionDeviceAdmin)
@@ -26,3 +28,5 @@ admin.site.register(models.DeploymentItem, DeploymentItemAdmin)
 admin.site.register(models.Deployment, DeploymentAdmin)
 admin.site.register(models.SamplingEventItem, SamplingEventItemAdmin)
 admin.site.register(models.SamplingEvent, SamplingEventAdmin)
+admin.site.register(models.SamplingEventType, SamplingEventTypeAdmin)
+admin.site.register(models.DeploymentType, DeploymentTypeAdmin)

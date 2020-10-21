@@ -11,12 +11,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBaseUser
-from irekua_types.models import DeploymentType
+# from irekua_types.models import DeploymentType
 
 
 class Deployment(IrekuaModelBaseUser):
     deployment_type = models.ForeignKey(
-        DeploymentType,
+        'DeploymentType',
         on_delete=models.PROTECT,
         db_column='deployment_type_id',
         verbose_name=_('deployment type'),

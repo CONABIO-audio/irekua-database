@@ -9,6 +9,7 @@ from irekua_devices.settings import *
 from irekua_geo.settings import *
 from irekua_items.settings import *
 from irekua_collections.settings import *
+from irekua_organisms.settings import *
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,5 +27,6 @@ INSTALLED_APPS = (
     IREKUA_DEVICES_APPS +
     IREKUA_GEO_APPS +
     IREKUA_ITEMS_APPS +
-    IREKUA_COLLECTIONS_APPS
+    IREKUA_COLLECTIONS_APPS +
+    IREKUA_ORGANISMS_APPS
 )

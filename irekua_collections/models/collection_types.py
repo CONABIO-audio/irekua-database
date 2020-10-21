@@ -187,7 +187,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     sampling_event_types = models.ManyToManyField(
-        types.SamplingEventType,
+        'SamplingEventType',
         through='CollectionTypeSamplingEventType',
         through_fields=('collection_type', 'sampling_event_type'),
         verbose_name=_('sampling event types'),
@@ -211,7 +211,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     deployment_types = models.ManyToManyField(
-        types.DeploymentType,
+        'DeploymentType',
         through='CollectionTypeDeploymentType',
         through_fields=('collection_type', 'deployment_type'),
         verbose_name=_('device types'),

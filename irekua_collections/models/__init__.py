@@ -16,6 +16,8 @@ from .collection_users import CollectionUser
 from .data_collections import Collection
 from .deployment_items import DeploymentItem
 from .deployments import Deployment
+from .deployment_types import DeploymentType
+from .sampling_event_types import SamplingEventType
 from .sampling_event_items import SamplingEventItem
 from .sampling_events import SamplingEvent
 
@@ -41,4 +43,6 @@ __all__ = [
     'DeploymentItem',
     'SamplingEvent',
     'SamplingEventItem',
+    'DeploymentType',
+    'SamplingEventType',
 ]

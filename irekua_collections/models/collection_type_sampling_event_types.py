@@ -2,8 +2,8 @@ from django.db import models
 
 from django.utils.translation import gettext_lazy as _
 from irekua_database.base import IrekuaModelBase
-from irekua_types.models import SamplingEventType
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
+# from irekua_types.models import SamplingEventType
 
 
 class CollectionTypeSamplingEventType(IrekuaModelBase, CollectionMetadataSchemaMixin):
@@ -17,7 +17,7 @@ class CollectionTypeSamplingEventType(IrekuaModelBase, CollectionMetadataSchemaM
         null=False)
 
     sampling_event_type = models.ForeignKey(
-        SamplingEventType,
+        'SamplingEventType',
         on_delete=models.PROTECT,
         db_column='sampling_event_type_id',
         verbose_name=_('sampling event type'),

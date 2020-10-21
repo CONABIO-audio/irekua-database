@@ -51,10 +51,4 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             remove_duplicates,
         ),
-        migrations.AlterField(
-            model_name='institution',
-            name='institution_name',
-            field=models.CharField(db_column='institution_name', help_text='Name of institution', max_length=256, unique=True, verbose_name='institution name'),
-        ),
-
     ]

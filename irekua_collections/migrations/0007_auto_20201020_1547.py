@@ -4,6 +4,30 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
+def resolve_duplicate_names(apps, schema_editor):
+    CollectionDevice = apps.get_model('irekua_collections', 'CollectionDevice')
+
+    repeated_names = (
+        CollectionDevice.objects
+        .values('collection', 'collection_name')
+        .annotate(models.Count('id'))
+        .order_by()
+        .filter(id__count__gt=1)
+    )
+
+    for repeated_name in repeated_names:
+        collection = repeated_name['collection']
+        device_name = repeated_name['collection_name']
+
+        repeated_devices = CollectionDevice.objects.filter(
+            collection__pk=collection,
+            collection_name=device_name)
+
+        for index, collection_device in enumerate(repeated_devices):
+            collection_device.collection_name += f'_{index}'
+            collection_device.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -107,6 +131,9 @@ class Migration(migrations.Migration):
             model_name='samplingevent',
             name='metadata',
             field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated to sampling event', null=True, verbose_name='metadata'),
+        ),
+        migrations.RunPython(
+            resolve_duplicate_names,
         ),
         migrations.AlterUniqueTogether(
             name='collectiondevice',

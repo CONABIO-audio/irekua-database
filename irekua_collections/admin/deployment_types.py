@@ -2,41 +2,13 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.admin.base import IrekuaAdmin
-from irekua_types.models import SamplingEventType
-
-
-class SiteTypeInline(admin.TabularInline):
-    extra = 0
-
-    model = SamplingEventType.site_types.through
-
-    autocomplete_fields = (
-        'sitetype',
-    )
-
-    verbose_name = _('Site type')
-
-    verbose_name_plural = _('Site types')
-
-
-class DeploymentTypeInline(admin.TabularInline):
-    extra = 0
-
-    model = SamplingEventType.deployment_types.through
-
-    autocomplete_fields = (
-        'deploymenttype',
-    )
-
-    verbose_name = _('Deployment type')
-
-    verbose_name_plural = _('Deployment types')
+from irekua_collections.models import DeploymentType
 
 
 class ItemTypeInline(admin.TabularInline):
     extra = 0
 
-    model = SamplingEventType.item_types.through
+    model = DeploymentType.item_types.through
 
     autocomplete_fields = (
         'itemtype',
@@ -47,38 +19,40 @@ class ItemTypeInline(admin.TabularInline):
     verbose_name_plural = _('Item types')
 
 
-class SamplingEventTypeAdmin(IrekuaAdmin):
+class DeploymentTypeAdmin(IrekuaAdmin):
     search_fields = (
         'name',
+        'device_type__name',
     )
 
     list_display = (
         'id',
         'name',
-        'restrict_site_types',
-        'restrict_deployment_types',
-        'created_on',
+        'device_type',
+        'restrict_item_types',
+        'created_on'
     )
 
     list_display_links = (
         'id',
-        'name',
+        'name'
     )
 
     list_filter = (
-        'restrict_site_types',
-        'restrict_deployment_types'
+        'device_type',
+        'restrict_item_types',
     )
 
-    autocomplete_fields = [
+    autocomplete_fields = (
         'metadata_schema',
-    ]
+    )
 
     fieldsets = (
         (None, {
             'fields': (
                 ('name', 'icon'),
                 'description',
+                'device_type',
             ),
         }),
         ('Schemas', {
@@ -89,8 +63,6 @@ class SamplingEventTypeAdmin(IrekuaAdmin):
         ('Restrictions', {
             'fields': (
                 (
-                    'restrict_site_types',
-                    'restrict_deployment_types',
                     'restrict_item_types',
                 ),
             ),
@@ -98,7 +70,5 @@ class SamplingEventTypeAdmin(IrekuaAdmin):
     )
 
     inlines = [
-        SiteTypeInline,
-        DeploymentTypeInline,
         ItemTypeInline,
     ]

@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
 from irekua_schemas.mixins import MetadataSchemaMixin
+from irekua_types.models import DeviceType
+from irekua_types.models import ItemType
 
 
 class DeploymentType(IrekuaModelBase, MetadataSchemaMixin):
@@ -31,7 +33,7 @@ class DeploymentType(IrekuaModelBase, MetadataSchemaMixin):
         null=True)
 
     device_type = models.ForeignKey(
-        'DeviceType',
+        DeviceType,
         on_delete=models.PROTECT,
         db_column='device_type_id',
         verbose_name=_('device type'),
@@ -52,7 +54,7 @@ class DeploymentType(IrekuaModelBase, MetadataSchemaMixin):
         null=False)
 
     item_types = models.ManyToManyField(
-        'ItemType',
+        ItemType,
         verbose_name=_('item types'),
         help_text=_('Valid item types for this deployment type'),
         blank=True)

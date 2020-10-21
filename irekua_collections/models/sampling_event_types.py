@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 
 from irekua_database.base import IrekuaModelBase
 from irekua_schemas.mixins import MetadataSchemaMixin
+from irekua_types.models import SiteType
+from irekua_types.models import ItemType
 
 
 class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
@@ -66,13 +68,13 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
         blank=True)
 
     site_types = models.ManyToManyField(
-        'SiteType',
+        SiteType,
         verbose_name=_('site types'),
         help_text=_('Valid site types for this sampling event type'),
         blank=True)
 
     item_types = models.ManyToManyField(
-        'ItemType',
+        ItemType,
         verbose_name=_('item types'),
         help_text=_('Valid item types for this sampling event type'),
         blank=True)

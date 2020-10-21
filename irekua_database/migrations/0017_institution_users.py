@@ -11,6 +11,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AlterField(
+            model_name='institution',
+            name='institution_name',
+            field=models.CharField(db_column='institution_name', help_text='Name of institution', max_length=256, unique=True, verbose_name='institution name'),
+        ),
         migrations.AddField(
             model_name='institution',
             name='users',

@@ -4,12 +4,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBaseUser
-from irekua_types.models import SamplingEventType
+# from irekua_types.models import SamplingEventType
 
 
 class SamplingEvent(IrekuaModelBaseUser):
     sampling_event_type = models.ForeignKey(
-        SamplingEventType,
+        'SamplingEventType',
         on_delete=models.PROTECT,
         db_column='sampling_event_type',
         verbose_name=_('sampling event type'),

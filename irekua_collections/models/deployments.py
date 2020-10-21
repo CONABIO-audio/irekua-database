@@ -126,9 +126,11 @@ class Deployment(IrekuaModelBaseUser):
         ordering = ['-created_on']
 
     def __str__(self):
-        msg = _('{} (deployed)')
-        msg = msg.format(self.collection_device.internal_id)
-        return msg
+        msg = _('%(device)s deployed on %(sampling_event)s')
+        params = dict(
+            device=self.collection_device,
+            sampling_event=self.sampling_event)
+        return msg % params
 
     def save(self, *args, **kwargs):
         if self.deployed_on is None:
@@ -171,7 +173,7 @@ class Deployment(IrekuaModelBaseUser):
         self.clean_item_datetimes()
 
         # pylint: disable=no-member
-        collection_type = self.collection_device.collection
+        collection_type = self.collection_device.collection.collection_type
 
         # If collection type does not restrict deployment types no further
         # validation is required
@@ -290,7 +292,7 @@ class Deployment(IrekuaModelBaseUser):
         if (start is None) and (end is None):
             return
 
-        for item in self.item_set.all():
+        for item in self.deploymentitem_set.all():
             if not item.captured_on:
                 continue
 
@@ -309,6 +311,10 @@ class Deployment(IrekuaModelBaseUser):
                         'was captured later that the registered device '
                         'recovery date.')
                     raise ValidationError({'recovered_on': message})
+
+    def collection(self):
+        # pylint: disable=no-member
+        return self.sampling_event.collection
 
     def get_best_date_estimate(self, datetime_info, time_zone):
         year = datetime_info.get('year', None)

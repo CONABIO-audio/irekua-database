@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_database.models import Role
 
@@ -34,11 +33,10 @@ class CollectionUser(IrekuaModelBaseUser):
         help_text=_('Role of user in collection'),
         blank=False)
 
-    metadata = models.JSONField(
+    collection_metadata = models.JSONField(
         blank=True,
-        db_column='metadata',
-        verbose_name=_('metadata'),
-        default=empty_JSON,
+        db_column='collection_metadata',
+        verbose_name=_('collection metadata'),
         help_text=_('Metadata associated to user in collection'),
         null=True)
 
@@ -52,8 +50,8 @@ class CollectionUser(IrekuaModelBaseUser):
         )
 
     def __str__(self):
-        msg = _('%(user)s (%(role)s)')
-        params = dict(user=str(self.user), role=str(self.role))
+        msg = _('%(collection)s user: %(user)s')
+        params = dict(user=str(self.user), collection=str(self.collection))
         return msg % params
 
     def clean(self):
@@ -71,6 +69,7 @@ class CollectionUser(IrekuaModelBaseUser):
     def clean_role(self, collection_type):
         try:
             return collection_type.get_role(self.role)
+
         except ObjectDoesNotExist as error:
             msg = _(
                 'Role %(role)s is not allowed in '
@@ -82,7 +81,7 @@ class CollectionUser(IrekuaModelBaseUser):
 
     def clean_metadata(self, role_config):
         try:
-            role_config.validate_metadata(self.metadata)
+            role_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({'metadata': str(error)}) from error
+            raise ValidationError({'collection_metadata': str(error)}) from error

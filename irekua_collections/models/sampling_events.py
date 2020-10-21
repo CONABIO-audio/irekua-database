@@ -126,7 +126,7 @@ class SamplingEvent(IrekuaModelBaseUser):
 
     def clean_compatible_site_and_sampling_event_types(self):
         # pylint: disable=no-member
-        site_type = self.collection_site.site.site_type
+        site_type = self.collection_site.site_type
 
         try:
             self.sampling_event_type.validate_site_type(site_type)

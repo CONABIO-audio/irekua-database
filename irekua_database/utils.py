@@ -14,10 +14,12 @@ SIMPLE_JSON_SCHEMA = {}
 def validate_JSON_schema(schema):
     try:
         jsonschema.validate(schema=schema, instance={})
+
     except jsonschema.exceptions.SchemaError as error:
         msg = _('JSON Schema is not valid. Error: %(error)s')
         params = dict(error=error)
-        raise ValidationError(msg, params=params)
+        raise ValidationError(msg, params=params) from error
+
     except jsonschema.exceptions.ValidationError:
         pass
 
@@ -25,10 +27,9 @@ def validate_JSON_schema(schema):
 def validate_JSON_instance(schema=None, instance=None):
     try:
         jsonschema.validate(schema=schema, instance=instance)
+
     except jsonschema.exceptions.ValidationError as error:
-        msg = _('Instance does not comply with JSON schema. Error: %(error)s')
-        params = dict(error=error.message)
-        raise ValidationError(msg, params=params)
+        raise ValidationError(error.message) from error
 
 
 def simple_JSON_schema():

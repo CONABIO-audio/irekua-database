@@ -6,7 +6,7 @@ from irekua_database.admin.base import IrekuaUserAdmin
 class LicenceAdmin(IrekuaUserAdmin):
     search_fields = [
         'licence_type__name',
-        'created_on__username',
+        'created_by__username',
     ]
 
     list_display = [

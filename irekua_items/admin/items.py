@@ -56,6 +56,7 @@ class ItemAdmin(IrekuaUserAdmin):
     autocomplete_fields = [
         'item_type',
         'source',
+        'licence',
     ]
 
     fieldsets = (
@@ -84,6 +85,7 @@ class ItemAdmin(IrekuaUserAdmin):
             ),
         }),
         (_('Source'), {
+            'classes': ('collapse', ),
             'fields': (
                 ('source', 'source_foreign_key'),
             )

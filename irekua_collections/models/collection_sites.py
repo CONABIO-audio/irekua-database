@@ -130,6 +130,13 @@ class CollectionSite(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({'collection_metadata': str(error)}) from error
 
+    def validate_descriptor(self, descriptor):
+        if self.id is None:
+            # Exit early if instance is being created
+            return
+
+        self.site_type.validate_descriptor_type(descriptor.descriptor_type)
+
     @property
     def items(self):
         from irekua_collections.models import SamplingEventItemItem

@@ -33,10 +33,10 @@ class CollectionDevice(IrekuaModelBaseUser):
         help_text=_('Nmae of device within the collection (visible to all collection users)'),
         blank=True)
 
-    metadata = models.JSONField(
+    collection_metadata = models.JSONField(
         blank=True,
-        db_column='metadata',
-        verbose_name=_('metadata'),
+        db_column='collection_metadata',
+        verbose_name=_('collection metadata'),
         help_text=_('Metadata associated with device within collection'),
         null=True)
 
@@ -93,10 +93,10 @@ class CollectionDevice(IrekuaModelBaseUser):
 
     def clean_collection_metadata(self, device_type_config):
         try:
-            device_type_config.validate_metadata(self.metadata)
+            device_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({'metadata': str(error)}) from error
+            raise ValidationError({'collection_metadata': str(error)}) from error
 
     @property
     def items(self):

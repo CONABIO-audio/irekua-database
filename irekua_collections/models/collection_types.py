@@ -235,49 +235,49 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         return str(self.name)
 
     def get_device_type(self, device_type):
-        return self.device_types.through.get(
+        return self.device_types.through.objects.get(
             collection_type=self,
             device_type=device_type,
         )
 
     def get_site_type(self, site_type):
-        return self.site_types.through.get(
+        return self.site_types.through.objects.get(
             collection_type=self,
             site_type=site_type,
         )
 
     def get_annotation_type(self, annotation_type):
-        return self.annotation_types.through.get(
+        return self.annotation_types.through.objects.get(
             collection_type=self,
             annotation_type=annotation_type,
         )
 
     def get_event_type(self, event_type):
-        return self.event_types.through.get(
+        return self.event_types.through.objects.get(
             collection_type=self,
             event_type=event_type,
         )
 
     def get_sampling_event_type(self, sampling_event_type):
-        return self.sampling_event_types.through.get(
+        return self.sampling_event_types.through.objects.get(
             collection_type=self,
             sampling_event_type=sampling_event_type,
         )
 
     def get_item_type(self, item_type):
-        return self.item_types.through.get(
+        return self.item_types.through.objects.get(
             collection_type=self,
             item_type=item_type,
         )
 
     def get_role(self, role):
-        return self.roles.through.get(
+        return self.roles.through.objects.get(
             collection_type=self,
             role=role,
         )
 
     def get_deployment_type(self, deployment_type):
-        return self.deployment_type.through.get(
+        return self.deployment_types.through.objects.get(
             collection_type=self,
             deployment_type=deployment_type,
         )

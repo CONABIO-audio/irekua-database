@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.admin.base import IrekuaAdmin
-from irekua_types.models import DeviceType
+from irekua_devices.models import DeviceType
 
 
 class MimeTypesInline(admin.TabularInline):

@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
 from irekua_schemas.mixins import MetadataSchemaMixin
-from irekua_types.models import DeviceType
+from irekua_devices.models import DeviceType
 from irekua_items.models import ItemType
 
 

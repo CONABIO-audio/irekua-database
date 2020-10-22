@@ -5,12 +5,11 @@ from django.core.exceptions import ValidationError
 from irekua_database.base import IrekuaModelBase
 from irekua_schemas.mixins import MetadataSchemaMixin
 from irekua_schemas.models import Schema
-from irekua_types.models import DeviceType
 
 
 class Device(IrekuaModelBase, MetadataSchemaMixin):
     device_type = models.ForeignKey(
-        DeviceType,
+        'DeviceType',
         on_delete=models.PROTECT,
         related_name='device_type',
         db_column='device_type_id',

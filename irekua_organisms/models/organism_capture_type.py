@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from irekua_database.base import IrekuaModelBase
-from irekua_types.models import DeviceType
+from irekua_devices.models import DeviceType
 from irekua_terms.models import TermType
 
 

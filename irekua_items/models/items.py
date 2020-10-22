@@ -11,7 +11,7 @@ from pytz import timezone as pytz_timezone
 
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_database.utils import hash_file
-from irekua_types.models import MimeType
+from irekua_devices.models import MimeType
 
 
 mimetypes.init()

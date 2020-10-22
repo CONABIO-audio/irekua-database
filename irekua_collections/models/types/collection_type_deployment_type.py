@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from irekua_database.base import IrekuaModelBase
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
-# from irekua_types.models import DeploymentType
 
 
 class CollectionTypeDeploymentType(IrekuaModelBase, CollectionMetadataSchemaMixin):

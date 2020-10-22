@@ -15,6 +15,7 @@ class Entailment(IrekuaModelBase):
         help_text=_('Source of entailment'),
         on_delete=models.CASCADE,
         blank=False)
+
     target = models.ForeignKey(
         'Term',
         related_name='entailment_target',
@@ -23,6 +24,7 @@ class Entailment(IrekuaModelBase):
         help_text=_('Target of entailment'),
         on_delete=models.CASCADE,
         blank=False)
+
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
@@ -51,8 +53,16 @@ class Entailment(IrekuaModelBase):
     def clean(self):
         super().clean()
 
+        # Check that entailments between these term types can be made.
+        entailment_type = self.check_entailment_type()
+
+        # Check that metadata is valid for this entailment type
+        self.check_metadata(entailment_type)
+
+    def check_entailment_type(self):
         try:
-            entailment_type = EntailmentType.objects.get(
+            # pylint: disable=no-member
+            return EntailmentType.objects.get(
                 source_type=self.source.term_type,
                 target_type=self.target.term_type)
 
@@ -60,11 +70,14 @@ class Entailment(IrekuaModelBase):
             msg = _(
                 'Entailment between types %(source_type)s and '
                 '%(target_type)s is not possible')
+
+            # pylint: disable=no-member
             params = dict(
                 source_type=self.source.term_type,
                 target_type=self.target.term_type)
             raise ValidationError({'target': msg % params}) from error
 
+    def check_metadata(self, entailment_type):
         try:
             entailment_type.validate_metadata(self.metadata)
 

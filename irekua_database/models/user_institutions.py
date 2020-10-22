@@ -13,6 +13,7 @@ class UserInstitution(IrekuaModelBase):
         help_text=_('Institution to which the user belongs'),
         blank=False,
         null=False)
+
     user = models.ForeignKey(
         'User',
         models.CASCADE,
@@ -21,6 +22,7 @@ class UserInstitution(IrekuaModelBase):
         help_text=_('User that belongs to this institution'),
         blank=False,
         null=False)
+
     subdependency = models.CharField(
         max_length=256,
         db_column='subdependency',
@@ -28,6 +30,7 @@ class UserInstitution(IrekuaModelBase):
         help_text=_('Subdependency at institution to which the user belongs'),
         blank=True,
         null=True)
+
     position = models.CharField(
         max_length=128,
         db_column='position',
@@ -38,6 +41,7 @@ class UserInstitution(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('User Institution')
+
         verbose_name_plural = _('User Institutions')
 
         unique_together = [

@@ -4,7 +4,6 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBaseUser
 
 
@@ -37,7 +36,6 @@ class PhysicalDevice(IrekuaModelBaseUser):
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to device'),
-        default=empty_JSON,
         null=True,
         blank=True)
 
@@ -65,29 +63,31 @@ class PhysicalDevice(IrekuaModelBaseUser):
     def clean(self):
         super().clean()
 
+        # Check metadata is valid for this device type
+        self.clean_metadata()
+
+    def clean_metadata(self):
         try:
             # pylint: disable=no-member
             self.device.validate_metadata(self.metadata)
+
         except ValidationError as error:
             raise ValidationError({'metadata': error}) from error
 
     @cached_property
     def items(self):
         from irekua_collections.models import DeploymentItem
-
         return DeploymentItem.objects.filter(
             deployment__collection_device__physical_device=self)
 
     @cached_property
     def sampling_events(self):
         from irekua_collections.models import SamplingEvent
-
         return SamplingEvent.objects.filter(
             collection_device__physical_device=self)
 
     @cached_property
     def deployments(self):
         from irekua_collections.models import Deployment
-
         return Deployment.objects.filter(
             sampling_event__collection_device__physical_device=self)

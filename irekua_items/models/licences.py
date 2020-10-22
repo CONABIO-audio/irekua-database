@@ -62,7 +62,9 @@ class Licence(IrekuaModelBaseUser):
 
     class Meta:
         verbose_name = _('Licence')
+
         verbose_name_plural = _('Licences')
+
         ordering = ['-created_on']
 
     def __str__(self):
@@ -74,22 +76,30 @@ class Licence(IrekuaModelBaseUser):
     def clean(self):
         super().clean()
 
+        # Update licence status if the active period is over
         self.update_is_active()
 
         # Check that metadata is valid
+        self.clean_metadata()
+
+    def clean_metadata(self):
         try:
+            # pylint: disable=no-member
             self.licence_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
             raise ValidationError({'metadata': error}) from error
 
     def update_is_active(self):
         """Modify active state if licence is outdated"""
-        # When licence is beign created the attribute created_on is null
         if self.created_on is None:
+            # When licence is beign created the attribute created_on is null
             self.is_active = True
             return
 
+        # pylint: disable=no-member
         duration_in_years = self.licence_type.years_valid_for
         current_time_offset = timezone.now() - self.created_on
         year_offset = current_time_offset.days / 365
+
         self.is_active = year_offset <= duration_in_years

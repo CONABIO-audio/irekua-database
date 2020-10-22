@@ -53,6 +53,7 @@ class AnnotationType(IrekuaModelBase, MetadataSchemaMixin):
     def validate_annotation(self, annotation):
         try:
             self.annotation_schema.validate(annotation)
+
         except ValidationError as error:
             msg = _('Invalid annotation for annotation type %(type)s. Error: %(error)s')
             params = dict(type=str(self), error=', '.join(error.messages))

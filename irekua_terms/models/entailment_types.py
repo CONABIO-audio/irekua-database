@@ -16,6 +16,7 @@ class EntailmentType(IrekuaModelBase):
         on_delete=models.CASCADE,
         blank=False,
         null=False)
+
     target_type = models.ForeignKey(
         'TermType',
         related_name='entailment_target_type',
@@ -25,6 +26,7 @@ class EntailmentType(IrekuaModelBase):
         on_delete=models.CASCADE,
         blank=False,
         null=False)
+
     metadata_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
@@ -36,6 +38,7 @@ class EntailmentType(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Entailment Type')
+
         verbose_name_plural = _('Entailment Types')
 
         unique_together = (
@@ -52,6 +55,12 @@ class EntailmentType(IrekuaModelBase):
         return msg % params
 
     def clean(self):
+        super().clean()
+
+        # Check that types being entailed are different.
+        self.clean_same_type()
+
+    def clean_same_type(self):
         if self.source_type == self.target_type:
             msg = _('Entailments are not possible between terms of the same type')
             raise ValidationError({'target': msg})
@@ -66,4 +75,4 @@ class EntailmentType(IrekuaModelBase):
             params = dict(
                 entailment=str(self),
                 error=str(error))
-            raise ValidationError(msg, params=params)
+            raise ValidationError(msg, params=params) from error

@@ -3,7 +3,6 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 
-from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_collections.models import Deployment
 from irekua_items.models import Item
@@ -20,14 +19,15 @@ class OrganismCapture(IrekuaModelBaseUser):
         blank=False,
         null=False)
 
-    sampling_event_device = models.ForeignKey(
+    deployment = models.ForeignKey(
         Deployment,
-        db_column='sampling_event_device_id',
-        verbose_name=_('sampling event device'),
-        help_text=_('Device used to capture this organism'),
+        db_column='deployment_id',
+        verbose_name=_('deployment'),
+        help_text=_('Deployed device that capture this organism'),
         on_delete=models.PROTECT,
         blank=False,
         null=False)
+
     organism = models.ForeignKey(
         'Organism',
         db_column='organism_id',
@@ -37,19 +37,26 @@ class OrganismCapture(IrekuaModelBaseUser):
         blank=False,
         null=False)
 
-    additional_metadata = models.JSONField(
-        db_column='additional_metadata',
-        default=empty_JSON,
-        verbose_name=_('additional metadata'),
-        help_text=_('Additional organism metadata'),
+    metadata = models.JSONField(
+        db_column='metadata',
+        verbose_name=_('metadata'),
+        help_text=_('Additional metadata associated to organism capture'),
         blank=True,
-        null=False)
+        null=True)
+
+    collection_metadata = models.JSONField(
+        db_column='collection_metadata',
+        verbose_name=_('collection metadata'),
+        help_text=_('Additional metadata associated to organism capture in collection'),
+        blank=True,
+        null=True)
 
     labels = models.ManyToManyField(
         Term,
         verbose_name=_('labels'),
         help_text=_('Description of the organism capture'),
         blank=True)
+
     items = models.ManyToManyField(
         Item,
         verbose_name=_('items'),
@@ -57,7 +64,9 @@ class OrganismCapture(IrekuaModelBaseUser):
 
     class Meta:
         verbose_name =_('Organism Capture')
+
         verbose_name_plural =_('Organism Captures')
+
         ordering = ['-created_on']
 
     def __str__(self):
@@ -66,24 +75,82 @@ class OrganismCapture(IrekuaModelBaseUser):
     def clean(self):
         super().clean()
 
-        sampling_event = self.sampling_event_device.sampling_event
-        collection = sampling_event.collection
-        collection_type = collection.collection_type
+        # Check if collection has been configured to use organisms
+        organism_config = self.clean_organism_config()
+
+        # Check if collection type allows organisms
+        self.clean_collection_type(organism_config)
+
+        # Check that capture type is valid for organism type
+        self.clean_compatible_organism_and_capture_type()
+
+        # Check that additional metadata is valid for capture type
+        self.clean_metadata()
+
+        # No futher validation is required if organism capture types are not
+        # restricted
+        if not organism_config.restrict_organism_capture_types:
+            return
+
+        # Check organism capture type is allowed in collections of this type
+        organism_capture_type_config = self.clean_organism_capture_type(organism_config)
+
+        # Check that additional collection metadata is valid for organism capture type
+        self.clean_collection_metadata(organism_capture_type_config)
+
+    def clean_organism_config(self):
+        # pylint: disable=no-member
+        collection_type = self.collection.collection_type
 
         try:
-            organism_config = collection_type.collectiontypeorganismconfig
-        except ObjectDoesNotExist:
-            raise ValidationError(_('This collection does not allow organisms'))
+            return collection_type.collectiontypeorganismconfig
 
+        except ObjectDoesNotExist as error:
+            msg = _('Collections of type %(collection_type)s do not allow organisms.')
+            params = dict(collection_type=collection_type)
+            raise ValidationError({'collection': msg % params}) from error
+
+    # pylint: disable=no-self-use
+    def clean_collection_type(self, organism_config):
         if not organism_config.use_organisms:
             raise ValidationError(_('This collection does not allow organisms'))
 
-        try:
-            capture_type = organism_config.validate_and_get_organism_capture_type(self.organism_capture_type)
-        except ValidationError as error:
-            raise ValidationError({'organism_capture_type': error})
+    def clean_compatible_organism_and_capture_type(self):
+        # pylint: disable=no-member
+        if self.organism.organism_type != self.organism_capture_type.organism_type:
+            msg = _(
+                'Captures of type %(capture_type)s cannot be used on organisms '
+                'of type %(organism_type)s')
+            # pylint: disable=no-member
+            params = dict(
+                capture_type=self.organism_capture_type,
+                organism_type=self.organism.organism_type)
+            raise ValidationError({'organism_capture_type': msg % params})
 
+    def clean_metadata(self):
         try:
-            capture_type.validate_additional_metadata(self.additional_metadata)
+            # pylint: disable=no-member
+            self.organism_capture_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
-            raise ValidationError({'additional_metadata': error})
+            raise ValidationError({'metadata': error}) from error
+
+    def clean_organism_capture_type(self, organism_config):
+        try:
+            return organism_config.get_organism_capture_type(self.organism_capture_type)
+
+        except ObjectDoesNotExist as error:
+            raise ValidationError({'organism_capture_type': error}) from error
+
+    def clean_collection_metadata(self, organism_capture_type_config):
+        try:
+            organism_capture_type_config.validate_metadata(self.collection_metadata)
+
+        except ValidationError as error:
+            raise ValidationError({'collection_metadata': error}) from error
+
+    def collection(self):
+        return self.organism.collection
+
+    def sampling_event(self):
+        return self.deployment.samplign_event

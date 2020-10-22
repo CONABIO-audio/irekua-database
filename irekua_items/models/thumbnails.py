@@ -53,5 +53,5 @@ class ItemThumbnail(IrekuaModelBase):
         verbose_name = _('Item Thumbnail')
 
         verbose_name_plural = _('Items Thumbnails')
-        
+
         ordering = ['created_on']

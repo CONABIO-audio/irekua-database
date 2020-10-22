@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
 
@@ -14,11 +15,13 @@ class Role(IrekuaModelBase):
         help_text=_('Name of role'),
         blank=False,
         null=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of role'),
         blank=True)
+
     icon = models.ImageField(
         db_column='icon',
         verbose_name=_('icon'),
@@ -26,6 +29,7 @@ class Role(IrekuaModelBase):
         upload_to='images/role_types/',
         blank=True,
         null=True)
+
     permissions = models.ManyToManyField(
         Permission,
         verbose_name=_('permissions'),
@@ -35,6 +39,7 @@ class Role(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Role')
+
         verbose_name_plural = _('Roles')
 
         ordering = ['name']
@@ -50,7 +55,8 @@ class Role(IrekuaModelBase):
             try:
                 permission = Permission.objects.get(codename=code)
                 self.permissions.add(permission)
-            except:
+
+            except ObjectDoesNotExist:
                 pass
 
     def has_permission(self, codename):

@@ -1,12 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 
 from irekua_database.base import IrekuaModelBase
 from irekua_collections.models import CollectionType
-
-from irekua_organisms.models.collection_type_organism_type import CollectionTypeOrganismType
-from irekua_organisms.models.collection_type_organism_capture_type import CollectionTypeOrganismCaptureType
 
 
 class CollectionTypeOrganismConfig(IrekuaModelBase):
@@ -26,6 +22,26 @@ class CollectionTypeOrganismConfig(IrekuaModelBase):
         null=False,
         default=False)
 
+    restrict_organism_types = models.BooleanField(
+        db_column='restrict_organism_types',
+        verbose_name=_('restrict organism types'),
+        help_text=_(
+            'Flag indicating whether types of organisms are restricted to '
+            'registered ones'),
+        default=True,
+        null=False,
+        blank=True)
+
+    restrict_organism_capture_types = models.BooleanField(
+        db_column='restrict_organism_capture_types',
+        verbose_name=_('restrict organism capture types'),
+        help_text=_(
+            'Flag indicating whether types of organism captures are restricted to '
+            'registered ones'),
+        default=True,
+        null=False,
+        blank=True)
+
     organism_types = models.ManyToManyField(
         'OrganismType',
         through='CollectionTypeOrganismType',
@@ -35,6 +51,7 @@ class CollectionTypeOrganismConfig(IrekuaModelBase):
             'Types of organisms that can be registered into '
             'collections of this type.'),
         blank=True)
+
     organism_capture_types = models.ManyToManyField(
         'OrganismCaptureType',
         through='CollectionTypeOrganismCaptureType',
@@ -47,6 +64,7 @@ class CollectionTypeOrganismConfig(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Collection Type Organism Configuration')
+
         verbose_name_plural = _('Collection Type Organism Configurations')
 
         ordering = ['-created_on']
@@ -56,26 +74,12 @@ class CollectionTypeOrganismConfig(IrekuaModelBase):
         params = dict(col_type=self.collection_type.name)
         return msg % params
 
-    def validate_and_get_organism_type(self, organism_type):
-        try:
-            return CollectionTypeOrganismType.objects.get(organism_type=organism_type.id)
-        except CollectionTypeOrganismType.DoesNotExist:
-            msg = _(
-                'Organism type %(organism_type)s is not accepted in collections of '
-                'type %(col_type)s')
-            params = dict(
-                organism_type=organism_type.name,
-                col_type=self.collection_type.name)
-            raise ValidationError(msg % params)
+    def get_organism_type(self, organism_type):
+        return self.organism_types.through.objects.get(
+            collection_type_organism_config=self,
+            organism_type=organism_type)
 
-    def validate_and_get_organism_capture_type(self, capture_type):
-        try:
-            return CollectionTypeOrganismCaptureType.objects.get(organism_capture_type=capture_type.id)
-        except CollectionTypeOrganismCaptureType.DoesNotExist:
-            msg = _(
-                'Organism capture type %(capture_type)s is not accepted in collections '
-                'of type %(col_type)s')
-            params = dict(
-                capture_type=capture_type.name,
-                col_type=self.collection_type.name)
-            raise ValidationError(msg % params)
+    def get_organism_capture_type(self, organism_capture_type):
+        return self.organism_capture_types.through.objects.get(
+            collection_type_organism_config=self,
+            organism_capture_type=organism_capture_type)

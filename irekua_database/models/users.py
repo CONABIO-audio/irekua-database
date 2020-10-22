@@ -3,12 +3,9 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.functional import cached_property
 
-from irekua_database.utils import translate_doc
 
-
-@translate_doc
 class User(AbstractUser):
-    help_text = _('''
+    '''
     User Model
 
     People using irekua must be previously registered and should provide
@@ -19,7 +16,7 @@ class User(AbstractUser):
     devices (:model:`irekua_database.PhysicalDevice`), sign licences
     (:model:`irekua_database.Licence`), upload items (:model:`irekua_database.Item`),
     annotate data (:model:`irekua_database.Annotation`), and more.
-    ''')
+    '''
 
     is_developer = models.BooleanField(
         db_column='is_developer',
@@ -28,6 +25,7 @@ class User(AbstractUser):
         blank=False,
         null=False,
         default=False)
+
     is_curator = models.BooleanField(
         db_column='is_curator',
         verbose_name=_('is curator'),
@@ -52,7 +50,9 @@ class User(AbstractUser):
 
     class Meta:
         verbose_name = _('User')
+
         verbose_name_plural = _('Users')
+
         unique_together = [
             ['email', ],
         ]
@@ -68,15 +68,15 @@ class User(AbstractUser):
 
     @cached_property
     def admin_collections(self):
-        from irekua_database.models import Collection
+        from irekua_collections.models import Collection
         return Collection.objects.filter(administrators=self)
 
     @cached_property
     def managed_collections(self):
-        from irekua_database.models import Collection
+        from irekua_collections.models import Collection
         return Collection.objects.filter(collection_type__administrators=self)
 
     def collections_with_permissions(self, codename):
-        from irekua_database.models import Collection
+        from irekua_collections.models import Collection
         memberships = self.collectionuser_set.filter(role__permissions__codename=codename)
         return Collection.objects.filter(collectionuser__in=memberships)

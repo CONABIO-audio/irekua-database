@@ -15,11 +15,13 @@ class Schema(IrekuaModelBase):
         help_text=_('Name of schema'),
         unique=True,
         blank=False)
+
     description = models.TextField(
         blank=True,
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Schema description'))
+
     schema = models.JSONField(
         db_column='schema',
         verbose_name=_('schema'),

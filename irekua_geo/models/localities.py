@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.gis.db.models import MultiPolygonField
 
 from irekua_database.base import IrekuaModelBase
-from irekua_database.utils import empty_JSON
 
 
 class Locality(IrekuaModelBase):
@@ -40,7 +39,6 @@ class Locality(IrekuaModelBase):
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to locality'),
-        default=empty_JSON,
         blank=True,
         null=True)
 
@@ -59,12 +57,18 @@ class Locality(IrekuaModelBase):
         super().clean(*args, **kwargs)
 
         # Check metdata is valid for locality type
+        self.clean_metadata()
+
+    def clean_metadata(self):
         try:
+            # pylint: disable=no-member
             self.locality_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
             raise ValidationError({'metadata': error}) from error
 
     def validate_point(self, point):
+        # pylint: disable=no-member
         if not self.geometry.contains(point):
             msg = _(
                 "Point is not contained within the locality's geometry")

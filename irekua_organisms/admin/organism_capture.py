@@ -1,64 +1,80 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
+from irekua_database.admin.base import IrekuaUserAdmin
+from irekua_organisms.models import OrganismCapture
 
 
-class OrganismCaptureAdmin(admin.ModelAdmin):
+class LabelsInline(admin.TabularInline):
+    extra = 0
+
+    model = OrganismCapture.labels.through
+
+    verbose_name = _('Label')
+
+    verbose_name_plural = _('Labels')
+
+    autocomplete_fields = ['term']
+
+
+class OrganismCaptureAdmin(IrekuaUserAdmin):
     date_hierarchy = 'created_on'
-    search_fields = ['organism__name']
+
+    search_fields = [
+        'organism__name'
+        'organism__organism_type__name',
+        'deployment__collection_device__collection_name',
+        'organism__collection__collection_name',
+    ]
+
     list_display = (
         'id',
+        '__str__',
         'collection',
         'sampling_event',
-        'sampling_event_device',
+        'deployment',
         'organism',
         'organism_capture_type',
         'created_on',
         'created_by',
     )
-    list_display_links = ('id',)
-    readonly_fields = ('created_by', 'created_on')
+
+    list_display_links = (
+        'id',
+        '__str__',
+    )
+
     list_filter = (
-        'created_on',
-        'created_by',
         'organism_capture_type',
-        'sampling_event_device',
-        'organism')
+        'deployment',
+        'organism',
+    )
 
     autocomplete_fields = (
         'labels',
-        'sampling_event_device',
+        'deployment',
         'organism_capture_type',
-        'organism')
+        'organism'
+    )
 
     fieldsets = (
         (None, {
             'fields': (
-                ('organism_capture_type',),
-                ('organism', 'sampling_event_device'),
+                ('organism_capture_type', 'deployment'),
+                ('organism'),
             )
         }),
-        ('Additional metadata', {
-            'classes': ('collapse',),
-            'fields': ('additional_metadata',),
+        (_('Additional metadata'), {
+            'fields': (
+                ('metadata', 'collection_metadata'),
+            ),
         }),
-        ('Descriptors', {
+        (_('Descriptors'), {
             'classes': ('collapse',),
             'fields': ('labels',),
         }),
-        ('Creation', {
-            'classes': ('collapse',),
-            'fields': (('created_by', 'created_on'),),
-        })
     )
 
-    def collection(self, obj):
-        return obj.sampling_event_device.sampling_event.collection
-
-    def sampling_event(self, obj):
-        return obj.sampling_event_device.sampling_event
-
-    def save_model(self, request, obj, form, change):
-        if change:
-            obj.modified_by = request.user
-        else:
-            obj.created_by = request.user
-        super().save_model(request, obj, form, change)
+    inlines = [
+        LabelsInline,
+    ]

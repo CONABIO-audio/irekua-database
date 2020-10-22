@@ -3,13 +3,13 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
 from irekua_database.base import IrekuaModelBase
+from irekua_schemas.mixins import MetadataSchemaMixin
+from irekua_schemas.models import Schema
 from irekua_terms.models import TermType
-from irekua_database.utils import validate_JSON_schema
-from irekua_database.utils import validate_JSON_instance
-from irekua_database.utils import simple_JSON_schema
+from irekua_items.models import ItemType
 
 
-class OrganismType(IrekuaModelBase):
+class OrganismType(IrekuaModelBase, MetadataSchemaMixin):
     name = models.CharField(
         max_length=64,
         db_column='name',
@@ -17,6 +17,7 @@ class OrganismType(IrekuaModelBase):
         unique=True,
         help_text=_('Name of organism type'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
@@ -36,14 +37,16 @@ class OrganismType(IrekuaModelBase):
         verbose_name=_('term types'),
         help_text=_('Valid term types to describe the organism'),
         blank=True)
-    identification_info_schema = models.JSONField(
-        db_column='identification_info_schema',
+
+    identification_info_schema = models.ForeignKey(
+        Schema,
+        models.PROTECT,
+        related_name='organism_identification_schema',
+        db_column='identification_info_schema_id',
         verbose_name=_('identification information schema'),
-        help_text=_('JSON Schema for identification information.'),
-        blank=True,
-        null=False,
-        default=simple_JSON_schema,
-        validators=[validate_JSON_schema])
+        help_text=_('JSON Schema for identification information'),
+        null=True,
+        blank=True)
 
     is_multi_organism = models.BooleanField(
         db_column='is_multi_organism',
@@ -55,25 +58,60 @@ class OrganismType(IrekuaModelBase):
         null=False,
         default=False)
 
+    restrict_item_types = models.BooleanField(
+        db_column='restrict_item_types',
+        verbose_name=_('restrict item types'),
+        help_text=_(
+            'Flag indicating whether any type of item can be associated '
+            'to organisms of this type'),
+        default=True,
+        null=False,
+        blank=True)
+
+    item_types = models.ManyToManyField(
+        ItemType,
+        verbose_name=_('item types'),
+        help_text=_(
+            'Types of items that can be associated to '
+            'organism of this type.'),
+        blank=True)
+
     class Meta:
         verbose_name =_('Organism Type')
+
         verbose_name_plural =_('Organism Types')
+
         ordering = ['-created_on']
 
     def __str__(self):
         return str(self.name)
 
     def validate_id_info(self, id_info):
+        if self.identification_info_schema is None:
+            return
+
         try:
-            validate_JSON_instance(
-                schema=self.identification_info_schema,
-                instance=id_info)
+            self.identification_info_schema.validate(id_info)
+
         except ValidationError as error:
             msg = _(
                 'Invalid identification information for organism '
                 'type %(type)s. Error: %(error)s')
             params = dict(type=self.name, error=', '.join(error.messages))
-            raise ValidationError(msg, params=params)
+            raise ValidationError(msg % params) from error
+
+    def validate_item_type(self, item_type):
+        if not self.restrict_item_types:
+            return
+
+        if not self.item_types.filter(id=item_type.id).exists():
+            msg = _(
+                'Items of type %(item_type)s can not be associated to organism '
+                ' of type %(capture_type)s.')
+            params = dict(
+                item_type=item_type,
+                capture_type=self.name)
+            raise ValidationError(msg % params)
 
     def validate_term(self, term):
         if not self.term_types.filter(id=term.term_type.id).exists():

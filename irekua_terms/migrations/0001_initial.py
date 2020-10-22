@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('irekua_database', '0008_move_terms'),
+        # ('irekua_database', '0008_move_terms'),
     ]
 
     operations = [

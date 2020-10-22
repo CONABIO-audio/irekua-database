@@ -12,6 +12,7 @@ class Migration(migrations.Migration):
         ('irekua_geo', '0001_initial'),
         ('irekua_collections', '0001_initial'),
         ('irekua_database', '0013_change_item_to_deployment'),
+        ('irekua_models', '0003_update_item_references'),
     ]
 
     operations = [

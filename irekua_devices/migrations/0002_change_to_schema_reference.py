@@ -54,6 +54,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('irekua_schemas', '0002_auto_20201018_2158'),
         ('irekua_devices', '0001_initial'),
+        ('irekua_database', '0014_massive_migration_to_submodules'),
     ]
 
     operations = [

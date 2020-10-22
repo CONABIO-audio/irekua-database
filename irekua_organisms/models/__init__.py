@@ -1,10 +1,10 @@
-from irekua_organisms.models.collection_type_organism_capture_type import CollectionTypeOrganismCaptureType
-from irekua_organisms.models.collection_type_organism_config import CollectionTypeOrganismConfig
-from irekua_organisms.models.collection_type_organism_type import CollectionTypeOrganismType
-from irekua_organisms.models.organism_capture_type import OrganismCaptureType
-from irekua_organisms.models.organism_capture import OrganismCapture
-from irekua_organisms.models.organism_type import OrganismType
-from irekua_organisms.models.organism import Organism
+from .organism_capture import OrganismCapture
+from .organism import Organism
+from .types import CollectionTypeOrganismCaptureType
+from .types import CollectionTypeOrganismConfig
+from .types import CollectionTypeOrganismType
+from .types import OrganismCaptureType
+from .types import OrganismType
 
 
 __all__ = [

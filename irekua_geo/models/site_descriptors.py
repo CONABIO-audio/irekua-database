@@ -3,7 +3,6 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBase
 
 
@@ -34,7 +33,6 @@ class SiteDescriptor(IrekuaModelBase):
         db_column='metadata',
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to term'),
-        default=empty_JSON,
         blank=True,
         null=True)
 
@@ -62,7 +60,12 @@ class SiteDescriptor(IrekuaModelBase):
         super().clean(*args, **kwargs)
 
         # Check metadata is valid for descriptor type
+        self.clean_metadata()
+
+    def clean_metadata(self):
         try:
+            # pylint: disable=no-member
             self.descriptor_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
             raise ValidationError({'metadata': error}) from error

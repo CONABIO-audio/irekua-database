@@ -17,12 +17,14 @@ class Institution(IrekuaModelBaseUser):
         help_text=_('Name of institution'),
         unique=True,
         blank=False)
+
     institution_code = models.CharField(
         max_length=64,
         db_column='institution_code',
         verbose_name=_('institution code'),
         help_text=_('Code of institution'),
         blank=True)
+
     country = models.CharField(
         max_length=2,
         choices=COUNTRIES,
@@ -30,22 +32,26 @@ class Institution(IrekuaModelBaseUser):
         verbose_name=_('country'),
         help_text=_('Country home of institution'),
         blank=True)
+
     postal_code = models.CharField(
         max_length=8,
         db_column='postal_code',
         verbose_name=_('postal code'),
         help_text=_('Postal code'),
         blank=True)
+
     address = models.TextField(
         blank=True,
         db_column='address',
         verbose_name=_('address'),
         help_text=_('Address of institution'))
+
     website = models.URLField(
         blank=True,
         db_column='website',
         verbose_name=_('website'),
         help_text=_('Website of institution'))
+
     logo = models.ImageField(
         db_column='logo',
         verbose_name=_('logo'),
@@ -53,6 +59,7 @@ class Institution(IrekuaModelBaseUser):
         upload_to='images/institutions/',
         blank=True,
         null=True)
+
     users = models.ManyToManyField(
         'User',
         through='UserInstitution',
@@ -62,6 +69,7 @@ class Institution(IrekuaModelBaseUser):
 
     class Meta:
         verbose_name = _('Institution')
+
         verbose_name_plural = _('Institutions')
 
         ordering = [

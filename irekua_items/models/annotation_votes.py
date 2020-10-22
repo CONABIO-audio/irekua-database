@@ -44,25 +44,37 @@ class AnnotationVote(IrekuaModelBaseUser):
 
     def __str__(self):
         msg = _('Vote %(id)s on annotation %(annotation)s')
+        # pylint: disable=no-member
         params = dict(
             id=self.id,
             annotation=self.annotation.id)
         return msg % params
 
     def clean(self):
-        if self.id:
-            try:
-                self.validate_labels(self.labels.all())
-            except ValidationError as error:
-                raise ValidationError({'labels': error}) from error
-
         super().clean()
+
+        # Check that labels are valid for this annotation.
+        self.clean_labels()
+
+    def clean_labels(self):
+        if not self.id:
+            # Exit early if AnnotationVote is being created
+            return
+
+        try:
+            self.validate_labels(self.labels.all())
+
+        except ValidationError as error:
+            raise ValidationError({'labels': error}) from error
 
     def validate_labels(self, labels):
         for term in labels:
             term_type = term.term_type.name
+
             try:
+                # pylint: disable=no-member
                 self.annotation.event_type.validate_term_type(term_type)
+
             except ValidationError as error:
                 msg = _(
                         'Labels contain a term (of type %(type)s) that is not '

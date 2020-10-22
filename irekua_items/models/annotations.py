@@ -79,46 +79,71 @@ class Annotation(IrekuaModelBaseUser):
         super().clean()
 
         # Check event type is valid for item type
+        self.clean_event_type()
+
+        # Check annotation type is valid for event type
+        self.clean_annotation_type()
+
+        # Check annotation is valid for Annotation Type
+        self.clean_annotation()
+
+        # Check annotation metadata is valid
+        self.clean_annotation_metadata()
+
+        # Check event metadata is valid
+        self.clean_event_metadata()
+
+    def clean_event_type(self):
         try:
             # pylint: disable=no-member
             self.item.item_type.validate_event_type(self.event_type)
+
         except ValidationError as error:
             raise ValidationError({'event_type': error}) from error
 
-        # Check annotation type is valid for event type
+    def clean_annotation_type(self):
         try:
+            # pylint: disable=no-member
             self.event_type.validate_annotation_type(self.annotation_type)
+
         except ValidationError as error:
             raise ValidationError({'annotation_type': error}) from error
 
-        # Check annotation is valid for Annotation Type
+    def clean_annotation(self):
         try:
+            # pylint: disable=no-member
             self.annotation_type.validate_annotation(self.annotation)
+
         except ValidationError as error:
             raise ValidationError({'annotation': error}) from error
 
-        # Check annotation metadata is valid
+    def clean_annotation_metadata(self):
         try:
+            # pylint: disable=no-member
             self.annotation_type.validate_metadata(self.annotation_metadata)
+
         except ValidationError as error:
             raise ValidationError({'annotation_metadata': error}) from error
 
-        # Check event metadata is valid
+    def clean_event_metadata(self):
         try:
+            # pylint: disable=no-member
             self.event_type.validate_metadata(self.event_metadata)
+
         except ValidationError as error:
             raise ValidationError({'event_metadata': error}) from error
-
-        # Labels
 
     def validate_labels(self, labels):
         for term in labels:
             term_type = term.term_type.name
+
             try:
+                # pylint: disable=no-member
                 self.event_type.validate_term_type(term_type)
-            except ValidationError:
+
+            except ValidationError as error:
                 msg = _(
                     'Labels contain a term (of type %(type)s) that is not '
                     'valid for the event type')
                 params = dict(type=term_type)
-                raise ValidationError(msg, params=params)
+                raise ValidationError(msg, params=params) from error

@@ -14,11 +14,13 @@ class TermType(IrekuaModelBase):
         verbose_name=_('name'),
         help_text=_('Name for term type'),
         blank=False)
+
     description = models.TextField(
         db_column='description',
         verbose_name=_('description'),
         help_text=_('Description of term type'),
         blank=False)
+
     icon = models.ImageField(
         db_column='icon',
         verbose_name=_('icon'),
@@ -26,6 +28,7 @@ class TermType(IrekuaModelBase):
         upload_to='images/term_types/',
         blank=True,
         null=True)
+
     metadata_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
@@ -35,6 +38,7 @@ class TermType(IrekuaModelBase):
         help_text=_('JSON Schema for metadata of term info'),
         null=True,
         blank=True)
+
     synonym_metadata_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
@@ -44,6 +48,7 @@ class TermType(IrekuaModelBase):
         help_text=_('JSON Schema for metadata of synonym info'),
         null=True,
         blank=True)
+
     is_categorical = models.BooleanField(
         db_column='is_categorical',
         verbose_name=_('is categorical'),
@@ -53,6 +58,7 @@ class TermType(IrekuaModelBase):
         default=True,
         blank=False,
         null=False)
+
     is_numerical = models.BooleanField(
         db_column='is_numerical',
         verbose_name=_('is numerical'),
@@ -62,6 +68,7 @@ class TermType(IrekuaModelBase):
         default=False,
         blank=False,
         null=False)
+
     is_integer = models.BooleanField(
         db_column='is_integer',
         verbose_name=_('is integer'),
@@ -71,6 +78,7 @@ class TermType(IrekuaModelBase):
         default=False,
         blank=False,
         null=False)
+
     is_boolean = models.BooleanField(
         db_column='is_boolean',
         verbose_name=_('is boolean'),
@@ -93,12 +101,22 @@ class TermType(IrekuaModelBase):
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
 
+        # Check that term type is of one type only (categorical/numeric/boolean/int)
+        self.clean_has_only_one_class()
+
+        # Check that no synonym metadata schema was given if not of categorical
+        # type.
+        self.clean_synonym_metadata()
+
+
+    def clean_has_only_one_class(self):
         flags = (
             self.is_categorical +
             self.is_numerical +
             self.is_integer +
             self.is_boolean
         )
+
         if flags != 1:
             msg = _(
                 'Term type can only be of one and only one type '
@@ -106,14 +124,13 @@ class TermType(IrekuaModelBase):
             )
             raise ValidationError(msg)
 
+    def clean_synonym_metadata(self):
         if self.is_categorical:
-            # no further validation is required for categorical types
             return
 
         if self.synonym_metadata_schema is not None:
             msg = _(
-                'Non categorical term types cannot have synonyms'
-            )
+                'Non categorical term types cannot have synonyms')
             raise ValidationError(msg)
 
     def validate_value(self, value):

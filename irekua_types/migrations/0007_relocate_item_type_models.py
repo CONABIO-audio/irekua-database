@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
         ('irekua_collections', '0010_update_item_type_reference_to_irekua_items'),
         ('irekua_items', '0004_include_item_types_models'),
         ('irekua_types', '0006_relocate_deployment_and_sampling_event_types'),
+        ('irekua_models', '0004_update_types_references'),
     ]
 
     operations = [

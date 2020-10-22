@@ -100,36 +100,56 @@ class SecondaryItem(IrekuaModelBase):
         super().clean()
 
         # Check that declared hash coincides with uploaded file.
+        self.clean_hash()
+
+        # Check that MIME type is declared in the database
+        mime_type = self.clean_mime_type()
+
+        # Check that MIME type is valid for item type
+        self.clean_compatible_mime_and_item_type(mime_type)
+
+        # Check that media info is valid for MIME type
+        self.clean_media_info(mime_type)
+
+    def clean_hash(self):
         try:
             self.validate_hash()
+
         except ValidationError as error:
             raise ValidationError({'hash': error}) from error
 
-        # Check that MIME type is declared in the database
+    def clean_mime_type(self):
         try:
-            mime_type = MimeType.infer(file=self.item_file)
-        except MimeType.DoesNotExist:
+            return MimeType.infer(file=self.item_file)
+
+        except MimeType.DoesNotExist as error:
             msg = _(
                 'No MIME type could be infered or not registered')
             raise ValidationError({'item_file': msg}) from error
 
-        # Check that MIME type is valid for item type
+    def clean_compatible_mime_and_item_type(self, mime_type):
         try:
+            # pylint: disable=no-member
             self.item_type.validate_mime_type(mime_type)
+
         except ValidationError as error:
             raise ValidationError({'item_file': error}) from error
 
-        # Check that media info is valid for MIME type
+    def clean_media_info(self, mime_type):
         try:
+            # pylint: disable=no-member
             mime_type.validate_media_info(self.media_info)
+
         except ValidationError as error:
             raise ValidationError({'media_info': error}) from error
 
     def validate_hash(self):
+        # pylint: disable=no-member
         if self.item_file.name is None and self.hash is None:
             msg = _('If no file is provided, a hash must be given')
             raise ValidationError(msg)
 
+        # pylint: disable=no-member
         if self.item_file.name is None:
             return
 

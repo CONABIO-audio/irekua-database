@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('irekua_database', '0007_delete_visualizer'),
+        ('irekua_models', '0002_update_term_references'),
     ]
 
     operations = [

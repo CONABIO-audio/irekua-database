@@ -39,7 +39,10 @@ class Source(IrekuaModelBase):
 
     class Meta:
         verbose_name = _('Source')
+
         verbose_name_plural = _('Sources')
+
+        ordering = ['-created_on']
 
     def __str__(self):
         msg = _('Directory %(dir)s uploaded with %(func)s')

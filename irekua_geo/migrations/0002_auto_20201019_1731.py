@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('irekua_geo', '0001_initial'),
+        ('irekua_database', '0014_massive_migration_to_submodules'),
     ]
 
     operations = [

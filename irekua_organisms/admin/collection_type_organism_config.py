@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
+from irekua_database.admin.base import IrekuaAdmin
 from irekua_organisms.models import CollectionTypeOrganismConfig
 
 
@@ -20,21 +21,45 @@ class CollectionTypeOrganismCaptureTypeInline(admin.TabularInline):
     verbose_name_plural = _('Organism capture types')
 
 
-class CollectionTypeOrganismConfigAdmin(admin.ModelAdmin):
-    date_hierarchy = 'created_on'
-    search_fields = ('collection_type__name',)
+class CollectionTypeOrganismConfigAdmin(IrekuaAdmin):
+    search_fields = (
+        'collection_type__name',
+    )
+
     list_display = (
         'collection_type',
         'use_organisms',
-    )
-    list_filter = (
-        'use_organisms',
+        'restrict_organism_types',
+        'restrict_organism_capture_types',
         'created_on',
     )
 
-    autocomplete_fields = ('collection_type',)
-    fields = (
-        ('collection_type', 'use_organisms'),
+    list_display_links = (
+        'collection_type',
+    )
+
+    list_filter = (
+        'use_organisms',
+        'restrict_organism_types',
+        'restrict_organism_capture_types',
+    )
+
+    autocomplete_fields = (
+        'collection_type',
+    )
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'collection_type',
+                'use_organisms',
+            )
+        }),
+        (_('Restrictions'), {
+            'fields': (
+                ('restrict_organism_types', 'restrict_organism_capture_types'),
+            )
+        }),
     )
 
     inlines = [

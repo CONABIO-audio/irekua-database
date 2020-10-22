@@ -5,7 +5,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBaseUser
-from irekua_types.models import SiteType
+from irekua_geo.models import SiteType
 from irekua_geo.models import SiteDescriptor
 from irekua_geo.models import Site
 

@@ -3,15 +3,14 @@ import datetime
 from pytz import timezone as pytz_timezone
 
 from django.db import models
-from django.contrib.gis.db.models import PointField
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError
+from django.contrib.gis.db.models import PointField
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from irekua_database.base import IrekuaModelBaseUser
-# from irekua_types.models import DeploymentType
 
 
 class Deployment(IrekuaModelBaseUser):

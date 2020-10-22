@@ -5,12 +5,11 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBase
-from irekua_types.models import SiteDescriptorType
 
 
 class SiteDescriptor(IrekuaModelBase):
     descriptor_type = models.ForeignKey(
-        SiteDescriptorType,
+        'SiteDescriptorType',
         on_delete=models.CASCADE,
         db_column='descriptor_type',
         verbose_name=_('descriptor type'),

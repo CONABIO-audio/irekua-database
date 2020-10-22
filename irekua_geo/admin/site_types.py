@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from irekua_types.models import SiteType
+from irekua_geo.models import SiteType
 
 
 class SiteDescriptorTypeInline(admin.TabularInline):

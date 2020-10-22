@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from irekua_database.base import IrekuaModelBase
 from irekua_schemas.mixins import MetadataSchemaMixin
-from irekua_types.models import SiteType
+from irekua_geo.models import SiteType
 from irekua_items.models import ItemType
 
 

@@ -6,9 +6,9 @@ from irekua_database.base import IrekuaModelBase
 from irekua_database.models import Role
 
 from irekua_items.models import types as item_type_models
-from irekua_devices.models import types as device_type_types
+from irekua_devices.models import types as device_type_models
+from irekua_geo.models import types as site_type_models
 
-from irekua_types import models as types
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
 
 
@@ -17,7 +17,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
     *Collection types* function as a templates for collection creation. Its
     utility stems from the fact that the configuration of a collection can be
     a tedious process and usually some preconfigured option suffices for the
-    current need. Hence a collection type contains all collection behaviour
+    need in hand. A collection type contains all collection behaviour
     configuration. This amounts to the following specifications:
 
     1. Metadata:
@@ -156,7 +156,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     site_types = models.ManyToManyField(
-        types.SiteType,
+        site_type_models.SiteType,
         through='CollectionTypeSiteType',
         through_fields=('collection_type', 'site_type'),
         verbose_name=_('site types'),
@@ -204,7 +204,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     device_types = models.ManyToManyField(
-        device_type_types.DeviceType,
+        device_type_models.DeviceType,
         through='CollectionTypeDeviceType',
         through_fields=('collection_type', 'device_type'),
         verbose_name=_('device types'),

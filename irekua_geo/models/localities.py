@@ -5,7 +5,6 @@ from django.contrib.gis.db.models import MultiPolygonField
 
 from irekua_database.base import IrekuaModelBase
 from irekua_database.utils import empty_JSON
-from irekua_types.models import LocalityType
 
 
 class Locality(IrekuaModelBase):
@@ -22,7 +21,7 @@ class Locality(IrekuaModelBase):
         help_text=_('Description of the locality'))
 
     locality_type = models.ForeignKey(
-        LocalityType,
+        'LocalityType',
         on_delete=models.PROTECT,
         db_column='locality_type_id',
         verbose_name=_('locality type'),

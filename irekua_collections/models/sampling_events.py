@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBaseUser
-# from irekua_types.models import SamplingEventType
 
 
 class SamplingEvent(IrekuaModelBaseUser):

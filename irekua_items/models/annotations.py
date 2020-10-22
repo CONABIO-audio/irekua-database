@@ -3,10 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBaseUser
-from irekua_database.utils import empty_JSON
 from irekua_terms.models import Term
-from irekua_types.models import EventType
-from irekua_types.models import AnnotationType
 
 
 class Annotation(IrekuaModelBaseUser):
@@ -19,7 +16,7 @@ class Annotation(IrekuaModelBaseUser):
         blank=False)
 
     event_type = models.ForeignKey(
-        EventType,
+        'EventType',
         on_delete=models.PROTECT,
         db_column='event_type_id',
         verbose_name=_('event type'),
@@ -27,7 +24,7 @@ class Annotation(IrekuaModelBaseUser):
         blank=False)
 
     annotation_type = models.ForeignKey(
-        AnnotationType,
+        'AnnotationType',
         on_delete=models.PROTECT,
         db_column='annotation_type_id',
         verbose_name=_('annotation type'),
@@ -37,7 +34,6 @@ class Annotation(IrekuaModelBaseUser):
     annotation = models.JSONField(
         db_column='annotation',
         verbose_name=_('annotation'),
-        default=empty_JSON,
         help_text=_('Information of annotation location within item'),
         blank=True,
         null=False)

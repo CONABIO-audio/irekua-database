@@ -5,10 +5,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
 from irekua_database.utils import hash_file
 from irekua_database.base import IrekuaModelBase
-from irekua_types.models import ItemType
 from irekua_types.models import MimeType
 
 
@@ -62,7 +60,7 @@ class SecondaryItem(IrekuaModelBase):
         null=True)
 
     item_type = models.ForeignKey(
-        ItemType,
+        'ItemType',
         on_delete=models.PROTECT,
         db_column='item_type',
         verbose_name=_('item type'),
@@ -83,7 +81,6 @@ class SecondaryItem(IrekuaModelBase):
         db_column='media_info',
         verbose_name=_('media info'),
         help_text=_('Media information of secondary item file'),
-        default=empty_JSON,
         blank=True,
         null=True)
 

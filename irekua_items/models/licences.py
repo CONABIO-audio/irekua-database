@@ -3,9 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
-from irekua_database.utils import empty_JSON
 from irekua_database.base import IrekuaModelBaseUser
-from irekua_types.models import LicenceType
 
 
 class Licence(IrekuaModelBaseUser):
@@ -31,7 +29,7 @@ class Licence(IrekuaModelBaseUser):
     '''
 
     licence_type = models.ForeignKey(
-        LicenceType,
+        'LicenceType',
         on_delete=models.PROTECT,
         db_column='licence_type_id',
         verbose_name=_('licence type'),
@@ -49,7 +47,6 @@ class Licence(IrekuaModelBaseUser):
     metadata = models.JSONField(
         db_column='metadata',
         verbose_name=_('metadata'),
-        default=empty_JSON,
         help_text=_('Metadata associated with licence'),
         blank=True,
         null=True)

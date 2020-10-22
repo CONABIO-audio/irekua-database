@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
 from irekua_database.models import Role
+from irekua_items.models import types as item_types
 from irekua_types import models as types
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
 
@@ -163,7 +164,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     annotation_types = models.ManyToManyField(
-        types.AnnotationType,
+        item_types.AnnotationType,
         through='CollectionTypeAnnotationType',
         through_fields=('collection_type', 'annotation_type'),
         verbose_name=_('annotation types'),
@@ -171,7 +172,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     licence_types = models.ManyToManyField(
-        types.LicenceType,
+        item_types.LicenceType,
         through='CollectionTypeLicenceType',
         through_fields=('collection_type', 'licence_type'),
         verbose_name=_('licence types'),
@@ -179,7 +180,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     event_types = models.ManyToManyField(
-        types.EventType,
+        item_types.EventType,
         through='CollectionTypeEventType',
         through_fields=('collection_type', 'event_type'),
         verbose_name=_('event types'),
@@ -195,7 +196,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     item_types = models.ManyToManyField(
-        types.ItemType,
+        item_types.ItemType,
         through='CollectionTypeItemType',
         through_fields=('collection_type', 'item_type'),
         verbose_name=_('item types'),

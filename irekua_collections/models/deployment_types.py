@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -6,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.base import IrekuaModelBase
 from irekua_schemas.mixins import MetadataSchemaMixin
 from irekua_types.models import DeviceType
-from irekua_types.models import ItemType
+from irekua_items.models import ItemType
 
 
 class DeploymentType(IrekuaModelBase, MetadataSchemaMixin):

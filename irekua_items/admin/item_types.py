@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from irekua_types.models import ItemType
+from irekua_items.models import ItemType
 
 
 class MimeTypesInline(admin.TabularInline):

@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
 from irekua_schemas.mixins import MetadataSchemaMixin
+from irekua_types.models import MimeType
 
 
 mimetypes.init()
@@ -34,7 +35,7 @@ class ItemType(IrekuaModelBase, MetadataSchemaMixin):
         null=True)
 
     mime_types = models.ManyToManyField(
-        'MimeType',
+        MimeType,
         db_column='mime_types',
         verbose_name=_('mime types'),
         help_text=_('Mime types of files for this item type'),

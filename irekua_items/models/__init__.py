@@ -7,6 +7,11 @@ from .sources import Source
 from .tags import Tag
 from .licences import Licence
 
+from .types import AnnotationType
+from .types import EventType
+from .types import ItemType
+from .types import LicenceType
+
 
 __all__ = [
     'Annotation',
@@ -16,4 +21,8 @@ __all__ = [
     'SecondaryItem',
     'Source',
     'Tag',
+    'AnnotationType',
+    'EventType',
+    'ItemType',
+    'LicenceType',
 ]

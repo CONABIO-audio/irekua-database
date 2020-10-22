@@ -10,12 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from pytz import timezone as pytz_timezone
 
 from irekua_database.base import IrekuaModelBaseUser
-from irekua_database.utils import empty_JSON
 from irekua_database.utils import hash_file
-
-from irekua_types.models import ItemType
 from irekua_types.models import MimeType
-from irekua_types.models import EventType
 
 
 mimetypes.init()
@@ -118,7 +114,7 @@ class Item(IrekuaModelBaseUser):
         null=False)
 
     item_type = models.ForeignKey(
-        ItemType,
+        'ItemType',
         on_delete=models.PROTECT,
         db_column='item_type_id',
         verbose_name=_('item type'),
@@ -135,7 +131,6 @@ class Item(IrekuaModelBaseUser):
 
     media_info = models.JSONField(
         db_column='media_info',
-        default=empty_JSON,
         verbose_name=_('media info'),
         help_text=_('Information of resource file'),
         blank=True,
@@ -159,7 +154,6 @@ class Item(IrekuaModelBaseUser):
 
     metadata = models.JSONField(
         db_column='metadata',
-        default=empty_JSON,
         verbose_name=_('metadata'),
         help_text=_('Metadata associated to item'),
         blank=True,
@@ -256,7 +250,7 @@ class Item(IrekuaModelBaseUser):
         blank=True)
 
     ready_event_types = models.ManyToManyField(
-        EventType,
+        'EventType',
         verbose_name=_('ready event types'),
         help_text=_('Types of event for which item has been fully annotated'),
         blank=True)
@@ -336,6 +330,7 @@ class Item(IrekuaModelBaseUser):
 
     def clean_compatible_mime_and_item_types(self, mime_type):
         try:
+            # pylint: disable=no-member
             self.item_type.validate_mime_type(mime_type)
 
         except ValidationError as error:
@@ -343,6 +338,7 @@ class Item(IrekuaModelBaseUser):
 
     def clean_metadata(self):
         try:
+            # pylint: disable=no-member
             self.item_type.validate_metadata(self.metadata)
 
         except ValidationError as error:

@@ -2,7 +2,7 @@ from django.db import models
 
 from django.utils.translation import gettext_lazy as _
 from irekua_database.base import IrekuaModelBase
-from irekua_types.models import AnnotationType
+from irekua_items.models import AnnotationType
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
 
 

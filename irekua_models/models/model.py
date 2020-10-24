@@ -73,7 +73,7 @@ class Model(IrekuaModelBaseUser):
             raise ValidationError(msg, params=params)
 
     def validate_item_type(self, item_type):
-        if not self.item_types.filter(name=item_type.name).exists()
+        if not self.item_types.filter(name=item_type.name).exists():
             msg = _(
                 'Item type %(item_type)s is invalid for model '
                 '%(model)s')

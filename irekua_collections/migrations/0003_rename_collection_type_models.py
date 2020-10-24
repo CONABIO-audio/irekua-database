@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0018_auto_20201017_2008'),
+        ('irekua_database', '0014_auto_20201017_2008'),
         ('irekua_schemas', '0002_auto_20201018_2158'),
         ('irekua_types', '0005_auto_20201019_1402'),
         ('irekua_collections', '0002_migrate_to_foreing_key_schemas'),

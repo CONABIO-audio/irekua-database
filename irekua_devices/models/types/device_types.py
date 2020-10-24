@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
+from irekua_items.models import MimeType
 
 
 class DeviceType(IrekuaModelBase):
@@ -29,7 +30,7 @@ class DeviceType(IrekuaModelBase):
         null=True)
 
     mime_types = models.ManyToManyField(
-        'MimeType',
+        MimeType,
         db_column='mime_types',
         verbose_name=_('mime types'),
         help_text=_(

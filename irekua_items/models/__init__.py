@@ -11,6 +11,7 @@ from .types import AnnotationType
 from .types import EventType
 from .types import ItemType
 from .types import LicenceType
+from .types import MimeType
 
 
 __all__ = [
@@ -25,4 +26,5 @@ __all__ = [
     'EventType',
     'ItemType',
     'LicenceType',
+    'MimeType',
 ]

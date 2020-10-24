@@ -65,6 +65,13 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
         help_text=_('Valid annotation types for this event type'),
         blank=True)
 
+    item_types = models.ManyToManyField(
+        'ItemType',
+        db_column='item_types',
+        verbose_name=_('item types'),
+        help_text=_('Types of items in which this event can occur'),
+        blank=True)
+
     class Meta:
         verbose_name = _('Event Type')
         verbose_name_plural = _('Event Types')
@@ -106,3 +113,5 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
                 annotation_type=str(annotation_type),
                 event_type=str(self))
             raise ValidationError(msg % params)
+
+# TODO: Validate Item Type

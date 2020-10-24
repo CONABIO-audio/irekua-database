@@ -16,32 +16,16 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('irekua_types', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('irekua_types', '0001_initial'),
         ('irekua_terms', '0001_initial'),
+        ('selia_annotator', '0002_add_annotator'),
+        ('selia_visualizers', '0002_add_visualizer'),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
-                migrations.CreateModel(
-                    name='Annotation',
-                    fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('annotation', models.JSONField(blank=True, db_column='annotation', default=irekua_database.utils.empty_JSON, help_text='Information of annotation location within item', verbose_name='annotation')),
-                        ('annotation_type', models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.annotationtype', verbose_name='annotation type')),
-                        ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='annotation_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
-                        ('event_type', models.ForeignKey(db_column='event_type_id', help_text='Type of event being annotated', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.eventtype', verbose_name='event type')),
-                    ],
-                    options={
-                        'verbose_name': 'Annotation',
-                        'verbose_name_plural': 'Annotations',
-                        'ordering': ['-modified_on'],
-                        'permissions': (('vote', 'Can vote annotation'),),
-                    },
-                ),
                 migrations.CreateModel(
                     name='Item',
                     fields=[
@@ -70,6 +54,32 @@ class Migration(migrations.Migration):
                         'verbose_name_plural': 'Items',
                         'ordering': ['created_on'],
                         'permissions': (('download_item', 'Can download item'), ('annotate_item', 'Can annotate item')),
+                    },
+                ),
+                migrations.CreateModel(
+                    name='Annotation',
+                    fields=[
+                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
+                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
+                        ('annotation', models.JSONField(blank=True, db_column='annotation', default=irekua_database.utils.empty_JSON, help_text='Information of annotation location within item', verbose_name='annotation')),
+                        ('annotation_type', models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.annotationtype', verbose_name='annotation type')),
+                        ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='annotation_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
+                        ('event_type', models.ForeignKey(db_column='event_type_id', help_text='Type of event being annotated', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.eventtype', verbose_name='event type')),
+                        ('annotation_tool', models.ForeignKey(db_column='annotation_tool_id', help_text='Annotation tool used when annotating', on_delete=django.db.models.deletion.PROTECT, to='selia_annotator.AnnotationTool', verbose_name='annotation tool')),
+                        ('item', models.ForeignKey(db_column='item_id', help_text='Annotated item', on_delete=django.db.models.deletion.PROTECT, to='irekua_items.Item', verbose_name='item')),
+                        ('labels', models.ManyToManyField(blank=True, db_column='labels', help_text='Labels associated with annotation', to='irekua_terms.Term', verbose_name='labels')),
+                        ('visualizer', models.ForeignKey(db_column='visualizers_id', help_text='Visualizer used when annotating', on_delete=django.db.models.deletion.PROTECT, to='selia_visualizers.Visualizer', verbose_name='visualizer')),
+                        ('visualizer_configuration', django.contrib.postgres.fields.jsonb.JSONField(blank=True, db_column='visualizer_configuration', default=irekua_database.utils.empty_JSON, help_text='Configuration of visualizer at annotation creation', verbose_name='visualizer configuration')),
+                        ('certainty', models.CharField(blank=True, choices=[('L', 'uncertain'), ('M', 'somewhat certain'), ('H', 'certain')], db_column='certainty', help_text='Level of certainty of location or labelling of annotation', max_length=16, null=True, verbose_name='certainty')),
+                        ('quality', models.CharField(blank=True, choices=[('L', 'low'), ('M', 'medium'), ('H', 'high')], db_column='quality', help_text='Quality of item content inside annotation', max_length=16, verbose_name='quality')),
+                        ('commentaries', models.TextField(blank=True, db_column='commentaries', help_text='Commentaries of annotator', verbose_name='commentaries')),
+                    ],
+                    options={
+                        'verbose_name': 'Annotation',
+                        'verbose_name_plural': 'Annotations',
+                        'ordering': ['-modified_on'],
+                        'permissions': (('vote', 'Can vote annotation'),),
                     },
                 ),
                 migrations.CreateModel(

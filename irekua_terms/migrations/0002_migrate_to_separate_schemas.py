@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('irekua_schemas', '0001_initial'),
         ('irekua_terms', '0001_initial'),
-        ('irekua_database', '0008_move_terms'),
+        ('irekua_database', '0004_move_terms'),
     ]
 
     operations = [

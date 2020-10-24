@@ -15,16 +15,6 @@ class Migration(migrations.Migration):
             options={'ordering': ['-created_on'], 'verbose_name': 'Annotation Vote', 'verbose_name_plural': 'Annotation Votes'},
         ),
         migrations.AddField(
-            model_name='annotation',
-            name='annotation_metadata',
-            field=models.JSONField(blank=True, db_column='annotation_metadata', help_text='Additional annotation metadata', null=True, verbose_name='annotation metadata'),
-        ),
-        migrations.AddField(
-            model_name='annotation',
-            name='event_metadata',
-            field=models.JSONField(blank=True, db_column='event_metadata', help_text='Additional metadata on event occurence', null=True, verbose_name='event metadata'),
-        ),
-        migrations.AddField(
             model_name='annotationvote',
             name='incorrect_geometry',
             field=models.BooleanField(blank=True, db_column='incorrect_geometry', default=False, help_text='Is the annotation geometry incorrect?', verbose_name='incorrect geometry'),

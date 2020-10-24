@@ -1,2 +1,6 @@
 from .device_types import DeviceType
-from .mime_types import MimeType
+
+
+__all__ = [
+    'DeviceType',
+]

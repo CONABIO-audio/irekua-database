@@ -3,15 +3,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.admin.base import IrekuaAdmin
-from selia_visualizers.models import VisualizerModule
+from selia_annotator.models import AnnotatorModule
 
 
 class ModuleInline(admin.TabularInline):
     extra = 0
 
-    model = VisualizerModule
+    model = AnnotatorModule
 
-    fk_name = 'visualizerversion_ptr'
+    fk_name = 'annotatorversion_ptr'
 
     verbose_name_plural = _('Module')
 
@@ -36,15 +36,15 @@ class ModuleFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == 'yes':
-            return queryset.filter(visualizermodule__isnull=False)
+            return queryset.filter(annotatormodule__isnull=False)
 
         if self.value() == 'no':
-            return queryset.filter(visualizermodule__isnull=True)
+            return queryset.filter(annotatormodule__isnull=True)
 
 
 def has_module(obj):
     try:
-        obj.visualizermodule
+        obj.annotatormodule
         return True
 
     except ObjectDoesNotExist:
@@ -52,42 +52,41 @@ def has_module(obj):
 has_module.boolean = True
 
 
-class VisualizerVersionAdmin(IrekuaAdmin):
+class AnnotatorVersionAdmin(IrekuaAdmin):
     search_fields = [
-        'visualizer__name',
-        'version'
+        'annotator__name',
+        'version']
+
+    list_display = [
+        'id',
+        '__str__',
+        'annotator',
+        'version',
+        has_module,
+        'created_on',
     ]
 
-    list_display = (
+    list_display_links = [
         'id',
         '__str__',
-        'visualizer',
-        'version',
-        'created_on',
-        has_module,
-    )
+    ]
 
-    list_display_links = (
-        'id',
-        '__str__',
-    )
+    autocomplete_fields = [
+        'annotator',
+    ]
 
-    list_filter = (
-        'visualizer',
-        'version',
-        'created_on',
+    list_filter = [
+        'annotator',
+        'annotator__annotation_type',
         ModuleFilter,
-    )
+    ]
+
 
     fieldsets = (
         (None, {
             'fields': (
-                ('visualizer', 'version'),
-                ('created_on',),
+                ('annotator', 'version'),
             )
-        }),
-        ('Configuration', {
-            'fields': ('configuration_schema',),
         }),
     )
 

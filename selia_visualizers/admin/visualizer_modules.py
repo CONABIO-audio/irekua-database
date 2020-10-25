@@ -1,18 +1,26 @@
-from django.contrib import admin
+from irekua_database.admin.base import IrekuaAdmin
 
 
-class VisualizerModuleAdmin(admin.ModelAdmin):
-    date_hierarchy = 'created_on'
-    search_fields = ['visualizer__name', 'version']
+class VisualizerModuleAdmin(IrekuaAdmin):
+    search_fields = [
+        'visualizer__name',
+        'version',
+    ]
+
     list_display = (
         'id',
+        '__str__',
         'visualizer',
         'version',
         'is_active',
         'created_on',
     )
-    readonly_fields = ('created_on',)
-    list_display_links = ('id', 'visualizer', 'version')
+
+    list_display_links = (
+        'id',
+        '__str__',
+    )
+
     list_filter = (
         'visualizer',
         'version',
@@ -23,13 +31,12 @@ class VisualizerModuleAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                ('visualizer', 'version', 'is_active'),
-                ('javascript_file'),
-                ('created_on',),
+                ('visualizer', 'version'),
+                'javascript_file',
+                'is_active'
             )
         }),
         ('Configuration', {
-            'classes': ('collapse',),
             'fields': ('configuration_schema',),
         }),
     )

@@ -47,7 +47,7 @@ class VisualizerVersion(IrekuaModelBase):
         )
 
     def __str__(self):
-        return f'{self.visualizer.name} @ {self.version}'
+        return f'{self.visualizer} @ {self.version}'
 
     def validate_configuration(self, configuration):
         try:

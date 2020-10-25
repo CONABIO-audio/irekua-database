@@ -49,6 +49,7 @@ class AnnotatorModule(AnnotatorVersion):
             queryset = AnnotatorModule.objects.filter(
                 annotator__annotation_type=self.annotator.annotation_type,
                 is_active=True)
+
             for entry in queryset:
                 if entry != self:
                     entry.deactivate()

@@ -29,4 +29,4 @@ class AnnotatorVersion(IrekuaModelBase):
         ordering = ['-created_on']
 
     def __str__(self):
-        return f'{self.annotator.name} @ {self.version}'
+        return f'{self.annotator} @ {self.version}'

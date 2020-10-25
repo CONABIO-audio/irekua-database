@@ -40,9 +40,6 @@ class VisualizerModule(VisualizerVersion):
 
         ordering = ['-created_on']
 
-    def __str__(self):
-        return str(self.visualizer)
-
     def clean(self):
         super().clean()
 

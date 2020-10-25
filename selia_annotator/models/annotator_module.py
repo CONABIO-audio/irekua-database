@@ -50,18 +50,22 @@ class AnnotatorModule(IrekuaModelBase):
 
         ordering = ['-created_on']
 
-    def deactivate(self):
-        self.is_active = False
-        self.save()
-
+    # pylint: disable=signature-differs
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
         if self.is_active:
-            queryset = AnnotatorModule.objects.filter(
-                annotator__annotation_type=self.annotator.annotation_type,
-                is_active=True)
+            self._deactivate_others()
 
-            for entry in queryset:
-                if entry != self:
-                    entry.deactivate()
+    def _deactivate_others(self):
+        # pylint: disable=no-member
+        annotation_type = self.annotator_version.annotator.annotation_type
+        (
+            AnnotatorModule.objects
+            .filter(
+                annotator_version__annotator__annotation_type=annotation_type,
+                is_active=True
+            )
+            .exclude(pk=self.pk)
+            .update(is_active=False)
+        )

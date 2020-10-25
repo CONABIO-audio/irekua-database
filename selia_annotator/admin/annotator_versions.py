@@ -15,11 +15,6 @@ class ModuleInline(admin.TabularInline):
 
     verbose_name = _('Module')
 
-    exclude = [
-        'annotator',
-        'version',
-    ]
-
 
 class ModuleFilter(admin.SimpleListFilter):
     title = _('has module')
@@ -73,6 +68,7 @@ class AnnotatorVersionAdmin(IrekuaAdmin):
 
     autocomplete_fields = [
         'annotator',
+        'configuration_schema',
     ]
 
     list_filter = [
@@ -85,6 +81,7 @@ class AnnotatorVersionAdmin(IrekuaAdmin):
         (None, {
             'fields': (
                 ('annotator', 'version'),
+                'configuration_schema',
             )
         }),
     )
@@ -92,9 +89,3 @@ class AnnotatorVersionAdmin(IrekuaAdmin):
     inlines = [
         ModuleInline,
     ]
-
-    def save_formset(self, request, form, formset, change):
-        for module_form in formset:
-            module_form.instance.__dict__.update(form.instance.__dict__)
-
-        super().save_formset(request, form, formset, change)

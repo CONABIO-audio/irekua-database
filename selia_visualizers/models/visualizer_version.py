@@ -48,6 +48,9 @@ class VisualizerVersion(IrekuaModelBase):
         return f'{self.visualizer} @ {self.version}'
 
     def validate_configuration(self, configuration):
+        if self.configuration_schema is None:
+            return
+
         try:
             # pylint: disable=no-member
             self.configuration_schema.validate(configuration)

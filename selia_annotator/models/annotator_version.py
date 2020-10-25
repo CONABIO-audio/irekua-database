@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
@@ -40,3 +41,20 @@ class AnnotatorVersion(IrekuaModelBase):
 
     def __str__(self):
         return f'{self.annotator} @ {self.version}'
+
+    def validate_configuration(self, configuration):
+        if self.configuration_schema is None:
+            return
+
+        try:
+            # pylint: disable=no-member
+            self.configuration_schema.validate(configuration)
+
+        except ValidationError as error:
+            msg = _(
+                'Invalid configuration information for annotator '
+                '%(annotator_version)s. Error: %(error)s')
+            params = dict(
+                annotator_version=self,
+                error=error)
+            raise ValidationError(msg % params) from error

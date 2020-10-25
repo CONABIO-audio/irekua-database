@@ -1,49 +1,41 @@
-from django.contrib import admin
+from irekua_database.admin.base import IrekuaAdmin
 
 
-class AnnotatorModuleAdmin(admin.ModelAdmin):
+class AnnotatorModuleAdmin(IrekuaAdmin):
     date_hierarchy = 'created_on'
 
     search_fields = [
-        'annotator__name',
-        'version',
+        'annotator_version__annotator__name',
+        'annotator_version__version',
     ]
 
     list_display = [
         'id',
-        'annotator',
-        'version',
+        '__str__',
+        'annotator_version',
+        'is_active',
         'created_on',
     ]
 
     list_display_links = [
         'id',
-        'version',
+        '__str__',
     ]
 
     autocomplete_fields = [
-        'annotator',
+        'annotator_version',
     ]
 
     list_filter = [
-        'annotator',
+        'annotator_version__annotator',
     ]
-
-    readonly_fields = (
-        'created_on',
-        'modified_on',
-    )
 
     fieldsets = (
         (None, {
             'fields': (
-                ('annotator', 'version',),
-                ('javascript_file', 'is_active'),
-            )
-        }),
-        ('Creation', {
-            'fields': (
-                ('created_on', 'modified_on'),
+                'annotator_version',
+                'javascript_file',
+                'is_active',
             )
         }),
     )

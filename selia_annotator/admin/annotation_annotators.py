@@ -38,6 +38,7 @@ class AnnotationAnnotatorAdmin(IrekuaAdmin):
         (None, {
             'fields': (
                 ('annotation', 'annotator_version'),
+                'annotator_configuration'
             )
         }),
     )

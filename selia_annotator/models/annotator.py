@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
@@ -16,6 +17,7 @@ class Annotator(IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         db_column='name',
+        unique=True,
         verbose_name=_('name'),
         help_text=_('Name of annotator'),
         blank=False)
@@ -44,3 +46,13 @@ class Annotator(IrekuaModelBase):
 
     def __str__(self):
         return str(self.name)
+
+    def validate_annotation_type(self, annotation_type):
+        if self.annotation_type != annotation_type:
+            msg = _(
+                'Annotator %(annotator)s does not produce annotations '
+                'of type %(annotation_type)s')
+            params = dict(
+                annotator=self,
+                annotation_type=annotation_type)
+            raise ValidationError(msg % params)

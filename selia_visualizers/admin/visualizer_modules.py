@@ -3,15 +3,14 @@ from irekua_database.admin.base import IrekuaAdmin
 
 class VisualizerModuleAdmin(IrekuaAdmin):
     search_fields = [
-        'visualizer__name',
-        'version',
+        'visualizer_version__visualizer__name',
+        'visualizer_version__version',
     ]
 
     list_display = (
         'id',
         '__str__',
-        'visualizer',
-        'version',
+        'visualizer_version',
         'is_active',
         'created_on',
     )
@@ -22,21 +21,15 @@ class VisualizerModuleAdmin(IrekuaAdmin):
     )
 
     list_filter = (
-        'visualizer',
-        'version',
-        'created_on',
         'is_active',
     )
 
     fieldsets = (
         (None, {
             'fields': (
-                ('visualizer', 'version'),
+                'visualizer_version',
                 'javascript_file',
                 'is_active'
             )
-        }),
-        ('Configuration', {
-            'fields': ('configuration_schema',),
         }),
     )

@@ -1,46 +1,66 @@
 from django.contrib import admin
+from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from selia_visualizers import models
+from irekua_database.admin.base import IrekuaAdmin
+from selia_visualizers.models import Visualizer
+from selia_visualizers.models import VisualizerVersion
 
 
 class ItemTypeInline(admin.TabularInline):
     extra = 0
-    model = models.Visualizer.item_types.through
+
+    model = Visualizer.item_types.through
+
     autocomplete_fields = ('item_type',)
+
     verbose_name = _('Item type')
+
     verbose_name_plural = _('Item types')
 
 
-class VisualizerAdmin(admin.ModelAdmin):
-    date_hierarchy = 'created_on'
-    search_fields = ['name', 'description']
+class VersionInline(admin.TabularInline):
+    extra = 0
+
+    model = VisualizerVersion
+
+    verbose_name = _('Version')
+
+    verbose_name_plural = _('Versions')
+
+
+class VisualizerAdmin(IrekuaAdmin):
+    search_fields = [
+        'name',
+        'description'
+    ]
+
     list_display = (
         'id',
-        'name',
+        '__str__',
         'website',
         'created_on',
     )
-    readonly_fields = ('created_on',)
-    list_display_links = ('id', 'name',)
+
+    list_display_links = (
+        'id',
+        '__str__',
+    )
+
     list_filter = (
-        'name',
-        'created_on',)
+        'item_types',
+    )
 
     fieldsets = (
         (None, {
             'fields': (
                 ('name', 'website'),
                 ('description',),
-                ('created_on',),
             )
-        }),
-        ('Configuration', {
-            'classes': ('collapse',),
-            'fields': ('configuration_schema',),
         }),
     )
 
     inlines = [
+        VersionInline,
         ItemTypeInline,
     ]

@@ -24,20 +24,6 @@ class VersionsInline(admin.TabularInline):
     )
 
 
-class ModulesInline(admin.TabularInline):
-    extra = 0
-
-    model = models.AnnotatorModule
-
-    verbose_name = _('Javascript Module')
-
-    verbose_name_plural = _('Javascript Modules')
-
-    autocomplete_fields = (
-        'configuration_schema',
-    )
-
-
 class AnnotatorAdmin(IrekuaAdmin):
     search_fields = [
         'name',
@@ -75,5 +61,4 @@ class AnnotatorAdmin(IrekuaAdmin):
 
     inlines = [
         VersionsInline,
-        ModulesInline,
     ]

@@ -7,10 +7,11 @@ from irekua_database.base import IrekuaModelBase
 
 
 def visualizer_version_module_path(instance, filename):
+    version = instance.visualizer_version
     _, ext = os.path.splitext(filename)
     return 'visualizers/{name}_{version}.{ext}'.format(
-        name=instance.visualizer.name.replace(' ', '_'),
-        version=instance.visualizer.version.replace('.', '_'),
+        name=version.visualizer.name.replace(' ', '_'),
+        version=version.version.replace('.', '_'),
         ext=ext)
 
 
@@ -49,12 +50,22 @@ class VisualizerModule(IrekuaModelBase):
 
         ordering = ['-created_on']
 
-    def clean(self):
-        super().clean()
+    def _deactivate_others(self):
+        # pylint: disable=no-member
+        visualizer = self.visualizer_version.visualizer
+        (
+            VisualizerModule.objects
+            .filter(
+                visualizer_version__visualizer=visualizer,
+                is_active=True
+            )
+            .exclude(pk=self.pk)
+            .update(is_active=False)
+        )
 
-        # if self.is_active:
-        #     for visualizer in VisualizerModule.objects.filter(visualizer=self.visualizer):
-        #         visualizer.is_active = False
-        #         visualizer.save()
-        #
-        #     self.is_active = True
+    # pylint: disable=signature-differs
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        if self.is_active:
+            self._deactivate_others()

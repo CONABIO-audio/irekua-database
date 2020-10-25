@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
@@ -42,3 +43,31 @@ class AnnotationAnnotator(IrekuaModelBase):
 
     def __str__(self):
         return str(self.id)
+
+    def clean(self):
+        super().clean()
+
+        # Check that configuration data is valid for annotator version
+        self.clean_configuration()
+
+        # Check that annotation_type is produced by annotator
+        self.clean_compatible_annotation_type()
+
+    def clean_configuration(self):        
+        try:
+            # pylint: disable=no-member
+            self.annotator_version.validate_configuration(self.annotator_configuration)
+
+        except ValidationError as error:
+            raise ValidationError({'annotator_configuration': error}) from error
+
+    def clean_compatible_annotation_type(self):
+        # pylint: disable=no-member
+        annotator = self.annotator_version.annotator
+        annotation_type = self.annotation.annotation_type
+
+        try:
+            annotator.validate_annotation_type(annotation_type)
+
+        except ValidationError as error:
+            raise ValidationError({'annotator_version': error}) from error

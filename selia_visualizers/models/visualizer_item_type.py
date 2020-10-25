@@ -48,7 +48,7 @@ class VisualizerItemType(IrekuaModelBase):
         )
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
         if self.is_active:
             self._deactivate_others()
-
-        super().save(*args, **kwargs)

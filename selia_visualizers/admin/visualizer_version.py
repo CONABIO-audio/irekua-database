@@ -11,16 +11,10 @@ class ModuleInline(admin.TabularInline):
 
     model = VisualizerModule
 
-    fk_name = 'visualizerversion_ptr'
-
     verbose_name_plural = _('Module')
 
     verbose_name = _('Module')
 
-    fields = [
-        'javascript_file',
-        'is_active',
-    ]
 
 
 class ModuleFilter(admin.SimpleListFilter):

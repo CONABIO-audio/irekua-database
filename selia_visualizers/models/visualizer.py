@@ -10,6 +10,7 @@ class Visualizer(IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         db_column='name',
+        unique=True,
         verbose_name=_('name'),
         help_text=_('Name of visualizer app'),
         blank=False,

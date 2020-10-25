@@ -8,7 +8,7 @@ from irekua_database.base import IrekuaModelBaseUser
 
 class AnnotationVote(IrekuaModelBaseUser):
     annotation = models.ForeignKey(
-        'AnnotationTmp',
+        'Annotation',
         on_delete=models.CASCADE,
         db_column='annotation_id',
         verbose_name=_('annotation'),

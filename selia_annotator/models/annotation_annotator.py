@@ -17,12 +17,12 @@ class AnnotationAnnotator(IrekuaModelBase):
         blank=False,
         null=False)
 
-    annotator = models.ForeignKey(
-        'Annotator',
+    annotator_version = models.ForeignKey(
+        'AnnotatorVersion',
         on_delete=models.PROTECT,
-        db_column='annotator_id',
-        verbose_name=_('annotator'),
-        help_text=_('Annotator used to create this annotation'),
+        db_column='annotator_version_id',
+        verbose_name=_('annotator version'),
+        help_text=_('Annotator version used to create this annotation'),
         blank=False,
         null=False)
 

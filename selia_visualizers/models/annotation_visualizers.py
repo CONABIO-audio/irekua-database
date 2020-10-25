@@ -13,12 +13,12 @@ class AnnotationVisualizer(IrekuaModelBase):
         verbose_name=_('annotation'),
         help_text=_('Annotation that was created using this visualizer'))
 
-    visualizer = models.ForeignKey(
-        'Visualizer',
+    visualizer_version = models.ForeignKey(
+        'VisualizerVersion',
         on_delete=models.CASCADE,
-        db_column='visualizer_id',
-        verbose_name=_('visualizer'),
-        help_text=_('Visualizer used to create this annotation'))
+        db_column='visualizer_version_id',
+        verbose_name=_('visualizer version'),
+        help_text=_('Visualizer version used to create this annotation'))
 
     visualizer_configuration = models.JSONField(
         db_column='visualizer_configuration',
@@ -31,3 +31,5 @@ class AnnotationVisualizer(IrekuaModelBase):
         verbose_name = _('Annotation Visualizer')
 
         verbose_name_plural = _('Annotation Visualizers')
+
+        ordering = ['-created_on']

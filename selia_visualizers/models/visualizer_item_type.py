@@ -5,7 +5,7 @@ from irekua_database.base import IrekuaModelBase
 from irekua_items.models import ItemType
 
 
-class VisualizerComponentItemType(models.Model):
+class VisualizerItemType(IrekuaModelBase):
     item_type = models.ForeignKey(
         ItemType,
         on_delete=models.CASCADE,
@@ -13,27 +13,30 @@ class VisualizerComponentItemType(models.Model):
         verbose_name=_('item type'),
         help_text=_('Item type'))
 
-    visualizer_component = models.ForeignKey(
-        'VisualizerComponent',
+    visualizer = models.ForeignKey(
+        'Visualizer',
         on_delete=models.CASCADE,
-        db_column='visualizer_component_id',
-        verbose_name=_('visualizer component'),
-        help_text=_('Visualizer component'))
+        db_column='visualizer_id',
+        verbose_name=_('visualizer'),
+        help_text=_('Visualizer'))
 
     is_active = models.BooleanField(
         db_column='is_active',
         verbose_name=_('is active'),
-        help_text=_('Is visualizer app active?'),
+        help_text=_(
+            'Indicates wheter this visualizer should be used '
+            'as the default visualizer of this item type.'),
         default=True,
         blank=False,
         null=False)
 
     class Meta:
-        verbose_name = _('Visualizer Component Item Type')
-        verbose_name_plural = _('Visualizer Component Item Types')
+        verbose_name = _('Visualizer Item Type')
+
+        verbose_name_plural = _('Visualizer Item Types')
 
         unique_together = (
-            ('item_type', 'visualizer_component'),
+            ('item_type', 'visualizer'),
         )
 
     def deactivate(self):
@@ -42,7 +45,7 @@ class VisualizerComponentItemType(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_active:
-            queryset = VisualizerComponentItemType.objects.filter(
+            queryset = VisualizerItemType.objects.filter(
                 item_type=self.item_type, is_active=True)
             for entry in queryset:
                 if entry != self:

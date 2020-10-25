@@ -23,6 +23,7 @@ class VisualizerComponent(models.Model):
         help_text=_('Visualizer'),
         blank=False,
         null=False)
+
     javascript_file = models.FileField(
         upload_to=visualizer_path,
         db_column='javascript_file',

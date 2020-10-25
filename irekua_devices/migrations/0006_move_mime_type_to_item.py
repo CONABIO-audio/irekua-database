@@ -8,6 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('irekua_devices', '0005_auto_20201021_2034'),
         ('irekua_items', '0009_add_mime_type'),
+        ('irekua_types', '0008_relocate_device_type_models'),
     ]
 
     operations = [

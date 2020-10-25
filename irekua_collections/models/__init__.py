@@ -1,3 +1,4 @@
+from .collection_annotations import CollectionAnnotation
 from .collection_devices import CollectionDevice
 from .collection_items import CollectionItem
 from .collection_licences import CollectionLicence
@@ -24,6 +25,7 @@ from .types import CollectionType
 
 __all__ = [
     'Collection',
+    'CollectionAnnotation',
     'CollectionDevice',
     'CollectionItem',
     'CollectionLicence',

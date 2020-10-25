@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.admin.base import IrekuaAdmin
-from irekua_items.models import EventType
+from irekua_annotations.models import EventType
 
 
 class TermTypesInline(admin.TabularInline):

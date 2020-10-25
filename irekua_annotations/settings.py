@@ -1,3 +1,3 @@
-IREKUA_ITEMS_APPS = [
-    'irekua_items',
+IREKUA_ANNOTATIONS_APPS = [
+    'irekua_annotations',
 ]

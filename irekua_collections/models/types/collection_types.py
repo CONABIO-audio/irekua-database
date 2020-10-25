@@ -8,6 +8,7 @@ from irekua_database.models import Role
 from irekua_items.models import types as item_type_models
 from irekua_devices.models import types as device_type_models
 from irekua_geo.models import types as site_type_models
+from irekua_annotations.models import types as annotation_type_models
 
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
 
@@ -164,7 +165,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     annotation_types = models.ManyToManyField(
-        item_type_models.AnnotationType,
+        annotation_type_models.AnnotationType,
         through='CollectionTypeAnnotationType',
         through_fields=('collection_type', 'annotation_type'),
         verbose_name=_('annotation types'),
@@ -180,7 +181,7 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         blank=True)
 
     event_types = models.ManyToManyField(
-        item_type_models.EventType,
+        annotation_type_models.EventType,
         through='CollectionTypeEventType',
         through_fields=('collection_type', 'event_type'),
         verbose_name=_('event types'),

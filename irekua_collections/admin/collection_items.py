@@ -19,20 +19,6 @@ class TagInline(admin.TabularInline):
     ]
 
 
-class ReadyEventTypeInline(admin.TabularInline):
-    extra = 0
-
-    model = CollectionItem.ready_event_types.through
-
-    verbose_name = _('Ready Event Type')
-
-    verbose_name_plural = _('Ready Event Types')
-
-    autocomplete_fields = [
-        'eventtype',
-    ]
-
-
 class CollectionItemAdmin(IrekuaUserAdmin):
     search_fields = [
         'collection__name',
@@ -105,5 +91,4 @@ class CollectionItemAdmin(IrekuaUserAdmin):
 
     inlines = [
         TagInline,
-        ReadyEventTypeInline,
     ]

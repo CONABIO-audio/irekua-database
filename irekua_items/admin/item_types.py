@@ -13,15 +13,6 @@ class MimeTypesInline(admin.TabularInline):
     classes = ('collapse', )
 
 
-class EventTypesInline(admin.TabularInline):
-    extra = 0
-    model = ItemType.event_types.through
-    autocomplete_fields = ('eventtype',)
-    verbose_name = _('Event type')
-    verbose_name_plural = _('Event types')
-    classes = ('collapse', )
-
-
 class ItemTypeAdmin(admin.ModelAdmin):
     search_fields = [
         'name'
@@ -58,5 +49,4 @@ class ItemTypeAdmin(admin.ModelAdmin):
 
     inlines = [
         MimeTypesInline,
-        EventTypesInline,
     ]

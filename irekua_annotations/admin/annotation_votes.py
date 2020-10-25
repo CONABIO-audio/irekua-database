@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.admin.base import IrekuaUserAdmin
-from irekua_items.models import AnnotationVote
+from irekua_annotations.models import AnnotationVote
 
 
 class LabelsInline(admin.TabularInline):

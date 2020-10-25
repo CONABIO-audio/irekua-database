@@ -35,4 +35,8 @@ class Migration(migrations.Migration):
             model_name='itemtype',
             name='event_types',
         ),
+        migrations.RemoveField(
+            model_name='item',
+            name='ready_event_types',
+        ),
     ]

@@ -11,9 +11,9 @@ from irekua_items.settings import *
 from irekua_collections.settings import *
 from irekua_organisms.settings import *
 from irekua_models.settings import *
-
 from selia_annotator.settings import *
 from selia_visualizers.settings import *
+from irekua_annotations.settings import IREKUA_ANNOTATIONS_APPS
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,5 +35,6 @@ INSTALLED_APPS = (
     IREKUA_ORGANISMS_APPS +
     IREKUA_MODELS_APPS +
     SELIA_ANNOTATOR_APPS +
-    SELIA_VISUALIZERS_APPS
+    SELIA_VISUALIZERS_APPS +
+    IREKUA_ANNOTATIONS_APPS
 )

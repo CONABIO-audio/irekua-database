@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_terms.models import Term
 from irekua_items.models import ItemType
-from irekua_items.models import AnnotationType
-from irekua_items.models import EventType
+from irekua_annotations.models import AnnotationType
+from irekua_annotations.models import EventType
 
 
 class Model(IrekuaModelBaseUser):

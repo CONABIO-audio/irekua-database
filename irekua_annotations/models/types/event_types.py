@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.base import IrekuaModelBase
 from irekua_terms.models import TermType
 from irekua_terms.models import Term
+from irekua_items.models import ItemType
 from irekua_schemas.mixins import MetadataSchemaMixin
 
 
@@ -66,7 +67,7 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
         blank=True)
 
     item_types = models.ManyToManyField(
-        'ItemType',
+        ItemType,
         db_column='item_types',
         verbose_name=_('item types'),
         help_text=_('Types of items in which this event can occur'),

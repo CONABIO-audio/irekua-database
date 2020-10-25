@@ -19,20 +19,6 @@ class TagInline(admin.TabularInline):
     ]
 
 
-class ReadyEventTypeInline(admin.TabularInline):
-    extra = 0
-
-    model = Item.ready_event_types.through
-
-    verbose_name = _('Ready Event Type')
-
-    verbose_name_plural = _('Ready Event Types')
-
-    autocomplete_fields = [
-        'eventtype',
-    ]
-
-
 class ItemAdmin(IrekuaUserAdmin):
     search_fields = [
         'id',
@@ -94,5 +80,4 @@ class ItemAdmin(IrekuaUserAdmin):
 
     inlines = [
         TagInline,
-        ReadyEventTypeInline,
     ]

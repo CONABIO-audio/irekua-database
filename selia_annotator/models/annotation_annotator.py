@@ -26,6 +26,13 @@ class AnnotationAnnotator(IrekuaModelBase):
         blank=False,
         null=False)
 
+    annotator_configuration = models.JSONField(
+        db_column='annotator_configuration',
+        verbose_name=_('annotator configuration'),
+        help_text=_('Configuration of annotator at annotation creation'),
+        blank=True,
+        null=True)
+
     class Meta:
         verbose_name = _('Annotation Annotator')
 

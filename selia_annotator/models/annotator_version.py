@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
+from irekua_schemas.models import Schema
 
 
 class AnnotatorVersion(IrekuaModelBase):
@@ -20,6 +21,15 @@ class AnnotatorVersion(IrekuaModelBase):
         verbose_name=_('version'),
         help_text=_('Annotator version'),
         blank=False)
+
+    configuration_schema = models.ForeignKey(
+        Schema,
+        models.PROTECT,
+        db_column='configuration_schema',
+        verbose_name=_('configuration schema'),
+        help_text=_('JSON schema for annotator configuration'),
+        null=True,
+        blank=True)
 
     class Meta:
         verbose_name = _('Annotator Version')

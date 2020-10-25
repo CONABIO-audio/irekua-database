@@ -25,7 +25,7 @@ class AnnotationVisualizer(IrekuaModelBase):
         verbose_name=_('visualizer configuration'),
         help_text=_('Configuration of visualizer at annotation creation'),
         blank=True,
-        null=False)
+        null=True)
 
     class Meta:
         verbose_name = _('Annotation Visualizer')
@@ -33,3 +33,8 @@ class AnnotationVisualizer(IrekuaModelBase):
         verbose_name_plural = _('Annotation Visualizers')
 
         ordering = ['-created_on']
+
+    def clean(self):
+        super().clean()
+
+        # TODO: complete clean

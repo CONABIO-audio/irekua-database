@@ -81,7 +81,6 @@ class AnnotatorVersionAdmin(IrekuaAdmin):
         ModuleFilter,
     ]
 
-
     fieldsets = (
         (None, {
             'fields': (

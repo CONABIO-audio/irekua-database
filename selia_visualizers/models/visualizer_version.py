@@ -3,9 +3,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
-from irekua_database.utils import validate_JSON_schema
-from irekua_database.utils import validate_JSON_instance
-from irekua_database.utils import simple_JSON_schema
+from irekua_schemas.models import Schema
 
 
 class VisualizerVersion(IrekuaModelBase):
@@ -26,14 +24,14 @@ class VisualizerVersion(IrekuaModelBase):
         blank=False,
         null=False)
 
-    configuration_schema = models.JSONField(
+    configuration_schema = models.ForeignKey(
+        Schema,
+        models.PROTECT,
         db_column='configuration_schema',
         verbose_name=_('configuration schema'),
         help_text=_('JSON schema for visualizer tool configuration info'),
-        blank=True,
-        null=False,
-        validators=[validate_JSON_schema],
-        default=simple_JSON_schema)
+        null=True,
+        blank=True)
 
     class Meta:
         verbose_name = _('Visualizer Version')
@@ -51,10 +49,10 @@ class VisualizerVersion(IrekuaModelBase):
 
     def validate_configuration(self, configuration):
         try:
-            validate_JSON_instance(
-                schema=self.configuration_schema,
-                instance=configuration)
+            # pylint: disable=no-member
+            self.configuration_schema.validate(configuration)
+
         except ValidationError as error:
             msg = _('Invalid visualizer configuration. Error: %(error)s')
-            params = dict(error=str(error))
-            raise ValidationError(msg, params=params)
+            params = dict(error=error)
+            raise ValidationError(msg % params) from error

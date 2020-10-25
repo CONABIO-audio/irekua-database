@@ -5,6 +5,7 @@ from .visualizer_component import visualizer_path
 from .visualizer_item_type import VisualizerItemType
 from .visualizer_module import VisualizerModule
 from .visualizer_version import VisualizerVersion
+from .annotation_visualizers import AnnotationVisualizer
 
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     'VisualizerItemType',
     'VisualizerModule',
     'VisualizerVersion',
+    'AnnotationVisualizer',
 ]

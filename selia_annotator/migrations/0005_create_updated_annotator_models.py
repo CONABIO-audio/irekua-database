@@ -39,12 +39,12 @@ def copy_annotators_into_new_models(apps, schema_editor):
 
         try:
             component = annotation_tool.annotationtoolcomponent
-            module = AnnotatorModule(
-                annotatorversion_ptr=version,
-                javascript_file=component.javascript_file,
-                is_active=component.is_active)
-            module.__dict__.update(version.__dict__)
-            module.save()
+            AnnotatorModule.objects.get_or_create(
+                annotator_version=version,
+                defaults={
+                    'javascript_file': component.javascript_file,
+                    'is_active': component.is_active,
+                })
 
         except ObjectDoesNotExist:
             pass
@@ -93,16 +93,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='AnnotatorModule',
             fields=[
-                ('annotatorversion_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='selia_annotator.annotatorversion')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
+                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
                 ('javascript_file', models.FileField(db_column='javascript_file', help_text='Javascript file containing annotator module', upload_to=selia_annotator.models.annotator_module.annotator_path, verbose_name='javascript file')),
                 ('is_active', models.BooleanField(db_column='is_active', default=True, help_text='Is this module to be used as default annotator for the associated annotation type?', verbose_name='is active')),
+                ('annotator_version', models.OneToOneField(db_column='annotator_version_id', help_text='annotator version to which this module belongs', on_delete=django.db.models.deletion.CASCADE, to='selia_annotator.annotatorversion', verbose_name='annotator version')),
             ],
             options={
                 'verbose_name': 'Annotator Module',
                 'verbose_name_plural': 'Annotator Modules',
                 'ordering': ['-created_on'],
             },
-            bases=('selia_annotator.annotatorversion',),
         ),
         migrations.RunPython(
             copy_annotators_into_new_models,

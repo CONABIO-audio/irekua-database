@@ -11,15 +11,13 @@ class ModuleInline(admin.TabularInline):
 
     model = AnnotatorModule
 
-    fk_name = 'annotatorversion_ptr'
-
     verbose_name_plural = _('Module')
 
     verbose_name = _('Module')
 
-    fields = [
-        'javascript_file',
-        'is_active',
+    exclude = [
+        'annotator',
+        'version',
     ]
 
 
@@ -40,6 +38,8 @@ class ModuleFilter(admin.SimpleListFilter):
 
         if self.value() == 'no':
             return queryset.filter(annotatormodule__isnull=True)
+
+        return queryset
 
 
 def has_module(obj):
@@ -92,3 +92,9 @@ class AnnotatorVersionAdmin(IrekuaAdmin):
     inlines = [
         ModuleInline,
     ]
+
+    def save_formset(self, request, form, formset, change):
+        for module_form in formset:
+            module_form.instance.__dict__.update(form.instance.__dict__)
+
+        super().save_formset(request, form, formset, change)

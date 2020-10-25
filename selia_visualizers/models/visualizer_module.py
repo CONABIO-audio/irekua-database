@@ -3,7 +3,7 @@ import os
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .visualizer_version import VisualizerVersion
+from irekua_database.base import IrekuaModelBase
 
 
 def visualizer_version_module_path(instance, filename):
@@ -14,7 +14,16 @@ def visualizer_version_module_path(instance, filename):
         ext=ext)
 
 
-class VisualizerModule(VisualizerVersion):
+class VisualizerModule(IrekuaModelBase):
+    visualizer_version = models.OneToOneField(
+        'VisualizerVersion',
+        on_delete=models.CASCADE,
+        db_column='visualizer_version_id',
+        verbose_name=_('visualizer version'),
+        help_text=_('visualizer version to which this module belongs'),
+        blank=False,
+        null=False)
+
     javascript_file = models.FileField(
         upload_to=visualizer_version_module_path,
         db_column='javascript_file',
@@ -43,9 +52,9 @@ class VisualizerModule(VisualizerVersion):
     def clean(self):
         super().clean()
 
-        if self.is_active:
-            for visualizer in VisualizerModule.objects.filter(visualizer=self.visualizer):
-                visualizer.is_active = False
-                visualizer.save()
-
-            self.is_active = True
+        # if self.is_active:
+        #     for visualizer in VisualizerModule.objects.filter(visualizer=self.visualizer):
+        #         visualizer.is_active = False
+        #         visualizer.save()
+        #
+        #     self.is_active = True

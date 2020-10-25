@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('selia_visualizers', '0007_auto_20201024_2341'),
+        ('selia_visualizers', '0007_remove_old_models'),
     ]
 
     operations = [
@@ -77,5 +77,9 @@ class Migration(migrations.Migration):
             model_name='visualizerversion',
             old_name='configuration_schema_tmp',
             new_name='configuration_schema',
+        ),
+        migrations.RemoveField(
+            model_name='visualizer',
+            name='configuration_schema',
         ),
     ]

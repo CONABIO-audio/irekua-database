@@ -3,18 +3,28 @@ import os
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .annotator_version import AnnotatorVersion
+from irekua_database.base import IrekuaModelBase
 
 
 def annotator_path(instance, filename):
+    version = instance.annotator_version
     _, ext = os.path.splitext(filename)
     return 'annotators/{name}_{version}.{ext}'.format(
-        name=instance.annotation_tool.name.replace(' ', '_'),
-        version=instance.annotation_tool.version.replace('.', '_'),
+        name=version.annotator.name.replace(' ', '_'),
+        version=version.version.replace('.', '_'),
         ext=ext)
 
 
-class AnnotatorModule(AnnotatorVersion):
+class AnnotatorModule(IrekuaModelBase):
+    annotator_version = models.OneToOneField(
+        'AnnotatorVersion',
+        on_delete=models.CASCADE,
+        db_column='annotator_version_id',
+        verbose_name=_('annotator version'),
+        help_text=_('annotator version to which this module belongs'),
+        blank=False,
+        null=False)
+
     javascript_file = models.FileField(
         upload_to=annotator_path,
         db_column='javascript_file',
@@ -45,6 +55,8 @@ class AnnotatorModule(AnnotatorVersion):
         self.save()
 
     def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
         if self.is_active:
             queryset = AnnotatorModule.objects.filter(
                 annotator__annotation_type=self.annotator.annotation_type,
@@ -53,5 +65,3 @@ class AnnotatorModule(AnnotatorVersion):
             for entry in queryset:
                 if entry != self:
                     entry.deactivate()
-
-        super().save(*args, **kwargs)

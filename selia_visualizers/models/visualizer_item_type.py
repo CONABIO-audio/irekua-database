@@ -39,16 +39,16 @@ class VisualizerItemType(IrekuaModelBase):
             ('item_type', 'visualizer'),
         )
 
-    def deactivate(self):
-        self.is_active = False
-        self.save()
+    def _deactivate_others(self):
+        (
+            VisualizerItemType.objects
+            .filter(item_type=self.item_type, is_active=True)
+            .exclude(pk=self.pk)
+            .update(is_active=False)
+        )
 
     def save(self, *args, **kwargs):
         if self.is_active:
-            queryset = VisualizerItemType.objects.filter(
-                item_type=self.item_type, is_active=True)
-            for entry in queryset:
-                if entry != self:
-                    entry.deactivate()
+            self._deactivate_others()
 
         super().save(*args, **kwargs)

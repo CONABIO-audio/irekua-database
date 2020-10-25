@@ -11,27 +11,27 @@ class Annotator(IrekuaModelBase):
         on_delete=models.CASCADE,
         db_column='annotation_type_id',
         verbose_name=_('annotation type'),
-        help_text=_('Type of annotation this tool produces'))
+        help_text=_('Type of annotation this annotator produces'))
 
     name = models.CharField(
         max_length=64,
         db_column='name',
         verbose_name=_('name'),
-        help_text=_('Name of annotation tool'),
+        help_text=_('Name of annotator'),
         blank=False)
 
     logo = models.ImageField(
         db_column='logo',
         verbose_name=_('logo'),
-        help_text=_('Annotation tool logo'),
-        upload_to='images/annotation_tools/',
+        help_text=_('Annotator logo'),
+        upload_to='images/annotators/',
         blank=True,
         null=True)
 
     website = models.URLField(
         db_column='website',
         verbose_name=_('website'),
-        help_text=_('Annotation tool website'),
+        help_text=_('Annotator website'),
         blank=True,
         null=True)
 

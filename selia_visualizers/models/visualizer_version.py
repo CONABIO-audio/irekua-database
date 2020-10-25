@@ -27,7 +27,7 @@ class VisualizerVersion(IrekuaModelBase):
     configuration_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
-        db_column='configuration_schema',
+        db_column='configuration_schema_id',
         verbose_name=_('configuration schema'),
         help_text=_('JSON schema for visualizer tool configuration info'),
         null=True,

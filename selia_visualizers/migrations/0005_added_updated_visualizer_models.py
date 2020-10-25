@@ -36,13 +36,12 @@ def copy_visualizer_objects_into_new_models(apps, schema_editor):
         try:
             # Add a module for every component
             component = visualizer.visualizercomponent
-            module = VisualizerModule(
-                visualizerversion_ptr=version,
-                javascript_file=component.javascript_file,
-                is_active=True,
-            )
-            module.__dict__.update(version.__dict__)
-            module.save()
+            module, _ = VisualizerModule.objects.get_or_create(
+                visualizer_version=version,
+                defaults={
+                    'javascript_file': component.javascript_file,
+                    'is_active': True,
+                })
 
             # Add admissible item types to visualizer
             queryset = VisualizerComponentItemType.objects.filter(
@@ -97,15 +96,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='VisualizerModule',
             fields=[
-                ('visualizerversion_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='selia_visualizers.visualizerversion')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
+                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
                 ('javascript_file', models.FileField(db_column='javascript_file', help_text='Javascript file containing visualizer version module', upload_to=selia_visualizers.models.visualizer_module.visualizer_version_module_path, verbose_name='javascript file')),
                 ('is_active', models.BooleanField(db_column='is_active', default=True, help_text='Boolean flag that indicates whether this version is to be used as the default version of this visualizer.', verbose_name='is active')),
             ],
             options={
-                'verbose_name': 'Visualizer Version Module',
-                'verbose_name_plural': 'Visualizers Version Modules',
+                'verbose_name': 'Visualizer Module',
+                'verbose_name_plural': 'Visualizer Modules',
+                'ordering': ['-created_on'],
             },
-            bases=('selia_visualizers.visualizerversion',),
         ),
         migrations.AddField(
             model_name='visualizerversion',
@@ -132,6 +133,11 @@ class Migration(migrations.Migration):
             model_name='visualizer',
             name='item_types',
             field=models.ManyToManyField(through='selia_visualizers.VisualizerItemType', to='irekua_items.ItemType'),
+        ),
+        migrations.AddField(
+            model_name='visualizermodule',
+            name='visualizer_version',
+            field=models.OneToOneField(db_column='visualizer_version_id', help_text='visualizer version to which this module belongs', on_delete=django.db.models.deletion.CASCADE, to='selia_visualizers.visualizerversion', verbose_name='visualizer version'),
         ),
         migrations.AlterUniqueTogether(
             name='visualizerversion',

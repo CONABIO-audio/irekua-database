@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
@@ -37,4 +38,27 @@ class AnnotationVisualizer(IrekuaModelBase):
     def clean(self):
         super().clean()
 
-        # TODO: complete clean
+        # Check that configuration data is valid for visualizer version
+        self.clean_configuration()
+
+        # Check that item type can be visualized with visualizer
+        self.clean_compatible_item_type()
+
+    def clean_configuration(self):
+        try:
+            # pylint: disable=no-member
+            self.visualizer_version.validate_configuration(self.visualizer_configuration)
+
+        except ValidationError as error:
+            raise ValidationError({'visualizer_configuration': error}) from error
+
+    def clean_compatible_item_type(self):
+        # pylint: disable=no-member
+        item_type = self.annotation.item.item_type
+        visualizer = self.visualizer_version.visualizer
+
+        try:
+            visualizer.validate_item_type(item_type)
+
+        except ValidationError as error:
+            raise ValidationError({'visualizer_version': error}) from error

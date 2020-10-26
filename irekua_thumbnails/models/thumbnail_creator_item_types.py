@@ -53,6 +53,12 @@ class ThumbnailCreatorItemType(IrekuaModelBase):
         if self.is_active:
             self._deactivate_others()
 
+    @staticmethod
+    def get_thumbnail_creator(item_type):
+        return ThumbnailCreatorItemType.objects.get(
+            item_type=item_type,
+            is_active=True)
+
     def _deactivate_others(self):
         # pylint: disable=no-member
         (

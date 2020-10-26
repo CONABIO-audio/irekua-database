@@ -43,6 +43,10 @@ class Schema(IrekuaModelBase):
     def clean(self):
         super().clean()
 
+        print(self.schema)
+        print(dir(self.schema))
+        
+
         try:
             validate_JSON_schema(self.schema)
 

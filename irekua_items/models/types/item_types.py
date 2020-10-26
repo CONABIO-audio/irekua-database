@@ -74,11 +74,11 @@ class ItemType(IrekuaModelBase, MetadataSchemaMixin):
 
         try:
             # pylint: disable=no-member
-            self.media_info_type.validate(media_info)
+            self.media_info_type.validate_media_info(media_info)
 
         except ValidationError as error:
             msg = _(
-                'Media info is invalid for items of type %(item_type)s. '
+                'Media info is invalid for item of type %(item_type)s. '
                 'Error: %(error)s')
             params = dict(
                 item_type=self,

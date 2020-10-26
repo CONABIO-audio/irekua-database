@@ -5,6 +5,9 @@ from django.utils.translation import gettext as _
 
 
 def validate_JSON_schema(schema):
+    if schema is None:
+        raise ValidationError(_('Invalid JSON'))
+
     if 'type' not in schema:
         msg = _('JSON Schema is not valid, no type field.')
         raise ValidationError(msg)

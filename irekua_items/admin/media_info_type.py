@@ -1,4 +1,19 @@
+from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
+
 from irekua_database.admin.base import IrekuaAdmin
+
+from irekua_items.models import MediaInfoExtractor
+
+
+class ExtractorInline(admin.TabularInline):
+    extra = 0
+
+    model = MediaInfoExtractor
+
+    verbose_name = _('Extractor')
+
+    verbose_name = _('Extractors')
 
 
 class MediaInfoTypeAdmin(IrekuaAdmin):
@@ -17,7 +32,6 @@ class MediaInfoTypeAdmin(IrekuaAdmin):
         '__str__',
     ]
 
-
     fieldsets = (
         (None, {
             'fields': (
@@ -26,3 +40,7 @@ class MediaInfoTypeAdmin(IrekuaAdmin):
             ),
         }),
     )
+
+    inlines = [
+        ExtractorInline,
+    ]

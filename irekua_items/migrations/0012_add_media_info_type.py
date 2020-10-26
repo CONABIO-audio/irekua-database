@@ -4,7 +4,6 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-
 def add_mime_type_to_items(apps, schema_editor):
     mimetypes.init()
 

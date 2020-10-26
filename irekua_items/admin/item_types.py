@@ -6,11 +6,14 @@ from irekua_items.models import ItemType
 
 class MimeTypesInline(admin.TabularInline):
     extra = 0
+
     model = ItemType.mime_types.through
+
     autocomplete_fields = ('mimetype',)
+
     verbose_name = _('Mime type')
+
     verbose_name_plural = _('Mime types')
-    classes = ('collapse', )
 
 
 class ItemTypeAdmin(admin.ModelAdmin):
@@ -31,6 +34,7 @@ class ItemTypeAdmin(admin.ModelAdmin):
 
     autocomplete_fields = [
         'metadata_schema',
+        'media_info_type',
     ]
 
     fieldsets = (
@@ -42,7 +46,8 @@ class ItemTypeAdmin(admin.ModelAdmin):
         }),
         ('Schemas', {
             'fields': (
-                ('metadata_schema'),
+                'metadata_schema',
+                'media_info_type',
             )
         }),
     )

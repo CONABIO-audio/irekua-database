@@ -3,6 +3,7 @@ from .secondary_items import SecondaryItem
 from .sources import Source
 from .tags import Tag
 from .licences import Licence
+from .media_info_extractors import MediaInfoExtractor
 
 from .types import ItemType
 from .types import LicenceType
@@ -19,4 +20,5 @@ __all__ = [
     'LicenceType',
     'MimeType',
     'MediaInfoType',
+    'MediaInfoExtractor',
 ]

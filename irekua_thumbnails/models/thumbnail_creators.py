@@ -1,3 +1,6 @@
+import os
+import importlib.util
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -38,3 +41,16 @@ class ThumbnailCreator(IrekuaModelBase):
 
     def __str__(self):
         return self.name
+
+    def load_creator(self):
+        name = self.python_file.name
+        basename = os.path.basename(name)
+        module_name = os.path.splitext(basename)[0]
+
+        spec = importlib.util.spec_from_file_location(
+            module_name,
+            self.python_file.path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        return module.creator

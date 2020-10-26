@@ -2,6 +2,7 @@ import os
 
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -12,6 +13,7 @@ from irekua_database.base import IrekuaModelBaseUser
 from irekua_database.utils import hash_file
 
 from .types import MimeType
+from .media_info_extractors import MediaInfoExtractor
 
 
 def infer_datetime(
@@ -304,6 +306,11 @@ class Item(IrekuaModelBaseUser):
             raise ValidationError({'item_file': msg}) from error
 
     def clean_valid_media_info(self):
+        if self.media_info is None:
+            self.extract_media_info()
+
+        print('MEDIA INFO', self.media_info)
+
         try:
             # pylint: disable=no-member
             if self.item_type.media_info_type is not None:
@@ -363,6 +370,26 @@ class Item(IrekuaModelBaseUser):
             'ext': extension,
             **self.get_upload_to_format_arguments(),
         })
+
+    def extract_media_info(self):
+        print('EXTRACTING MEDIA INFO')
+
+        # pylint: disable=no-member
+        media_info_type = self.item_type.media_info_type
+
+        if media_info_type is None:
+            return
+
+        try:
+            extractor = media_info_type.mediainfoextractor
+
+        except ObjectDoesNotExist:
+            return
+
+        try:
+            self.media_info = extractor.extract_media_info(self.item_file.file)
+        except Exception as error:
+            print(error)
 
     @staticmethod
     def hash_file(file):

@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from sorl.thumbnail import ImageField
 
 from irekua_database.base import IrekuaModelBase
+from irekua_items.models import Item
 
 
 def get_thumbnail_path(instance, filename):
@@ -19,7 +20,7 @@ def get_thumbnail_path(instance, filename):
 
 class ItemThumbnail(IrekuaModelBase):
     item = models.OneToOneField(
-        'Item',
+        Item,
         models.CASCADE,
         primary_key=True,
         db_column='item_id',

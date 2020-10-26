@@ -31,7 +31,7 @@ class MimeType(IrekuaModelBase):
         related_name='media_info_schema',
         db_column='media_info_schema_id',
         verbose_name=_('media info schema'),
-        help_text=_('JSON Schema for item type media info'),
+        help_text=_('JSON Schema for basic media info of files of this mime type'),
         null=True,
         blank=True)
 
@@ -45,11 +45,14 @@ class MimeType(IrekuaModelBase):
         return self.mime_type
 
     def validate_media_info(self, media_info):
+        if self.media_info_schema is None:
+            return
+
         try:
             self.media_info_schema.validate(media_info)
         except ValidationError as error:
             msg = _(
-                'Invalid media info for item of type %(type)s. '
+                'Invalid media info for item of mime type %(type)s. '
                 'Error %(error)s')
             params = dict(type=str(self), error=str(error))
             raise ValidationError(msg, params=params) from error

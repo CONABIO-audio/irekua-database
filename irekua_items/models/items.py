@@ -89,6 +89,15 @@ class Item(IrekuaModelBaseUser):
         blank=True,
         null=False)
 
+    mime_type = models.ForeignKey(
+        'MimeType',
+        on_delete=models.PROTECT,
+        db_column='mime_type_id',
+        verbose_name=_('mime type'),
+        help_text=_('MIME type of resource'),
+        blank=True,
+        null=True)
+
     item_type = models.ForeignKey(
         'ItemType',
         on_delete=models.PROTECT,
@@ -248,16 +257,16 @@ class Item(IrekuaModelBaseUser):
         self.clean_hash_and_filesize()
 
         # Check MIME type is valid and registered in the database
-        mime_type = self.clean_mime_type()
+        self.clean_mime_type()
 
         # Check that media info is valid for MIME type
-        self.clean_media_info(mime_type)
+        self.clean_valid_media_info()
 
         # Check that mime type is valid for item type
-        self.clean_compatible_mime_and_item_types(mime_type)
+        self.clean_compatible_mime_and_item_types()
 
         # Check that metadata is valid for item type.
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
         # Synchronize captured on individual fields with datetime field.
         self.sync_captured_on()
@@ -283,30 +292,39 @@ class Item(IrekuaModelBaseUser):
             raise ValidationError({'hash': msg})
 
     def clean_mime_type(self):
+        if self.mime_type is not None:
+            return
+
         try:
-            return MimeType.infer(file=self.item_file)
+            self.mime_type = MimeType.infer(file=self.item_file)
 
         except MimeType.DoesNotExist as error:
             msg = _(
                 'No MIME type could be infered or not registered')
             raise ValidationError({'item_file': msg}) from error
 
-    def clean_media_info(self, mime_type):
+    def clean_valid_media_info(self):
         try:
-            mime_type.validate_media_info(self.media_info)
+            # pylint: disable=no-member
+            if self.item_type.media_info_type is not None:
+                self.item_type.validate_media_info(self.media_info)
+
+            else:
+                # pylint: disable=no-member
+                self.mime_type.validate_media_info(self.media_info)
 
         except ValidationError as error:
             raise ValidationError({'media_info': error}) from error
 
-    def clean_compatible_mime_and_item_types(self, mime_type):
+    def clean_compatible_mime_and_item_types(self):
         try:
             # pylint: disable=no-member
-            self.item_type.validate_mime_type(mime_type)
+            self.item_type.validate_mime_type(self.mime_type)
 
         except ValidationError as error:
             raise ValidationError({'item_file': error}) from error
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             # pylint: disable=no-member
             self.item_type.validate_metadata(self.metadata)
@@ -329,6 +347,7 @@ class Item(IrekuaModelBaseUser):
 
         self.captured_on = captured_on
 
+    # pylint: disable=no-self-use
     def get_upload_to_format_arguments(self):
         return {}
 
@@ -349,6 +368,7 @@ class Item(IrekuaModelBaseUser):
     def hash_file(file):
         return hash_file(file)
 
+    # pylint: disable=signature-differs
     def delete(self, *args, **kwargs):
         try:
             self.item_file.delete()

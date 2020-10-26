@@ -1,28 +1,28 @@
 from irekua_database.admin.base import IrekuaAdmin
 
 
-class MimeTypeAdmin(IrekuaAdmin):
+class MediaInfoTypeAdmin(IrekuaAdmin):
     search_fields = [
-        'mime_type',
+        'name',
     ]
 
     list_display = [
         'id',
-        'mime_type',
+        '__str__',
         'created_on',
     ]
 
     list_display_links = [
         'id',
-        'mime_type',
+        '__str__',
     ]
 
 
     fieldsets = (
         (None, {
             'fields': (
-                'mime_type',
-                'media_info_schema',
+                ('name', 'media_info_schema'),
+                'description',
             ),
         }),
     )

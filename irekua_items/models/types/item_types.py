@@ -40,6 +40,15 @@ class ItemType(IrekuaModelBase, MetadataSchemaMixin):
         help_text=_('Mime types of files for this item type'),
         blank=True)
 
+    media_info_type = models.ForeignKey(
+        'MediaInfoType',
+        models.PROTECT,
+        db_column='media_info_type_id',
+        verbose_name=_('media info type'),
+        help_text=_('Type of media info associated to items of this type'),
+        blank=True,
+        null=True)
+
     class Meta:
         verbose_name = _('Item Type')
         verbose_name_plural = _('Item Types')
@@ -58,3 +67,20 @@ class ItemType(IrekuaModelBase, MetadataSchemaMixin):
                 mime_type=mime_type,
                 item_type=self)
             raise ValidationError(msg % params)
+
+    def validate_media_info(self, media_info):
+        if self.media_info_type is None:
+            return
+
+        try:
+            # pylint: disable=no-member
+            self.media_info_type.validate(media_info)
+
+        except ValidationError as error:
+            msg = _(
+                'Media info is invalid for items of type %(item_type)s. '
+                'Error: %(error)s')
+            params = dict(
+                item_type=self,
+                error=error)
+            raise  ValidationError(msg % params) from error

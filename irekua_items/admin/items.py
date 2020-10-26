@@ -23,16 +23,24 @@ class ItemAdmin(IrekuaUserAdmin):
     search_fields = [
         'id',
         'item_type__name',
+        'mime_type__name',
     ]
 
     list_display = [
         'id',
         'item_type',
+        'mime_type',
         'filesize',
         'captured_on',
         'licence',
         'created_by',
         'created_on',
+    ]
+
+    list_filter = [
+        'item_type',
+        'mime_type',
+        'licence__licence_type',
     ]
 
     list_display_links = [

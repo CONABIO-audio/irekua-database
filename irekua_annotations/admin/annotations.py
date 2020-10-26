@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.admin.base import IrekuaUserAdmin
 from irekua_annotations.models import Annotation
-# from irekua_annotations.models import AnnotationVote
+from irekua_annotations.models import AnnotationVote
 
 
 class LabelsInline(admin.TabularInline):
@@ -21,35 +21,32 @@ class LabelsInline(admin.TabularInline):
 
 
 
-# class AnnotationVoteInline(admin.TabularInline):
-#     extra = 0
-#
-#     model = AnnotationVote
-#
-#     fk_name = 'annotation'
-#
-#     verbose_name = _('Annotation Vote')
-#
-#     verbose_name_plural = _('Annotation Votes')
-#
-#     autocomplete_fields = [
-#         'labels',
-#     ]
-#
-#     readonly_fields = [
-#         'created_by',
-#         'created_on',
-#         'modified_by'
-#     ]
-#
-#
-#     fields = [
-#         'incorrect_geometry',
-#         'labels',
-#         'created_by',
-#         'created_on',
-#         'modified_by',
-#     ]
+class AnnotationVoteInline(admin.TabularInline):
+    extra = 0
+
+    model = AnnotationVote
+
+    fk_name = 'annotation'
+
+    verbose_name = _('Annotation Vote')
+
+    verbose_name_plural = _('Annotation Votes')
+
+    autocomplete_fields = [
+        'labels',
+    ]
+
+    readonly_fields = [
+        'created_by',
+        'created_on',
+    ]
+
+    fields = [
+        'labels',
+        'incorrect_geometry',
+        'created_by',
+        'created_on',
+    ]
 
 
 class AnnotationAdmin(IrekuaUserAdmin):
@@ -69,6 +66,12 @@ class AnnotationAdmin(IrekuaUserAdmin):
         'annotation_type',
         'created_by',
         'created_on',
+    ]
+
+    list_filter = [
+        'item__item_type',
+        'event_type',
+        'annotation_type',
     ]
 
     list_display_links = [
@@ -98,7 +101,7 @@ class AnnotationAdmin(IrekuaUserAdmin):
 
     inlines = [
         LabelsInline,
-        # AnnotationVoteInline,
+        AnnotationVoteInline,
     ]
 
     def save_related(self, request, form, formsets, change):

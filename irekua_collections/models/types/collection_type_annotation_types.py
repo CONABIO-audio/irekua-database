@@ -27,6 +27,7 @@ class CollectionTypeAnnotationType(IrekuaModelBase, CollectionMetadataSchemaMixi
 
     class Meta:
         verbose_name = _('Collection Type Annotation Type')
+
         verbose_name_plural = _('Collection Type Annotation Types')
 
         unique_together = (

@@ -168,19 +168,15 @@ class Collection(IrekuaModelBaseUser):
         super().clean()
 
         # Check that metadata is valid for this collection type
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             # pylint: disable=no-member
             self.collection_type.validate_metadata(self.metadata)
 
         except ValidationError as error:
             raise ValidationError({'metadata': error}) from error
-
-    @property
-    def all_admin(self):
-        return self.administrators.all()
 
     def is_admin(self, user):
         queryset = self.administrators.filter(id=user.id)

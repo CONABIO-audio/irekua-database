@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from irekua_collections import models
 
+from .collection_annotations import CollectionAnnotationAdmin
 from .collection_devices import CollectionDeviceAdmin
 from .collection_items import CollectionItemAdmin
 from .collection_licences import CollectionLicenceAdmin
@@ -17,6 +18,7 @@ from .deployment_types import DeploymentTypeAdmin
 from .sampling_event_types import SamplingEventTypeAdmin
 
 
+admin.site.register(models.CollectionAnnotation, CollectionAnnotationAdmin)
 admin.site.register(models.CollectionDevice, CollectionDeviceAdmin)
 admin.site.register(models.CollectionItem, CollectionItemAdmin)
 admin.site.register(models.CollectionLicence, CollectionLicenceAdmin)

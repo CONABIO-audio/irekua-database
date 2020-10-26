@@ -31,9 +31,9 @@ class SamplingEventItem(CollectionItem):
 
         # Check that captured on date is within the limits of the
         # sampling event
-        self.clean_captured_on()
+        self.clean_valid_captured_on()
 
-    def clean_item_level(self, item_type_config):
+    def clean_allowed_item_level(self, item_type_config):
         if not item_type_config.sampling_event_item:
             msg = _(
                 'Item of type %(item_type)s are cannot be declared at a sampling '
@@ -52,7 +52,7 @@ class SamplingEventItem(CollectionItem):
         except ValidationError as error:
             raise ValidationError({'item_type': error}) from error
 
-    def clean_captured_on(self):
+    def clean_valid_captured_on(self):
         if self.captured_on is None:
             return
 

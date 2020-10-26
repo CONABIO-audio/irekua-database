@@ -69,7 +69,7 @@ class AnnotationVote(IrekuaModelBaseUser):
 
     def validate_labels(self, labels):
         for term in labels:
-            term_type = term.term_type.name
+            term_type = term.term_type
 
             try:
                 # pylint: disable=no-member

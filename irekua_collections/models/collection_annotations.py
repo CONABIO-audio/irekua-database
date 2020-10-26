@@ -45,7 +45,7 @@ class CollectionAnnotation(UserAnnotation):
         annotation_type_config = self.clean_allowed_annotation_type(collection_type)
 
         # Check if collection metadata is valid for this annotation type
-        self.clean_collection_metadata(annotation_type_config)
+        self.clean_valid_collection_metadata(annotation_type_config)
 
     def clean_allowed_annotation_type(self, collection_type):
         try:
@@ -60,7 +60,7 @@ class CollectionAnnotation(UserAnnotation):
                 collection_type=collection_type)
             raise ValidationError({'annotation_type': msg % params}) from error
 
-    def clean_collection_metadata(self, annotation_type_config):
+    def clean_valid_collection_metadata(self, annotation_type_config):
         try:
             annotation_type_config.validate_metadata(self.collection_metadata)
 

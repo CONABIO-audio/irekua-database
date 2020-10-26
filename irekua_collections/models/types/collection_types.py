@@ -230,7 +230,9 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type')
+
         verbose_name_plural = _('Collection Types')
+
         ordering = ['name']
 
     def __str__(self):

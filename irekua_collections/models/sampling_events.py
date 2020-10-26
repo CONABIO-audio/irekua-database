@@ -89,13 +89,21 @@ class SamplingEvent(IrekuaModelBaseUser):
         self.clean_equal_collections()
 
         # Check that starting date is earlier than ending date
-        self.clean_dates()
+        self.clean_valid_dates()
 
         # Check that site type and sampling event type are compatible
         self.clean_compatible_site_and_sampling_event_types()
 
         # Check metadata is valid for sampling event type
-        self.clean_metadata()
+        self.clean_valid_metadata()
+
+        # Check that deployment dates do not fall outside the sampling event's
+        # date range
+        self.clean_consistent_deployment_dates()
+
+        # Check that any registered items do fall outside the the sampling event's
+        # date range
+        self.clean_consistent_item_dates()
 
         # pylint: disable=no-member
         collection_type = self.collection.collection_type
@@ -107,10 +115,10 @@ class SamplingEvent(IrekuaModelBaseUser):
 
         # Check that this sampling event type is registered for this collection
         # type
-        sampling_event_config = self.clean_sampling_event_type(collection_type)
+        sampling_event_config = self.clean_allowed_sampling_event_type(collection_type)
 
         # Check if additional collection metadata is valid for this sampling event type
-        self.clean_collection_metadata(sampling_event_config)
+        self.clean_valid_collection_metadata(sampling_event_config)
 
     def clean_equal_collections(self):
         # pylint: disable=no-member
@@ -118,7 +126,7 @@ class SamplingEvent(IrekuaModelBaseUser):
             msg = _('Site does not belong to the declared collection')
             raise ValidationError({'collection_site': msg})
 
-    def clean_dates(self):
+    def clean_valid_dates(self):
         if self.started_on > self.ended_on:
             msg = _('Starting date cannot be greater than ending date')
             raise ValidationError({'started_on': msg})
@@ -139,14 +147,15 @@ class SamplingEvent(IrekuaModelBaseUser):
                 site_type=site_type)
             raise ValidationError({'collection_site': msg % params}) from error
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
+            # pylint: disable=no-member
             self.sampling_event_type.validate_metadata(self.metadata)
 
         except ValidationError as error:
             raise ValidationError({'metadata': error}) from error
 
-    def clean_sampling_event_type(self, collection_type):
+    def clean_allowed_sampling_event_type(self, collection_type):
         try:
             return collection_type.get_sampling_event_type(self.sampling_event_type)
 
@@ -159,12 +168,66 @@ class SamplingEvent(IrekuaModelBaseUser):
                 collection_type=collection_type)
             raise ValidationError({'sampling_event_type': msg % params}) from error
 
-    def clean_collection_metadata(self, sampling_event_config):
+    def clean_valid_collection_metadata(self, sampling_event_config):
         try:
             sampling_event_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
             raise ValidationError({'collection_metadata': str(error)}) from error
+
+    def clean_consistent_deployment_dates(self):
+        if self.id is None:
+            # Exit early if sampling event is being created
+            return
+
+        if (self.started_on is None) and (self.ended_on is None):
+            return
+
+        queryset = self.deployment_set.all()
+
+        if self.started_on is not None:
+            if queryset.filter(
+                    models.Q(recovered_on__lt=self.started_on) |
+                    models.Q(deployed_on__lt=self.started_on)).exists():
+                msg = _(
+                    "Registered deployments occur before the sampling event's "
+                    "declared date range")
+                raise ValidationError({'started_on': msg})
+
+        if self.ended_on is not None:
+            if queryset.filter(
+                    models.Q(recovered_on__gt=self.ended_on) |
+                    models.Q(deployed_on__gt=self.ended_on)).exists():
+                msg = _(
+                    "Registered deployments occur after the sampling event's "
+                    "declared date range")
+                raise ValidationError({'ended_on': msg})
+
+    def clean_consistent_item_dates(self):
+        if self.id is None:
+            # Exit early if sampling event is being created
+            return
+
+        if (self.started_on is None) and (self.ended_on is None):
+            return
+
+        # Check on all sampling event items but exclude deployment items
+        # since their dates are validated when associated to the deployment.
+        queryset = self.samplingeventitem_set.filter(deploymentitem__isnull=True)
+
+        if self.started_on is not None:
+            if queryset.filter(captured_on__lt=self.started_on).exists():
+                msg = _(
+                    'There are items associated to this sampling event that '
+                    'where captured before the start of the sampling event.')
+                raise ValidationError({'started_on': msg})
+
+        if self.ended_on is not None:
+            if queryset.filter(captured_on__gt=self.ended_on).exists():
+                msg = _(
+                    'There are items associated to this sampling event that '
+                    'where captured after the end of the sampling event.')
+                raise ValidationError({'ended_on': msg})
 
     def validate_date(self, date_info):
         if self.started_on is not None:

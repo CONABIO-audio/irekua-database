@@ -27,6 +27,7 @@ class CollectionTypeSamplingEventType(IrekuaModelBase, CollectionMetadataSchemaM
 
     class Meta:
         verbose_name = _('Collection Type Sampling Event Type')
+
         verbose_name_plural = _('Collection Type Sampling Event Types')
 
         unique_together = (

@@ -80,21 +80,24 @@ class Annotation(IrekuaModelBaseUser):
         super().clean()
 
         # Check event type is valid for item type
-        self.clean_event_type()
+        self.clean_compatible_item_and_event_types()
 
         # Check annotation type is valid for event type
-        self.clean_annotation_type()
+        self.clean_compatible_event_and_annotation_types()
 
         # Check annotation is valid for Annotation Type
-        self.clean_annotation()
+        self.clean_valid_annotation()
 
         # Check annotation metadata is valid
-        self.clean_annotation_metadata()
+        self.clean_valid_annotation_metadata()
 
         # Check event metadata is valid
-        self.clean_event_metadata()
+        self.clean_valid_event_metadata()
 
-    def clean_event_type(self):
+        # Check labels are compatible with event type
+        self.clean_compatible_labels_and_event_type()
+
+    def clean_compatible_item_and_event_types(self):
         try:
             # pylint: disable=no-member
             self.item.item_type.validate_event_type(self.event_type)
@@ -102,7 +105,7 @@ class Annotation(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({'event_type': error}) from error
 
-    def clean_annotation_type(self):
+    def clean_compatible_event_and_annotation_types(self):
         try:
             # pylint: disable=no-member
             self.event_type.validate_annotation_type(self.annotation_type)
@@ -110,7 +113,7 @@ class Annotation(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({'annotation_type': error}) from error
 
-    def clean_annotation(self):
+    def clean_valid_annotation(self):
         try:
             # pylint: disable=no-member
             self.annotation_type.validate_annotation(self.annotation)
@@ -118,7 +121,7 @@ class Annotation(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({'annotation': error}) from error
 
-    def clean_annotation_metadata(self):
+    def clean_valid_annotation_metadata(self):
         try:
             # pylint: disable=no-member
             self.annotation_type.validate_metadata(self.annotation_metadata)
@@ -126,13 +129,24 @@ class Annotation(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({'annotation_metadata': error}) from error
 
-    def clean_event_metadata(self):
+    def clean_valid_event_metadata(self):
         try:
             # pylint: disable=no-member
             self.event_type.validate_metadata(self.event_metadata)
 
         except ValidationError as error:
             raise ValidationError({'event_metadata': error}) from error
+
+    def clean_compatible_labels_and_event_type(self):
+        if self.id is None:
+            # Exit early if annotation is being created
+            return
+
+        try:
+            self.validate_labels(self.labels)
+
+        except ValidationError as error:
+            raise ValidationError({'labels': error}) from error
 
     def validate_labels(self, labels):
         for term in labels:

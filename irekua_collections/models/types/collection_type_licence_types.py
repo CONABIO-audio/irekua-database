@@ -27,6 +27,7 @@ class CollectionTypeLicenceType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type Licence Type')
+
         verbose_name_plural = _('Collection Type Licence Types')
 
         unique_together = (

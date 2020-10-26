@@ -70,12 +70,12 @@ class CollectionDevice(IrekuaModelBaseUser):
             return
 
         # Get device type configuration from collection type
-        device_type_config = self.clean_device_type(collection_type)
+        device_type_config = self.clean_allowed_device_type(collection_type)
 
         # Check additional metadata is valid for device type
-        self.clean_collection_metadata(device_type_config)
+        self.clean_valid_collection_metadata(device_type_config)
 
-    def clean_device_type(self, collection_type):
+    def clean_allowed_device_type(self, collection_type):
         # pylint: disable=no-member
         device_type = self.physical_device.device.device_type
 
@@ -91,7 +91,7 @@ class CollectionDevice(IrekuaModelBaseUser):
                 collection_type=collection_type)
             raise ValidationError({'physical_device': msg % params}) from error
 
-    def clean_collection_metadata(self, device_type_config):
+    def clean_valid_collection_metadata(self, device_type_config):
         try:
             device_type_config.validate_metadata(self.collection_metadata)
 

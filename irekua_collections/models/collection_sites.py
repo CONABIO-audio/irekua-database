@@ -88,7 +88,7 @@ class CollectionSite(IrekuaModelBaseUser):
         super().clean()
 
         # Check that metadata is valid for site type
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
         # pylint: disable=no-member
         collection_type = self.collection.collection_type
@@ -99,19 +99,19 @@ class CollectionSite(IrekuaModelBaseUser):
             return
 
         # Check if site type is registered for collection type
-        site_type_config = self.clean_site_type(collection_type)
+        site_type_config = self.clean_allowed_site_type(collection_type)
 
         # Check if additional collection metadata is valid for this site type
-        self.clean_collection_metadata(site_type_config)
+        self.clean_valid_collection_metadata(site_type_config)
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             self.site_type.validate_metadata(self.metadata)
 
         except ValidationError as error:
             raise ValidationError({'metadata': str(error)}) from error
 
-    def clean_site_type(self, collection_type):
+    def clean_allowed_site_type(self, collection_type):
         try:
              return collection_type.get_site_type(self.site_type)
         except ObjectDoesNotExist as error:
@@ -123,7 +123,7 @@ class CollectionSite(IrekuaModelBaseUser):
                 collection_type=collection_type)
             raise ValidationError({'site_type': msg % params}) from error
 
-    def clean_collection_metadata(self, site_type_config):
+    def clean_valid_collection_metadata(self, site_type_config):
         try:
             site_type_config.validate_metadata(self.collection_metadata)
 

@@ -28,6 +28,7 @@ class CollectionTypeDeviceType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type Device Type')
+
         verbose_name_plural = _('Collection Type Device Types')
 
         unique_together = (

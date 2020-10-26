@@ -39,16 +39,16 @@ class CollectionItem(Item):
             return
 
         # Check if this item type is permitted in this collection type
-        item_type_config = self.clean_item_type(collection_type)
+        item_type_config = self.clean_allowed_item_type(collection_type)
 
         # Check if this type of items can be associated at the correct
         # level
-        self.clean_item_level(item_type_config)
+        self.clean_allowed_item_level(item_type_config)
 
         # Check if collection metadata is valid for this item type
-        self.clean_collection_metadata(item_type_config)
+        self.clean_valid_collection_metadata(item_type_config)
 
-    def clean_item_type(self, collection_type):
+    def clean_allowed_item_type(self, collection_type):
         try:
             return collection_type.get_item_type(self.item_type)
 
@@ -61,7 +61,7 @@ class CollectionItem(Item):
                 collection_type=collection_type)
             raise ValidationError({'item_type': msg % params}) from error
 
-    def clean_item_level(self, item_type_config):
+    def clean_allowed_item_level(self, item_type_config):
         if not item_type_config.collection_item:
             msg = _(
                 'Item of type %(item_type)s are cannot be declared at a collection '
@@ -71,7 +71,7 @@ class CollectionItem(Item):
                 collection_type=item_type_config.collection_type)
             raise ValidationError({'item_type': msg % params})
 
-    def clean_collection_metadata(self, item_type_config):
+    def clean_valid_collection_metadata(self, item_type_config):
         try:
             item_type_config.validate_metadata(self.collection_metadata)
 

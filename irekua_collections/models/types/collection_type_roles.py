@@ -28,6 +28,7 @@ class CollectionTypeRole(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type Role')
+
         verbose_name_plural = _('Collection Type Roles')
 
         unique_together = (

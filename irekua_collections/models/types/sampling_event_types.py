@@ -81,7 +81,9 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Sampling Event Type')
+
         verbose_name_plural = _('Sampling Event Types')
+        
         ordering = ['name']
 
     def __str__(self):

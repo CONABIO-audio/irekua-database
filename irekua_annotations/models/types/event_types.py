@@ -92,15 +92,18 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
 
     def validate_term(self, term):
         for implication in self.should_imply.all():
-            if not term.entails(implication):
-                msg = _(
-                    'Only terms that entail %(implication)s can be used '
-                    'to describe events of type %(event_type)s.'
-                )
-                params = dict(
-                    implication=str(implication),
-                    event_type=str(self))
-                raise ValidationError(msg % params)
+            if term.entails(implication):
+                continue
+
+            msg = _(
+                'Only terms that entail %(implication)s can be used '
+                'to describe events of type %(event_type)s. Term %(term)s '
+                'does not satisfy this constraint.')
+            params = dict(
+                implication=implication,
+                event_type=self,
+                term=term)
+            raise ValidationError(msg % params)
 
     def validate_annotation_type(self, annotation_type):
         if not self.restrict_annotation_types:
@@ -115,4 +118,12 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
                 event_type=str(self))
             raise ValidationError(msg % params)
 
-# TODO: Validate Item Type
+    def validate_item_type(self, item_type):
+        if not self.item_types.filter(pk=item_type.pk).exists():
+            msg = _(
+                'Event type %(event_type)s is not valid in items of '
+                'type %(item_type)s')
+            params = dict(
+                item_type=str(item_type),
+                event_type=str(self))
+            raise ValidationError(msg % params)

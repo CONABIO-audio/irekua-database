@@ -61,12 +61,12 @@ class CollectionUser(IrekuaModelBaseUser):
         collection_type = self.collection.collection_type
 
         # Check if role is registered for collection type
-        role_config = self.clean_role(collection_type)
+        role_config = self.clean_allowed_role(collection_type)
 
         # Check if additional collection metadata is valid for this site type
-        self.clean_metadata(role_config)
+        self.clean_valid_metadata(role_config)
 
-    def clean_role(self, collection_type):
+    def clean_allowed_role(self, collection_type):
         try:
             return collection_type.get_role(self.role)
 
@@ -79,7 +79,7 @@ class CollectionUser(IrekuaModelBaseUser):
                 collection_type=collection_type)
             raise ValidationError({'role': msg % params}) from error
 
-    def clean_metadata(self, role_config):
+    def clean_valid_metadata(self, role_config):
         try:
             role_config.validate_metadata(self.collection_metadata)
 

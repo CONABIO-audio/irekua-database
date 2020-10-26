@@ -27,6 +27,7 @@ class CollectionTypeEventType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type Event Type')
+
         verbose_name_plural = _('Collection Type Event Types')
 
         unique_together = (

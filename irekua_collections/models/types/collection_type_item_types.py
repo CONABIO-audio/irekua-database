@@ -57,6 +57,7 @@ class CollectionTypeItemType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type Item Type')
+        
         verbose_name_plural = _('Collection Type Item Types')
 
         unique_together = (

@@ -27,6 +27,7 @@ class CollectionTypeSiteType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type Site Type')
+        
         verbose_name_plural = _('Collection Type Site Types')
 
         unique_together = (

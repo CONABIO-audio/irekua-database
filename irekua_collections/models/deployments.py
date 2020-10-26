@@ -150,26 +150,26 @@ class Deployment(IrekuaModelBaseUser):
         self.clean_coordinates_and_georef()
 
         # Check that deployed on datetime is within the sampling event lapse
-        self.clean_deployed_on()
+        self.clean_valid_deployed_on()
 
         # Check that recovered on date is within the sampling event lapse
-        self.clean_recovered_on()
+        self.clean_valid_recovered_on()
 
         # Check that recovered_on is not earlier that deployed_on
-        self.clean_dates()
+        self.clean_valid_dates()
 
         # Check that metadata is valid for deployment type
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
         # Check that configuration information is valid for device
-        self.clean_configuration()
+        self.clean_valid_configuration()
 
         # Check that device and sampling event belong to the same collection
         self.clean_equal_collections()
 
         # Check that changes made to the deployment-recovery dates do not
         # leave any registered deployment items outside the deployment interval
-        self.clean_item_datetimes()
+        self.clean_consistent_item_dates()
 
         # pylint: disable=no-member
         collection_type = self.collection_device.collection.collection_type
@@ -180,10 +180,10 @@ class Deployment(IrekuaModelBaseUser):
             return
 
         # Check that deployment type is registered for this collection type
-        deployment_type_config = self.clean_deployment_type(collection_type)
+        deployment_type_config = self.clean_allowed_deployment_type(collection_type)
 
         # Check that collection-specific metadata is valid for deployment type
-        self.clean_collection_metadata(deployment_type_config)
+        self.clean_valid_collection_metadata(deployment_type_config)
 
     def clean_coordinates_and_georef(self):
         if self.latitude is not None and self.longitude is not None:
@@ -198,9 +198,10 @@ class Deployment(IrekuaModelBaseUser):
         msg = _('Geo reference or longitude-latitude must be provided')
         raise ValidationError({'geo_ref': msg})
 
-    def clean_deployment_type(self, collection_type):
+    def clean_allowed_deployment_type(self, collection_type):
         try:
             return collection_type.get_deployment_type(self.deployment_type)
+
         except ObjectDoesNotExist as error:
             msg = _(
                 'Deployments of type %(deployment_type)s are not allowed in '
@@ -210,19 +211,21 @@ class Deployment(IrekuaModelBaseUser):
                 collection_type=collection_type)
             raise ValidationError({'deployment_type': msg % params}) from error
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
+            # pylint: disable=no-member
             self.deployment_type.validate_metadata(self.metadata)
+
         except ValidationError as error:
             raise ValidationError({'metadata': error}) from error
 
-    def clean_collection_metadata(self, deployment_type_config):
+    def clean_valid_collection_metadata(self, deployment_type_config):
         try:
             deployment_type_config.validate_metadata(self.collection_metadata)
         except ValidationError as error:
             raise ValidationError({'collection_metadata': str(error)}) from error
 
-    def clean_configuration(self):
+    def clean_valid_configuration(self):
         # pylint: disable=no-member
         device = self.collection_device.physical_device.device
 
@@ -242,7 +245,7 @@ class Deployment(IrekuaModelBaseUser):
                 sampling_event=self.sampling_event)
             raise ValidationError({'collection_device': msg % params})
 
-    def clean_deployed_on(self):
+    def clean_valid_deployed_on(self):
         # pylint: disable=no-member
         starting_date = self.sampling_event.started_on
 
@@ -255,28 +258,30 @@ class Deployment(IrekuaModelBaseUser):
 
         try:
             # pylint: disable=no-member
-            self.sampling_event.validate_date(starting_date)
+            self.sampling_event.validate_date(self.deployed_on)
+
         except ValidationError as error:
             raise ValidationError({'deployed_on': error}) from error
 
-    def clean_recovered_on(self):
+    def clean_valid_recovered_on(self):
         # pylint: disable=no-member
         ending_date = self.sampling_event.ended_on
 
-        if not ending_date:
+        if ending_date is None:
             return
 
-        if not self.recovered_on:
+        if self.recovered_on is None:
             self.recovered_on = ending_date
             return
 
         try:
             # pylint: disable=no-member
-            self.sampling_event.validate_date(ending_date)
+            self.sampling_event.validate_date(self.recovered_on)
+
         except ValidationError as error:
             raise ValidationError({'recovered_on': error}) from error
 
-    def clean_dates(self):
+    def clean_valid_dates(self):
         if (self.deployed_on is None) or (self.recovered_on is None):
             return
 
@@ -284,32 +289,29 @@ class Deployment(IrekuaModelBaseUser):
             msg = _('Device recovery is earlier that its deployment')
             raise ValidationError({'deployed_on': msg})
 
-    def clean_item_datetimes(self):
-        start = self.deployed_on if self.deployed_on else None
-        end = self.recovered_on if self.recovered_on else None
-
-        if (start is None) and (end is None):
+    def clean_consistent_item_dates(self):
+        if self.id is None:
+            # Exit early if deployment is being created
             return
 
-        for item in self.deploymentitem_set.all():
-            if not item.captured_on:
-                continue
+        if (self.deployed_on is None) and (self.recovered_on is None):
+            return
 
-            if start is not None:
-                if item.captured_on < start:
-                    message = _(
-                        'There is an item registered in this deployment that '
-                        'was captured earlier that the registered deployment '
-                        'date.')
-                    raise ValidationError({'deployed_on': message})
+        queryset = self.deploymentitem_set.all()
 
-            if end is not None:
-                if item.captured_on > end:
-                    message = _(
-                        'There is an item registered in this deployment that '
-                        'was captured later that the registered device '
-                        'recovery date.')
-                    raise ValidationError({'recovered_on': message})
+        if self.deployed_on is not None:
+            if queryset.filter(captured_on__lt=self.deployed_on).exists():
+                msg = _(
+                    'There are items associated to this deployment that '
+                    'where captured before the deployment date.')
+                raise ValidationError({'deployed_on': msg})
+
+        if self.recovered_on is not None:
+            if queryset.filter(captured_on__gt=self.deployed_on).exists():
+                msg = _(
+                    'There are items associated to this deployment that '
+                    'where captured after the deployment recovery date.')
+                raise ValidationError({'deployed_on': msg})
 
     def collection(self):
         # pylint: disable=no-member

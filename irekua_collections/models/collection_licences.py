@@ -46,12 +46,12 @@ class CollectionLicence(Licence):
             return
 
         # Check if licence type is registered for collection type
-        licence_type_config = self.clean_licence_type(collection_type)
+        licence_type_config = self.clean_allowed_licence_type(collection_type)
 
         # Check if additional collection metadata is valid for this licence type
-        self.clean_collection_metadata(licence_type_config)
+        self.clean_valid_collection_metadata(licence_type_config)
 
-    def clean_licence_type(self, collection_type):
+    def clean_allowed_licence_type(self, collection_type):
         try:
             return collection_type.get_licence_type(self.licence_type)
 
@@ -64,7 +64,7 @@ class CollectionLicence(Licence):
                 collection_type=collection_type)
             raise ValidationError({'licence_type': msg % params}) from error
 
-    def clean_collection_metadata(self, licence_type_config):
+    def clean_valid_collection_metadata(self, licence_type_config):
         try:
             licence_type_config.validate_metadata(self.collection_metadata)
 

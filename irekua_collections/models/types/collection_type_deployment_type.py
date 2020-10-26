@@ -26,6 +26,7 @@ class CollectionTypeDeploymentType(IrekuaModelBase, CollectionMetadataSchemaMixi
 
     class Meta:
         verbose_name = _('Collection Type Deployment Type')
+
         verbose_name_plural = _('Collection Type Deployment Types')
 
         unique_together = (

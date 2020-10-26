@@ -56,10 +56,10 @@ class Locality(IrekuaModelBase):
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
 
-        # Check metdata is valid for locality type
-        self.clean_metadata()
+        # Check metadata is valid for locality type
+        self.clean_valid_metadata()
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             # pylint: disable=no-member
             self.locality_type.validate_metadata(self.metadata)
@@ -70,8 +70,7 @@ class Locality(IrekuaModelBase):
     def validate_point(self, point):
         # pylint: disable=no-member
         if not self.geometry.contains(point):
-            msg = _(
-                "Point is not contained within the locality's geometry")
+            msg = _("Point is not contained within the locality's geometry")
             raise ValidationError(msg)
 
     def __str__(self):

@@ -60,7 +60,7 @@ class Synonym(IrekuaModelBase):
         self.clean_is_categorical()
 
         # Check that metadata is valid for term type
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
     def clean_same_type(self):
         # pylint: disable=no-member
@@ -74,7 +74,7 @@ class Synonym(IrekuaModelBase):
             msg = _('Cannot create synonyms between non-categorical terms')
             raise ValidationError({'source': msg})
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             # pylint: disable=no-member
             self.source.term_type.validate_synonym_metadata(self.metadata)

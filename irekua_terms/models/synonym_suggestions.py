@@ -47,9 +47,9 @@ class SynonymSuggestion(IrekuaModelBaseUser):
         super().clean()
 
         # Check that synonym metadata is valid for term type
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             # pylint: disable=no-member
             self.source.term_type.validate_synonym_metadata(self.metadata)

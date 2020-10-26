@@ -69,7 +69,7 @@ class Term(IrekuaModelBase):
         self.clean_validate_value()
 
         # Check that metadata is valid for term type
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
     def clean_validate_value(self):
         try:
@@ -79,7 +79,7 @@ class Term(IrekuaModelBase):
         except ValidationError as error:
             raise ValidationError({'value': error}) from error
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             # pylint: disable=no-member
             self.term_type.validate_metadata(self.metadata)

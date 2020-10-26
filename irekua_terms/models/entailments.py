@@ -54,12 +54,12 @@ class Entailment(IrekuaModelBase):
         super().clean()
 
         # Check that entailments between these term types can be made.
-        entailment_type = self.check_entailment_type()
+        entailment_type = self.clean_valid_entailment_type()
 
         # Check that metadata is valid for this entailment type
-        self.check_metadata(entailment_type)
+        self.clean_valid_metadata(entailment_type)
 
-    def check_entailment_type(self):
+    def clean_valid_entailment_type(self):
         try:
             # pylint: disable=no-member
             return EntailmentType.objects.get(
@@ -77,7 +77,7 @@ class Entailment(IrekuaModelBase):
                 target_type=self.target.term_type)
             raise ValidationError({'target': msg % params}) from error
 
-    def check_metadata(self, entailment_type):
+    def clean_valid_metadata(self, entailment_type):
         try:
             entailment_type.validate_metadata(self.metadata)
 

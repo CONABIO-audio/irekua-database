@@ -55,7 +55,7 @@ class TermSuggestion(IrekuaModelBaseUser):
         self.clean_is_categorical()
 
         # Check that metadata is valid for this term type
-        self.clean_metadata()
+        self.clean_valid_metadata()
 
     def clean_is_categorical(self):
         # pylint: disable=no-member
@@ -65,7 +65,7 @@ class TermSuggestion(IrekuaModelBaseUser):
             )
             raise ValidationError({'term_type': msg})
 
-    def clean_metadata(self):
+    def clean_valid_metadata(self):
         try:
             # pylint: disable=no-member
             self.term_type.validate_metadata(self.metadata)

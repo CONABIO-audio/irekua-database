@@ -1,5 +1,4 @@
 import os
-import mimetypes
 
 from django.db import models
 from django.core.exceptions import ValidationError
@@ -13,9 +12,6 @@ from irekua_database.base import IrekuaModelBaseUser
 from irekua_database.utils import hash_file
 
 from .types import MimeType
-
-
-mimetypes.init()
 
 
 def infer_datetime(
@@ -68,25 +64,14 @@ def infer_datetime(
 
 
 def get_item_path(instance, filename):
-    path_fmt = os.path.join(
-        'items',
-        '{hash}{ext}')
-
-    mime_type, _ = mimetypes.guess_type(filename)
-    extension = mimetypes.guess_extension(mime_type)
-
-    instance.item_file.open()
-    hash_string = hash_file(instance.item_file)
-
-    path = path_fmt.format(
-        hash=hash_string,
-        ext=extension)
-    return path
+    return instance.get_upload_to(filename)
 
 
 class Item(IrekuaModelBaseUser):
-    hash_string = None
-    item_size = None
+    upload_to_format = os.path.join(
+        'items',
+        '{hash}{ext}'
+    )
 
     filesize = models.IntegerField(
         db_column='filesize',
@@ -343,6 +328,26 @@ class Item(IrekuaModelBaseUser):
             return
 
         self.captured_on = captured_on
+
+    def get_upload_to_format_arguments(self):
+        return {}
+
+    def get_upload_to(self, filename):
+        mime_type, _ = MimeType.guess_type(filename)
+        extension = MimeType.guess_extension(mime_type)
+
+        self.item_file.open()
+        hash_string = hash_file(self.item_file)
+
+        return self.upload_to_format.format(**{
+            'hash': hash_string,
+            'ext': extension,
+            **self.get_upload_to_format_arguments(),
+        })
+
+    @staticmethod
+    def hash_file(file):
+        return hash_file(file)
 
     def delete(self, *args, **kwargs):
         try:

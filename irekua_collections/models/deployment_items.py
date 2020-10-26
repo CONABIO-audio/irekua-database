@@ -6,6 +6,14 @@ from .sampling_event_items import SamplingEventItem
 
 
 class DeploymentItem(SamplingEventItem):
+    upload_to_format = os.path.join(
+        'items',
+        '{collection}',
+        '{sampling_event}',
+        '{deployment}',
+        '{hash}{ext}'
+    )
+
     deployment = models.ForeignKey(
         'Deployment',
         db_column='deployment_id',
@@ -51,3 +59,10 @@ class DeploymentItem(SamplingEventItem):
 
         except ValidationError as error:
             raise ValidationError({'captured_on': error}) from error
+
+    def get_upload_to_format_arguments(self):
+        return {
+            **super().get_upload_to_format_arguments(),
+            # pylint: disable=no-member
+            'deployment': self.deployment.id,
+        }

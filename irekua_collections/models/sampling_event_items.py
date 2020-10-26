@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -6,6 +8,13 @@ from .collection_items import CollectionItem
 
 
 class SamplingEventItem(CollectionItem):
+    upload_to_format = os.path.join(
+        'items',
+        '{collection}',
+        '{sampling_event}',
+        '{hash}{ext}'
+    )
+
     sampling_event = models.ForeignKey(
         'SamplingEvent',
         db_column='sampling_event_id',
@@ -62,3 +71,10 @@ class SamplingEventItem(CollectionItem):
 
         except ValidationError as error:
             raise ValidationError({'captured_on': error}) from error
+
+    def get_upload_to_format_arguments(self):
+        return {
+            **super().get_upload_to_format_arguments(),
+            # pylint: disable=no-member
+            'sampling_event': self.sampling_event.id,
+        }

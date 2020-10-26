@@ -11,25 +11,10 @@ from irekua_database.base import IrekuaModelBase
 def get_thumbnail_path(instance, filename):
     path_fmt = os.path.join(
         'thumbnails',
-        '{collection}',
-        '{sampling_event}',
-        '{sampling_event_device}',
         '{hash}{ext}')
     extension = 'jpg'
-
-    sampling_event_device = instance.sampling_event_device
-    sampling_event = sampling_event_device.sampling_event
-    collection = sampling_event.collection
-
     hash_string = instance.hash
-
-    path = path_fmt.format(
-        collection=collection.pk,
-        sampling_event=sampling_event.pk,
-        sampling_event_device=sampling_event_device.pk,
-        hash=hash_string,
-        ext=extension)
-    return path
+    return path_fmt.format(hash=hash_string, ext=extension)
 
 
 class ItemThumbnail(IrekuaModelBase):

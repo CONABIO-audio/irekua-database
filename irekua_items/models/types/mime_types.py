@@ -55,6 +55,14 @@ class MimeType(IrekuaModelBase):
             raise ValidationError(msg, params=params) from error
 
     @staticmethod
+    def guess_type(filename):
+        return mimetypes.guess_type(filename)
+
+    @staticmethod
+    def guess_extension(mime_type):
+        return mimetypes.guess_extension(mime_type)
+
+    @staticmethod
     def infer(name=None, url=None, file=None):
         if url is not None:
             name = url

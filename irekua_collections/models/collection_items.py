@@ -1,3 +1,5 @@
+import os
+
 from django.db import models
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
@@ -7,6 +9,12 @@ from irekua_items.models import Item
 
 
 class CollectionItem(Item):
+    upload_to_format = os.path.join(
+        'items',
+        '{collection}',
+        '{hash}{ext}'
+    )
+
     collection = models.ForeignKey(
         'Collection',
         db_column='collection_id',
@@ -70,6 +78,13 @@ class CollectionItem(Item):
                 item_type=self.item_type,
                 collection_type=item_type_config.collection_type)
             raise ValidationError({'item_type': msg % params})
+
+    def get_upload_to_format_arguments(self):
+        return {
+            **super().get_upload_to_format_arguments(),
+            # pylint: disable=no-member
+            'collection': self.collection.id,
+        }
 
     def clean_valid_collection_metadata(self, item_type_config):
         try:

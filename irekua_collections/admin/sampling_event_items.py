@@ -1,60 +1,31 @@
-from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.admin.base import IrekuaUserAdmin
-from irekua_collections.models import SamplingEventItem
+from .site_items import SiteItemAdmin
 
 
-class TagInline(admin.TabularInline):
-    extra = 0
-
-    model = SamplingEventItem.tags.through
-
-    verbose_name = _('Tag')
-
-    verbose_name_plural = _('Tags')
-
-    autocomplete_fields = [
-        'tag',
-    ]
-
-
-class SamplingEventItemAdmin(IrekuaUserAdmin):
-    search_fields = [
-        'collection__name',
-        'item_type__name',
-        'licence__licence_type__name',
-        'id',
-    ]
-
+class SamplingEventItemAdmin(SiteItemAdmin):
     list_display = [
+        'id',
         '__str__',
-        'collection',
-        'sampling_event',
         'item_type',
-        'filesize',
         'licence',
+        'collection',
+        'collection_site',
+        'sampling_event',
+        'filesize',
         'captured_on',
         'created_by',
         'created_on',
     ]
 
-    list_display_links = [
-        '__str__',
-    ]
-
     list_filter = [
-        'collection',
-        'item_type',
-        'licence__licence_type',
         'sampling_event__sampling_event_type',
+        *SiteItemAdmin.list_filter,
     ]
 
     autocomplete_fields = [
         'sampling_event',
-        'item_type',
-        'licence',
-        'source',
+        *SiteItemAdmin.autocomplete_fields,
     ]
 
     fieldsets = (
@@ -91,6 +62,5 @@ class SamplingEventItemAdmin(IrekuaUserAdmin):
         })
     )
 
-    inlines = [
-        TagInline,
-    ]
+    def filter_queryset(self, queryset):
+        return queryset.filter(deploymentitem__isnull=True)

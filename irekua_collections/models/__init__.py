@@ -1,14 +1,18 @@
 from .collection_annotations import CollectionAnnotation
 from .collection_devices import CollectionDevice
-from .collection_items import CollectionItem
 from .collection_licences import CollectionLicence
 from .collection_sites import CollectionSite
 from .collection_users import CollectionUser
 from .data_collections import Collection
-from .deployment_items import DeploymentItem
 from .deployments import Deployment
-from .sampling_event_items import SamplingEventItem
 from .sampling_events import SamplingEvent
+
+from .items import SamplingEventItem
+from .items import CollectionItem
+from .items import DeploymentItem
+from .items import DeviceItem
+from .items import SiteItem
+
 from .types import CollectionTypeAnnotationType
 from .types import CollectionTypeDeploymentType
 from .types import CollectionTypeDeviceType

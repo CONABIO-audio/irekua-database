@@ -16,6 +16,8 @@ from .sampling_event_items import SamplingEventItemAdmin
 from .sampling_events import SamplingEventAdmin
 from .deployment_types import DeploymentTypeAdmin
 from .sampling_event_types import SamplingEventTypeAdmin
+from .device_items import DeviceItemAdmin
+from .site_items import SiteItemAdmin
 
 
 admin.site.register(models.CollectionAnnotation, CollectionAnnotationAdmin)
@@ -32,3 +34,5 @@ admin.site.register(models.SamplingEventItem, SamplingEventItemAdmin)
 admin.site.register(models.SamplingEvent, SamplingEventAdmin)
 admin.site.register(models.SamplingEventType, SamplingEventTypeAdmin)
 admin.site.register(models.DeploymentType, DeploymentTypeAdmin)
+admin.site.register(models.DeviceItem, DeviceItemAdmin)
+admin.site.register(models.SiteItem, SiteItemAdmin)

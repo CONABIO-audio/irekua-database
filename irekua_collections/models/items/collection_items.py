@@ -11,6 +11,7 @@ from irekua_items.models import Item
 class CollectionItem(Item):
     upload_to_format = os.path.join(
         'items',
+        'collection',
         '{collection}',
         '{hash}{ext}'
     )

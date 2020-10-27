@@ -5,10 +5,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-
 from irekua_database.base import IrekuaModelBase
 from irekua_upload.base import IrekuaOperation
-
 
 
 class Operation(IrekuaModelBase):

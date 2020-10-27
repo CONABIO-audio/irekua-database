@@ -28,7 +28,6 @@ def inline_factory(m2m_field):
 
     class M2MInline(admin.TabularInline):
         extra = 0
-        classes = ('collapse',)
         model = getattr(CollectionType, m2m_field).through
         verbose_name = _(name.rstrip('s'))
         verbose_name_plural = _(name)

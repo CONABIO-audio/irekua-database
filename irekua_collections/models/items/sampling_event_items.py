@@ -4,13 +4,15 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .collection_items import CollectionItem
+from .site_items import SiteItem
 
 
-class SamplingEventItem(CollectionItem):
+class SamplingEventItem(SiteItem):
     upload_to_format = os.path.join(
         'items',
+        'collection',
         '{collection}',
+        'sampling_event',
         '{sampling_event}',
         '{hash}{ext}'
     )
@@ -32,6 +34,13 @@ class SamplingEventItem(CollectionItem):
         ordering = ['-created_on']
 
     def clean(self):
+        # Check that sampling event belongs to the declared collection
+        self.clean_compatible_sampling_event_and_collection()
+
+        # Check that collection site coincides with the one declared by
+        # the sampling event
+        self.clean_compatible_sampling_event_and_site()
+
         super().clean()
 
         # Check if items of this type are allowed in sampling
@@ -42,10 +51,44 @@ class SamplingEventItem(CollectionItem):
         # sampling event
         self.clean_valid_captured_on()
 
+    def clean_compatible_sampling_event_and_collection(self):
+        if self.collection is None:
+            # pylint: disable=no-member
+            self.collection = self.sampling_event.collection
+
+        # pylint: disable=no-member
+        if self.collection == self.sampling_event.collection:
+            return
+
+        msg = _(
+            'The sampling event in which the item was captured (%(sampling_event)s) '
+            'does not belong to the collection %(collection)s.')
+        params = dict(
+            sampling_event=self.sampling_event,
+            collection=self.collection)
+        raise ValidationError({'sampling_event': msg % params})
+
+    def clean_compatible_sampling_event_and_site(self):
+        if self.collection_site is None:
+            # pylint: disable=no-member
+            self.collection_site = self.sampling_event.collection_site
+
+        # pylint: disable=no-member
+        if self.collection_site == self.sampling_event.collection_site:
+            return
+
+        msg = _(
+            'The sampling event %(sampling_event)s occured on a different site than'
+            'what was declared %(collection_site)s')
+        params = dict(
+            sampling_event=self.sampling_event,
+            collection_site=self.collection_site)
+        raise ValidationError({'sampling_event': msg % params})
+
     def clean_allowed_item_level(self, item_type_config):
         if not item_type_config.sampling_event_item:
             msg = _(
-                'Item of type %(item_type)s are cannot be declared at a sampling '
+                'Item of type %(item_type)s are cannot be declared at the sampling '
                 'event level for collections of type %(collection_type)s')
             params = dict(
                 item_type=self.item_type,

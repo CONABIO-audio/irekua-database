@@ -1,12 +1,13 @@
 from django.utils.translation import gettext_lazy as _
 
-from irekua_items.admin.items import ItemAdmin
+from .collection_items import CollectionItemAdmin
 
 
-class CollectionItemAdmin(ItemAdmin):
+class DeviceItemAdmin(CollectionItemAdmin):
     search_fields = [
         'collection__name',
-        *ItemAdmin.search_fields,
+        'collection_device__collection_name',
+        *CollectionItemAdmin.search_fields,
     ]
 
     list_display = [
@@ -15,6 +16,7 @@ class CollectionItemAdmin(ItemAdmin):
         'item_type',
         'licence',
         'collection',
+        'collection_device',
         'filesize',
         'captured_on',
         'created_by',
@@ -22,19 +24,19 @@ class CollectionItemAdmin(ItemAdmin):
     ]
 
     list_filter = [
-        'collection',
-        *ItemAdmin.list_filter,
+        'collection_device__physical_device__device__device_type',
+        *CollectionItemAdmin.list_filter,
     ]
 
     autocomplete_fields = [
-        'collection',
-        *ItemAdmin.autocomplete_fields,
+        'collection_device',
+        *CollectionItemAdmin.autocomplete_fields,
     ]
 
     fieldsets = (
         (None, {
             'fields': (
-                'collection',
+                'collection_device',
                 ('item_type', 'licence'),
                 'item_file',
             )
@@ -66,8 +68,4 @@ class CollectionItemAdmin(ItemAdmin):
     )
 
     def filter_queryset(self, queryset):
-        return queryset.exclude(deviceitem__isnull=False, siteitem__isnull=False)
-
-    def get_queryset(self, *args, **kwargs):
-        queryset = super().get_queryset(*args, **kwargs)
-        return self.filter_queryset(queryset)
+        return queryset.filter(deploymentitem__isnull=True)

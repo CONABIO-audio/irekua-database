@@ -5,13 +5,17 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from .sampling_event_items import SamplingEventItem
+from .device_items import DeviceItem
 
 
-class DeploymentItem(SamplingEventItem):
+class DeploymentItem(DeviceItem, SamplingEventItem):
     upload_to_format = os.path.join(
         'items',
+        'collection',
         '{collection}',
+        'sampling_event',
         '{sampling_event}',
+        'deployment',
         '{deployment}',
         '{hash}{ext}'
     )
@@ -31,6 +35,51 @@ class DeploymentItem(SamplingEventItem):
         verbose_name_plural = _('Deployment Items')
 
         ordering = ['-created_on']
+
+    def clean(self):
+        # Check that the samplign event coincides with the one declared by
+        # the deployment
+        self.clean_compatible_deployment_and_sampling_event()
+
+        # Check that the device used coincides with the one delared by the
+        # deployment
+        self.clean_compatible_deployment_and_device()
+
+        super().clean()
+
+    def clean_compatible_deployment_and_sampling_event(self):
+        if self.sampling_event is None:
+            # pylint: disable=no-member
+            self.sampling_event = self.deployment.sampling_event
+
+        # pylint: disable=no-member
+        if self.sampling_event == self.deployment.sampling_event:
+            return
+
+        msg = _(
+            'The deployment in which the item was captured (%(deployment)s) '
+            'does not belong to the sampling event %(sampling_event)s.')
+        params = dict(
+            deployment=self.deployment,
+            sampling_event=self.sampling_event)
+        raise ValidationError({'deployment': msg % params})
+
+    def clean_compatible_deployment_and_device(self):
+        if self.collection_device is None:
+            # pylint: disable=no-member
+            self.collection_device = self.deployment.collection_device
+
+        # pylint: disable=no-member
+        if self.collection_device == self.deployment.collection_device:
+            return
+
+        msg = _(
+            'The device that captured the item (%(collection_device)s) '
+            'does not coincide with the deployed device %(deployment)s.')
+        params = dict(
+            collection_device=self.collection_device,
+            deployment=self.deployment)
+        raise ValidationError({'deployment': msg % params})
 
     def clean_allowed_item_level(self, item_type_config):
         if not item_type_config.deployment_item:

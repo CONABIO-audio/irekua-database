@@ -1,35 +1,23 @@
-from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.admin.base import IrekuaUserAdmin
-from irekua_collections.models import DeploymentItem
+from .sampling_event_items import SamplingEventItemAdmin
 
 
-class TagInline(admin.TabularInline):
-    extra = 0
-
-    model = DeploymentItem.tags.through
-
-    verbose_name = _('Tag')
-
-    verbose_name_plural = _('Tags')
-
-    autocomplete_fields = [
-        'tag',
-    ]
-
-
-class DeploymentItemAdmin(IrekuaUserAdmin):
+class DeploymentItemAdmin(SamplingEventItemAdmin):
     search_fields = [
-        'collection__name',
-        'item_type__name',
-        'licence__licence_type__name',
-        'id',
+        'deployment__deployment_type__name',
+        'collection_device__collection_name',
+        'collection_device__physical_device__device__device_type__name',
+        *SamplingEventItemAdmin.search_fields,
     ]
 
     list_display = [
+        'id',
         '__str__',
         'collection',
+        'collection_site',
+        'collection_device',
+        'sampling_event',
         'deployment',
         'item_type',
         'filesize',
@@ -39,23 +27,16 @@ class DeploymentItemAdmin(IrekuaUserAdmin):
         'created_on',
     ]
 
-    list_display_links = [
-        '__str__',
-    ]
-
     list_filter = [
-        'collection',
-        'item_type',
-        'licence__licence_type',
         'deployment__deployment_type',
-        'sampling_event__sampling_event_type',
+        'collection_device__physical_device__device__device_type',
+        *SamplingEventItemAdmin.list_filter,
     ]
 
     autocomplete_fields = [
         'deployment',
-        'item_type',
-        'licence',
-        'source',
+        'collection_device',
+        *SamplingEventItemAdmin.autocomplete_fields,
     ]
 
     fieldsets = (
@@ -92,6 +73,5 @@ class DeploymentItemAdmin(IrekuaUserAdmin):
         })
     )
 
-    inlines = [
-        TagInline,
-    ]
+    def filter_queryset(self, queryset):
+        return queryset

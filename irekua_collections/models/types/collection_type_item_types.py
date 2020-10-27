@@ -35,6 +35,26 @@ class CollectionTypeItemType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         default=True,
         null=False)
 
+    site_item = models.BooleanField(
+        db_column='site_item',
+        verbose_name=_('site item'),
+        help_text=_(
+            'Boolean flag indicating items of this type can be registered '
+            'at the site level.'),
+        blank=True,
+        default=True,
+        null=False)
+
+    device_item = models.BooleanField(
+        db_column='device_item',
+        verbose_name=_('device item'),
+        help_text=_(
+            'Boolean flag indicating items of this type can be registered '
+            'at the device level.'),
+        blank=True,
+        default=True,
+        null=False)
+
     sampling_event_item = models.BooleanField(
         db_column='sampling_event_item',
         verbose_name=_('sampling event item'),
@@ -57,7 +77,7 @@ class CollectionTypeItemType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     class Meta:
         verbose_name = _('Collection Type Item Type')
-        
+
         verbose_name_plural = _('Collection Type Item Types')
 
         unique_together = (

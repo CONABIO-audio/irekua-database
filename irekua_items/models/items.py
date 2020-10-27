@@ -13,7 +13,6 @@ from irekua_database.base import IrekuaModelBaseUser
 from irekua_database.utils import hash_file
 
 from .types import MimeType
-from .media_info_extractors import MediaInfoExtractor
 
 
 def infer_datetime(
@@ -309,8 +308,6 @@ class Item(IrekuaModelBaseUser):
         if self.media_info is None:
             self.extract_media_info()
 
-        print('MEDIA INFO', self.media_info)
-
         try:
             # pylint: disable=no-member
             if self.item_type.media_info_type is not None:
@@ -372,8 +369,6 @@ class Item(IrekuaModelBaseUser):
         })
 
     def extract_media_info(self):
-        print('EXTRACTING MEDIA INFO')
-
         # pylint: disable=no-member
         media_info_type = self.item_type.media_info_type
 
@@ -388,8 +383,8 @@ class Item(IrekuaModelBaseUser):
 
         try:
             self.media_info = extractor.extract_media_info(self.item_file.file)
-        except Exception as error:
-            print(error)
+        except Exception:
+            pass
 
     @staticmethod
     def hash_file(file):

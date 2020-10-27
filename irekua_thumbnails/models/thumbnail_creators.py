@@ -42,6 +42,13 @@ class ThumbnailCreator(IrekuaModelBase):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_thumbnail_creator(item_type):
+        Model = ThumbnailCreator.item_types.through
+        return Model.objects.get(
+            item_type=item_type,
+            is_active=True).thumbnail_creator
+
     def load_creator(self):
         name = self.python_file.name
         basename = os.path.basename(name)
@@ -53,4 +60,4 @@ class ThumbnailCreator(IrekuaModelBase):
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
 
-        return module.creator
+        return module.thumbnail_creator

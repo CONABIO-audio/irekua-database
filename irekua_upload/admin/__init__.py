@@ -1,7 +1,8 @@
-# from django.contrib import admin
-#
-# from irekua_schemas import models
-#
-# from .schemas import SchemaAdmin
-#
-# admin.site.register(models.Schema, SchemaAdmin)
+from django.contrib import admin
+
+from irekua_upload import models
+
+from .operations import OperationAdmin
+
+
+admin.site.register(models.Operation, OperationAdmin)

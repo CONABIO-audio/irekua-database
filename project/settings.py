@@ -15,6 +15,7 @@ from selia_annotator.settings import *
 from selia_visualizers.settings import *
 from irekua_annotations.settings import *
 from irekua_thumbnails.settings import *
+from irekua_upload.settings import *
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,5 +39,6 @@ INSTALLED_APPS = (
     SELIA_ANNOTATOR_APPS +
     SELIA_VISUALIZERS_APPS +
     IREKUA_ANNOTATIONS_APPS +
-    IREKUA_THUMBNAILS_APPS
+    IREKUA_THUMBNAILS_APPS +
+    IREKUA_UPLOAD_APPS
 )

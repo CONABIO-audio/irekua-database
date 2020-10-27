@@ -40,7 +40,7 @@ class Operation(IrekuaModelBase):
 
         ordering = ['-created_on']
 
-    def load_operation(self):
+    def get_operation_class(self):
         name = self.python_file.name
         basename = os.path.basename(name)
         module_name = os.path.splitext(basename)[0]
@@ -53,6 +53,14 @@ class Operation(IrekuaModelBase):
 
         return module.Operation
 
+    def get_operation_instance_kwargs(self):
+        return {}
+
+    def get_operation(self):
+        operation_class = self.get_operation_class()
+        kwargs = self.get_operation_instance_kwargs()
+        return operation_class(**kwargs)
+
     def run(self, *args, **kwargs):
-        operation = self.load_operation()
+        operation = self.get_operation()
         return operation.run(*args, **kwargs)

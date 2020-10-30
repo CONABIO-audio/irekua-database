@@ -11,11 +11,11 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('selia_visualizers', '0004_auto_20201024_1826'),
+        ('irekua_visualizers', '0004_auto_20201024_1826'),
         ('irekua_schemas', '0002_auto_20201018_2158'),
         ('irekua_items', '0009_add_mime_type'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('selia_annotator', '0003_change_annotation_type_reference'),
+        ('irekua_annotators', '0003_change_annotation_type_reference'),
         ('irekua_terms', '0006_auto_20201021_2015'),
     ]
 
@@ -73,14 +73,14 @@ class Migration(migrations.Migration):
                         ('certainty', models.CharField(blank=True, choices=[('L', 'uncertain'), ('M', 'somewhat certain'), ('H', 'certain')], db_column='certainty', help_text='Level of certainty of location or labelling of annotation', max_length=16, null=True, verbose_name='certainty')),
                         ('quality', models.CharField(blank=True, choices=[('L', 'low'), ('M', 'medium'), ('H', 'high')], db_column='quality', help_text='Quality of item content inside annotation', max_length=16, verbose_name='quality')),
                         ('commentaries', models.TextField(blank=True, db_column='commentaries', help_text='Commentaries of annotator', verbose_name='commentaries')),
-                        ('annotation_tool', models.ForeignKey(db_column='annotation_tool_id', help_text='Annotation tool used when annotating', on_delete=django.db.models.deletion.PROTECT, to='selia_annotator.annotationtool', verbose_name='annotation tool')),
+                        ('annotation_tool', models.ForeignKey(db_column='annotation_tool_id', help_text='Annotation tool used when annotating', on_delete=django.db.models.deletion.PROTECT, to='irekua_annotators.annotationtool', verbose_name='annotation tool')),
                         ('annotation_type', models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation', on_delete=django.db.models.deletion.PROTECT, to='irekua_annotations.annotationtype', verbose_name='annotation type')),
                         ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='annotation_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
                         ('event_type', models.ForeignKey(db_column='event_type_id', help_text='Type of event being annotated', on_delete=django.db.models.deletion.PROTECT, to='irekua_annotations.eventtype', verbose_name='event type')),
                         ('item', models.ForeignKey(db_column='item_id', help_text='Annotated item', on_delete=django.db.models.deletion.PROTECT, to='irekua_items.item', verbose_name='item')),
                         ('labels', models.ManyToManyField(blank=True, db_column='labels', help_text='Labels associated with annotation', to='irekua_terms.Term', verbose_name='labels')),
                         ('modified_by', models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='annotation_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by')),
-                        ('visualizer', models.ForeignKey(db_column='visualizers_id', help_text='Visualizer used when annotating', on_delete=django.db.models.deletion.PROTECT, to='selia_visualizers.visualizer', verbose_name='visualizer')),
+                        ('visualizer', models.ForeignKey(db_column='visualizers_id', help_text='Visualizer used when annotating', on_delete=django.db.models.deletion.PROTECT, to='irekua_visualizers.visualizer', verbose_name='visualizer')),
                     ],
                     options={
                         'verbose_name': 'Annotation',

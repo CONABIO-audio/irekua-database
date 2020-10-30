@@ -7,10 +7,10 @@ import django.db.models.deletion
 def move_annotations_to_collection_annotations(apps, schema_editor):
     AnnotationTmp = apps.get_model('irekua_annotations', 'AnnotationTmp')
     CollectionAnnotation = apps.get_model('irekua_collections', 'CollectionAnnotation')
-    VisualizerVersion = apps.get_model('selia_visualizers', 'VisualizerVersion')
-    AnnotationVisualizer = apps.get_model('selia_visualizers', 'AnnotationVisualizer')
-    AnnotatorVersion = apps.get_model('selia_annotator', 'AnnotatorVersion')
-    AnnotationAnnotator = apps.get_model('selia_annotator', 'AnnotationAnnotator')
+    VisualizerVersion = apps.get_model('irekua_visualizers', 'VisualizerVersion')
+    AnnotationVisualizer = apps.get_model('irekua_visualizers', 'AnnotationVisualizer')
+    AnnotatorVersion = apps.get_model('irekua_annotators', 'AnnotatorVersion')
+    AnnotationAnnotator = apps.get_model('irekua_annotators', 'AnnotationAnnotator')
 
     annotators = {}
     def get_annotator_version(annotation):
@@ -82,8 +82,8 @@ class Migration(migrations.Migration):
     dependencies = [
         ('irekua_annotations', '0003_annotation_userannotation'),
         ('irekua_collections', '0014_collectionannotation'),
-        ('selia_visualizers', '0006_created_annotation_visualizer_model'),
-        ('selia_annotator', '0006_annotationannotator'),
+        ('irekua_visualizers', '0006_created_annotation_visualizer_model'),
+        ('irekua_annotators', '0006_annotationannotator'),
     ]
 
     operations = [

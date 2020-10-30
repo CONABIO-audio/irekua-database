@@ -222,8 +222,8 @@ msgstr "alta"
 
 #: irekua-database/build/lib/irekua_database/models/annotations/annotations.py:29
 #: irekua-database/irekua_database/models/annotations/annotations.py:29
-#: selia-annotator/build/lib/selia_annotator/models.py:22
-#: selia-annotator/selia_annotator/models.py:22
+#: selia-annotator/build/lib/irekua_annotators/models.py:22
+#: selia-annotator/irekua_annotators/models.py:22
 msgid "annotation tool"
 msgstr "herramienta de anotación"
 
@@ -234,8 +234,8 @@ msgstr "Herramienta de anotación utilizada"
 
 #: irekua-database/build/lib/irekua_database/models/annotations/annotations.py:36
 #: irekua-database/irekua_database/models/annotations/annotations.py:36
-#: selia-visualizers/build/lib/selia_visualizers/models.py:23
-#: selia-visualizers/selia_visualizers/models.py:23
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:23
+#: selia-visualizers/irekua_visualizers/models.py:23
 msgid "visualizer"
 msgstr "visualizador"
 
@@ -1084,8 +1084,8 @@ msgstr ""
 #: irekua-database/irekua_database/models/items/items.py:95
 #: irekua-database/irekua_database/models/items/secondary_items.py:65
 #: irekua-database/irekua_database/models/object_types/data_collections/collection_item_types.py:25
-#: selia-visualizers/build/lib/selia_visualizers/models.py:53
-#: selia-visualizers/selia_visualizers/models.py:53
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:53
+#: selia-visualizers/irekua_visualizers/models.py:53
 msgid "item type"
 msgstr ""
 
@@ -1291,8 +1291,8 @@ msgstr ""
 
 #: irekua-database/build/lib/irekua_database/models/items/items.py:237
 #: irekua-database/irekua_database/models/items/items.py:237
-#: selia-annotator/build/lib/selia_annotator/templates/selia_annotator/annotator.html:14
-#: selia-annotator/selia_annotator/templates/selia_annotator/annotator.html:14
+#: selia-annotator/build/lib/irekua_annotators/templates/irekua_annotators/annotator.html:14
+#: selia-annotator/irekua_annotators/templates/irekua_annotators/annotator.html:14
 msgid "Item"
 msgstr ""
 
@@ -1545,10 +1545,10 @@ msgstr ""
 
 #: irekua-database/build/lib/irekua_database/models/licences.py:69
 #: irekua-database/irekua_database/models/licences.py:69
-#: selia-annotator/build/lib/selia_annotator/models.py:36
-#: selia-annotator/selia_annotator/models.py:36
-#: selia-visualizers/build/lib/selia_visualizers/models.py:64
-#: selia-visualizers/selia_visualizers/models.py:64
+#: selia-annotator/build/lib/irekua_annotators/models.py:36
+#: selia-annotator/irekua_annotators/models.py:36
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:64
+#: selia-visualizers/irekua_visualizers/models.py:64
 msgid "is active"
 msgstr ""
 
@@ -3466,8 +3466,8 @@ msgstr ""
 
 #: irekua-database/build/lib/irekua_database/models/visualizers.py:43
 #: irekua-database/irekua_database/models/visualizers.py:43
-#: selia-visualizers/build/lib/selia_visualizers/models.py:24
-#: selia-visualizers/selia_visualizers/models.py:24
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:24
+#: selia-visualizers/irekua_visualizers/models.py:24
 msgid "Visualizer"
 msgstr ""
 
@@ -3644,40 +3644,40 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
-#: selia-annotator/build/lib/selia_annotator/models.py:23
-#: selia-annotator/selia_annotator/models.py:23
+#: selia-annotator/build/lib/irekua_annotators/models.py:23
+#: selia-annotator/irekua_annotators/models.py:23
 msgid "Annotation tool"
 msgstr ""
 
-#: selia-annotator/build/lib/selia_annotator/models.py:29
-#: selia-annotator/selia_annotator/models.py:29
-#: selia-visualizers/build/lib/selia_visualizers/models.py:30
-#: selia-visualizers/selia_visualizers/models.py:30
+#: selia-annotator/build/lib/irekua_annotators/models.py:29
+#: selia-annotator/irekua_annotators/models.py:29
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:30
+#: selia-visualizers/irekua_visualizers/models.py:30
 msgid "javascript file"
 msgstr ""
 
-#: selia-annotator/build/lib/selia_annotator/models.py:30
-#: selia-annotator/selia_annotator/models.py:30
+#: selia-annotator/build/lib/irekua_annotators/models.py:30
+#: selia-annotator/irekua_annotators/models.py:30
 msgid "Javascript file containing annotator component"
 msgstr ""
 
-#: selia-annotator/build/lib/selia_annotator/models.py:37
-#: selia-annotator/selia_annotator/models.py:37
+#: selia-annotator/build/lib/irekua_annotators/models.py:37
+#: selia-annotator/irekua_annotators/models.py:37
 msgid "Is annotator tool active?"
 msgstr ""
 
-#: selia-annotator/build/lib/selia_annotator/models.py:43
-#: selia-annotator/selia_annotator/models.py:43
+#: selia-annotator/build/lib/irekua_annotators/models.py:43
+#: selia-annotator/irekua_annotators/models.py:43
 msgid "Annotation Tool Component"
 msgstr ""
 
-#: selia-annotator/build/lib/selia_annotator/models.py:44
-#: selia-annotator/selia_annotator/models.py:44
+#: selia-annotator/build/lib/irekua_annotators/models.py:44
+#: selia-annotator/irekua_annotators/models.py:44
 msgid "Annotation Tool Components"
 msgstr ""
 
-#: selia-annotator/build/lib/selia_annotator/templates/selia_annotator/annotator.html:14
-#: selia-annotator/selia_annotator/templates/selia_annotator/annotator.html:14
+#: selia-annotator/build/lib/irekua_annotators/templates/irekua_annotators/annotator.html:14
+#: selia-annotator/irekua_annotators/templates/irekua_annotators/annotator.html:14
 msgid "Annotations: Add"
 msgstr ""
 
@@ -4022,47 +4022,47 @@ msgstr ""
 msgid "Add items"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:31
-#: selia-visualizers/selia_visualizers/models.py:31
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:31
+#: selia-visualizers/irekua_visualizers/models.py:31
 msgid "Javascript file containing visualizer component"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:41
-#: selia-visualizers/selia_visualizers/models.py:41
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:41
+#: selia-visualizers/irekua_visualizers/models.py:41
 msgid "Visualizer Component"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:42
-#: selia-visualizers/selia_visualizers/models.py:42
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:42
+#: selia-visualizers/irekua_visualizers/models.py:42
 msgid "Visualizers Components"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:54
-#: selia-visualizers/selia_visualizers/models.py:54
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:54
+#: selia-visualizers/irekua_visualizers/models.py:54
 msgid "Item type"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:59
-#: selia-visualizers/selia_visualizers/models.py:59
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:59
+#: selia-visualizers/irekua_visualizers/models.py:59
 msgid "visualizer component"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:60
-#: selia-visualizers/selia_visualizers/models.py:60
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:60
+#: selia-visualizers/irekua_visualizers/models.py:60
 msgid "Visualizer component"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:65
-#: selia-visualizers/selia_visualizers/models.py:65
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:65
+#: selia-visualizers/irekua_visualizers/models.py:65
 msgid "Is visualizer app active?"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:71
-#: selia-visualizers/selia_visualizers/models.py:71
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:71
+#: selia-visualizers/irekua_visualizers/models.py:71
 msgid "Visualizer Component Item Type"
 msgstr ""
 
-#: selia-visualizers/build/lib/selia_visualizers/models.py:72
-#: selia-visualizers/selia_visualizers/models.py:72
+#: selia-visualizers/build/lib/irekua_visualizers/models.py:72
+#: selia-visualizers/irekua_visualizers/models.py:72
 msgid "Visualizer Component Item Types"
 msgstr ""

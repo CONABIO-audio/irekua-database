@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
         ('irekua_collections', '0001_initial'),
         ('irekua_database', '0009_change_item_to_deployment'),
         ('irekua_models', '0003_update_item_references'),
-        ('selia_annotator', '0002_add_annotator'),
-        ('selia_visualizers', '0002_add_visualizer'),
+        ('irekua_annotators', '0002_add_annotator'),
+        ('irekua_visualizers', '0002_add_visualizer'),
     ]
 
     operations = [
@@ -598,7 +598,7 @@ class Migration(migrations.Migration):
                 ),
                 migrations.AlterModelTable(
                     name='AnnotationTool',
-                    table='selia_annotator_annotationtool',
+                    table='irekua_annotators_annotationtool',
                 ),
                 migrations.AlterModelTable(
                     name='AnnotationType',
@@ -762,7 +762,7 @@ class Migration(migrations.Migration):
                 ),
                 migrations.AlterModelTable(
                     name='Visualizer',
-                    table='selia_visualizers_visualizer',
+                    table='irekua_visualizers_visualizer',
                 ),
             ],
         ),

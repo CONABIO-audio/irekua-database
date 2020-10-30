@@ -10,8 +10,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('selia_visualizers', '0004_auto_20201024_1826'),
-        ('selia_annotator', '0004_update_annotation_type_reference'),
+        ('irekua_visualizers', '0004_auto_20201024_1826'),
+        ('irekua_annotators', '0004_update_annotation_type_reference'),
         ('irekua_items', '0010_relocate_annotation_models'),
         ('irekua_terms', '0006_auto_20201021_2015'),
         ('irekua_annotations', '0001_initial'),

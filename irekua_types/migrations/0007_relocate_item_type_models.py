@@ -10,8 +10,8 @@ class Migration(migrations.Migration):
         ('irekua_items', '0004_include_item_types_models'),
         ('irekua_types', '0006_relocate_deployment_and_sampling_event_types'),
         ('irekua_models', '0004_update_types_references'),
-        ('selia_annotator', '0003_change_annotation_type_reference'),
-        ('selia_visualizers', '0003_change_item_type_reference'),
+        ('irekua_annotators', '0003_change_annotation_type_reference'),
+        ('irekua_visualizers', '0003_change_item_type_reference'),
     ]
 
     operations = [

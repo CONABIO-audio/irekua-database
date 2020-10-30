@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('irekua_annotations', '0001_initial'),
         ('irekua_collections', '0013_update_annotation_type_reference'),
-        ('selia_annotator', '0004_update_annotation_type_reference'),
+        ('irekua_annotators', '0004_update_annotation_type_reference'),
         ('irekua_models', '0006_update_annotation_type_reference'),
         ('irekua_items', '0009_add_mime_type'),
     ]

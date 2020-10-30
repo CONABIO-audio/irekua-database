@@ -1,0 +1,16 @@
+<textarea class="hidden" id="textarea_{{ widget.name }}" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>
+{% if widget.value %}{{ widget.value }}{% endif %}</textarea>
+
+<div class="container">
+  <pre class="editor" id="editor_{{ widget.name }}">{% if widget.value %}{{ widget.value }}{% endif %}</pre>
+</div>
+
+<script>
+    var editor = ace.edit("editor_{{ widget.name }}");
+    editor.setTheme("ace/theme/monokai");
+    editor.session.setMode("ace/mode/python");
+    editor.session.on('change', function(delta) {
+      let textarea = document.getElementById("textarea_{{ widget.name }}");
+      textarea.value = editor.getValue();
+    });
+</script>

@@ -1,4 +1,5 @@
 import os
+import inspect
 import importlib.util
 
 from django.db import models
@@ -37,6 +38,50 @@ class Operation(IrekuaModelBase):
         verbose_name_plural = _('Operations')
 
         ordering = ['-created_on']
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def validate_syntax(code):
+        try:
+            return compile(code, '<string>', 'exec')
+
+        except SyntaxError as error:
+            raise ValidationError(error) from error
+
+    @staticmethod
+    def validate_content(compiled_code):
+        try:
+            # pylint: disable=exec-used
+            exec(compiled_code)
+
+        except Exception as error:
+            raise ValidationError(error) from error
+
+        local_variables = locals()
+
+        if 'Operation' not in local_variables:
+            msg = _('No operation class is defined in this python file')
+            raise ValidationError(msg)
+
+        klass = local_variables['Operation']
+
+        if not inspect.isclass(klass):
+            msg = _('The defined operation is not a class.')
+            raise ValidationError(msg)
+
+        if not issubclass(klass, IrekuaOperation):
+            msg = _(
+                'The defined operation does not subclass the IrekuaOperation'
+                ' base class')
+            raise ValidationError(msg)
+
+        try:
+            klass()
+
+        except Exception as error:
+            raise ValidationError(error) from error
 
     def get_operation_class(self):
         name = self.python_file.name

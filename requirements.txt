@@ -29,5 +29,6 @@ sorl-thumbnail==12.6.3
 sortedcontainers==2.2.2
 sqlparse==0.4.1
 timezonefinder==4.4.1
+tqdm==4.51.0
 traitlets==5.0.5
 wcwidth==0.2.5

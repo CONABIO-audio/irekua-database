@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
+from irekua_database.admin.base import IrekuaAdmin
 from irekua_items.models import ItemType
 
 
@@ -16,7 +17,7 @@ class MimeTypesInline(admin.TabularInline):
     verbose_name_plural = _('Mime types')
 
 
-class ItemTypeAdmin(admin.ModelAdmin):
+class ItemTypeAdmin(IrekuaAdmin):
     search_fields = [
         'name'
     ]

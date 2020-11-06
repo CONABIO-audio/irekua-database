@@ -13,12 +13,12 @@ def visualizer_path(instance, filename):
 
 
 def check_name_change(apps, schema_editor):
-    sql = "SELECT * FROM django_content_type WHERE app_label='irekua_visualizers'"
+    sql = "SELECT * FROM django_content_type WHERE app_label='selia_visualizers'"
 
     with schema_editor.connection.cursor() as cursor:
         cursor.execute(sql, ())
 
-        if not cursor.fetchone():
+        if cursor.fetchone():
             msg = 'Please run the script `change_app_names` before continuing migrations'
             raise ValueError(msg)
 

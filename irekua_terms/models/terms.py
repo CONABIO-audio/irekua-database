@@ -89,3 +89,9 @@ class Term(IrekuaModelBase):
 
     def entails(self, term):
         return self.entailment_source.filter(target=term).exists()
+
+    def entailments(self):
+        return Term.objects.filter(entailment_target__source=self)
+
+    def synonyms(self):
+        return Term.objects.filter(synonym_target__source=self)

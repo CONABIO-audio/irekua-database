@@ -1,5 +1,6 @@
 import os
 import inspect
+import traceback
 import importlib.util
 
 from django.db import models
@@ -54,9 +55,10 @@ class Operation(IrekuaModelBase):
     def validate_content(compiled_code):
         try:
             # pylint: disable=exec-used
-            exec(compiled_code)
+            exec(compiled_code, locals(), locals())
 
         except Exception as error:
+            traceback.print_exc()
             raise ValidationError(error) from error
 
         local_variables = locals()
@@ -96,13 +98,16 @@ class Operation(IrekuaModelBase):
 
         return module.Operation
 
-    def get_operation_instance_kwargs(self):
+    def get_operation_kwargs(self):
         return {}
 
     def get_operation(self):
         operation_class = self.get_operation_class()
-        kwargs = self.get_operation_instance_kwargs()
-        return operation_class(**kwargs)
+        return operation_class(**self.get_operation_kwargs())
+
+    def dispatch(self, request):
+        operation = self.get_operation()
+        return operation.dispatch(request)
 
     def run(self, *args, **kwargs):
         operation = self.get_operation()

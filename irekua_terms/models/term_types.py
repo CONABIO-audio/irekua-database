@@ -254,3 +254,6 @@ class TermType(IrekuaModelBase):
             'of type %(type)s')
         params = dict(value=value, type=str(self))
         raise ValidationError(msg % params)
+
+    def entailments(self):
+        return TermType.objects.filter(entailment_target_type__source_type=self)

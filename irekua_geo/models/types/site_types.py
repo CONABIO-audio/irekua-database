@@ -23,6 +23,15 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
         blank=False,
     )
 
+    icon = models.ImageField(
+        db_column="icon",
+        verbose_name=_("icon"),
+        help_text=_("Icon for site type"),
+        upload_to="images/site_types/",
+        blank=True,
+        null=True,
+    )
+
     site_descriptor_types = models.ManyToManyField("SiteDescriptorType", blank=True)
 
     point_site = models.BooleanField(

@@ -14,63 +14,69 @@ class CollectionSite(IrekuaModelBaseUser):
     site_type = models.ForeignKey(
         SiteType,
         on_delete=models.PROTECT,
-        db_column='site_type',
-        verbose_name=_('site type'),
-        help_text=_('Type of site'),
+        db_column="site_type",
+        verbose_name=_("site type"),
+        help_text=_("Type of site"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     site = models.ForeignKey(
         Site,
         on_delete=models.PROTECT,
-        db_column='site_id',
-        verbose_name=_('site'),
-        help_text=_('Reference to Site'),
+        db_column="site_id",
+        verbose_name=_("site"),
+        help_text=_("Reference to Site"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     collection = models.ForeignKey(
-        'Collection',
+        "Collection",
         on_delete=models.CASCADE,
-        db_column='collection_id',
-        verbose_name=_('collection'),
-        help_text=_('Collection to which the site belongs'),
+        db_column="collection_id",
+        verbose_name=_("collection"),
+        help_text=_("Collection to which the site belongs"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     metadata = models.JSONField(
-        db_column='metadata',
-        verbose_name=_('metadata'),
-        help_text=_('Metadata associated to site'),
+        db_column="metadata",
+        verbose_name=_("metadata"),
+        help_text=_("Metadata associated to site"),
         blank=True,
-        null=True)
+        null=True,
+    )
 
     collection_metadata = models.JSONField(
-        db_column='collection_metadata',
-        verbose_name=_('collection metadata'),
-        help_text=_('Additional metadata associated to site in collection'),
+        db_column="collection_metadata",
+        verbose_name=_("collection metadata"),
+        help_text=_("Additional metadata associated to site in collection"),
         blank=True,
-        null=True)
+        null=True,
+    )
 
     collection_name = models.CharField(
         max_length=64,
-        db_column='collection_name',
-        verbose_name=_('collection name'),
-        help_text=_('Name of site within the collection (visible to all collection users)'),
-        blank=True)
+        db_column="collection_name",
+        verbose_name=_("collection name"),
+        help_text=_(
+            "Name of site within the collection (visible to all collection users)"
+        ),
+        blank=True,
+    )
 
-    site_descriptors = models.ManyToManyField(
-        SiteDescriptor,
-        blank=True)
+    site_descriptors = models.ManyToManyField(SiteDescriptor, blank=True)
 
     class Meta:
-        verbose_name = _('Collection Site')
+        verbose_name = _("Collection Site")
 
-        verbose_name_plural = _('Collection Sites')
+        verbose_name_plural = _("Collection Sites")
 
         unique_together = (
-            ('collection', 'site'),
-            ('collection', 'collection_name'),
+            ("collection", "site"),
+            ("collection", "collection_name"),
         )
 
     def __str__(self):
@@ -80,7 +86,7 @@ class CollectionSite(IrekuaModelBaseUser):
         if self.site.name:
             return self.site.name
 
-        msg = _('Site %(id)s')
+        msg = _("Site %(id)s")
         params = dict(id=str(self.id))
         return msg % params
 
@@ -89,6 +95,9 @@ class CollectionSite(IrekuaModelBaseUser):
 
         # Check that metadata is valid for site type
         self.clean_valid_metadata()
+
+        # Check that geometry type of site is compatible with the site type
+        self.clean_compatible_geometry_and_site_type()
 
         # pylint: disable=no-member
         collection_type = self.collection.collection_type
@@ -109,26 +118,33 @@ class CollectionSite(IrekuaModelBaseUser):
             self.site_type.validate_metadata(self.metadata)
 
         except ValidationError as error:
-            raise ValidationError({'metadata': str(error)}) from error
+            raise ValidationError({"metadata": str(error)}) from error
 
     def clean_allowed_site_type(self, collection_type):
         try:
-             return collection_type.get_site_type(self.site_type)
+            return collection_type.get_site_type(self.site_type)
+
         except ObjectDoesNotExist as error:
             msg = _(
-                'Sites of type %(site_type)s are not allowed in '
-                'collections of type %(collection_type)s')
-            params = dict(
-                site_type=self.site_type,
-                collection_type=collection_type)
-            raise ValidationError({'site_type': msg % params}) from error
+                "Sites of type %(site_type)s are not allowed in "
+                "collections of type %(collection_type)s"
+            )
+            params = dict(site_type=self.site_type, collection_type=collection_type)
+            raise ValidationError({"site_type": msg % params}) from error
 
     def clean_valid_collection_metadata(self, site_type_config):
         try:
             site_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({'collection_metadata': str(error)}) from error
+            raise ValidationError({"collection_metadata": str(error)}) from error
+
+    def clean_compatible_geometry_and_site_type(self):
+        try:
+            self.site_type.validate_site_geometry_type(self.site)
+
+        except ValidationError as error:
+            raise ValidationError({"site": str(error)}) from error
 
     def validate_descriptor(self, descriptor):
         if self.id is None:
@@ -140,10 +156,13 @@ class CollectionSite(IrekuaModelBaseUser):
     @property
     def items(self):
         from irekua_collections.models import SamplingEventItemItem
+
         return SamplingEventItemItem.objects.filter(
-            sampling_event__collection_site=self)
+            sampling_event__collection_site=self
+        )
 
     @cached_property
     def deployments(self):
         from irekua_collections.models import Deployment
+
         return Deployment.objects.filter(sampling_event__collection_site=self)

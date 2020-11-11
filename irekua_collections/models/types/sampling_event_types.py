@@ -12,79 +12,112 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
     name = models.CharField(
         max_length=128,
         unique=True,
-        db_column='name',
-        verbose_name=_('name'),
-        help_text=_('Name fo sampling event type'),
-        blank=False)
+        db_column="name",
+        verbose_name=_("name"),
+        help_text=_("Name fo sampling event type"),
+        blank=False,
+    )
 
     description = models.TextField(
-        db_column='description',
-        verbose_name=_('description'),
-        help_text=_('Description of sampling event type'),
-        blank=True)
+        db_column="description",
+        verbose_name=_("description"),
+        help_text=_("Description of sampling event type"),
+        blank=True,
+    )
 
     icon = models.ImageField(
-        db_column='icon',
-        verbose_name=_('icon'),
-        help_text=_('Icon for sampling event type'),
-        upload_to='images/sampling_event_types/',
+        db_column="icon",
+        verbose_name=_("icon"),
+        help_text=_("Icon for sampling event type"),
+        upload_to="images/sampling_event_types/",
         blank=True,
-        null=True)
+        null=True,
+    )
 
     restrict_deployment_types = models.BooleanField(
-        db_column='restrict_deployment_types',
-        verbose_name=_('restrict deployment types'),
+        db_column="restrict_deployment_types",
+        verbose_name=_("restrict deployment types"),
         help_text=_(
-            'Flag indicating whether to restrict deployment types '
-            'associated with this sampling event type'),
+            "Flag indicating whether to restrict deployment types "
+            "associated with this sampling event type"
+        ),
         default=False,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     restrict_site_types = models.BooleanField(
-        db_column='restrict_site_types',
-        verbose_name=_('restrict site types'),
+        db_column="restrict_site_types",
+        verbose_name=_("restrict site types"),
         help_text=_(
-            'Flag indicating whether to restrict site '
-            'types associated with this sampling event type'),
+            "Flag indicating whether to restrict site "
+            "types associated with this sampling event type"
+        ),
         default=False,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     restrict_item_types = models.BooleanField(
-        db_column='restrict_item_types',
-        verbose_name=_('restrict item types'),
+        db_column="restrict_item_types",
+        verbose_name=_("restrict item types"),
         help_text=_(
-            'Flag indicating whether to restrict item '
-            'types apt for this sampling event type'),
+            "Flag indicating whether to restrict item "
+            "types apt for this sampling event type"
+        ),
         default=False,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     deployment_types = models.ManyToManyField(
-        'DeploymentType',
-        verbose_name=_('deployment types'),
-        help_text=_('Valid deployment types for this sampling event type'),
-        blank=True)
+        "DeploymentType",
+        verbose_name=_("deployment types"),
+        help_text=_("Valid deployment types for this sampling event type"),
+        blank=True,
+    )
 
     site_types = models.ManyToManyField(
         SiteType,
-        verbose_name=_('site types'),
-        help_text=_('Valid site types for this sampling event type'),
-        blank=True)
+        verbose_name=_("site types"),
+        help_text=_("Valid site types for this sampling event type"),
+        blank=True,
+    )
 
     item_types = models.ManyToManyField(
         ItemType,
-        verbose_name=_('item types'),
-        help_text=_('Valid item types for this sampling event type'),
-        blank=True)
+        verbose_name=_("item types"),
+        help_text=_("Valid item types for this sampling event type"),
+        blank=True,
+    )
+
+    restrict_deployment_positions = models.BooleanField(
+        db_column="restrict_deployment_positions",
+        verbose_name=_("restrict deployment positions"),
+        help_text=_(
+            "Determines whether deployment positions are checked. When true "
+            "all deployments must occurr within some distance to the site."
+        ),
+        blank=False,
+        null=False,
+        default=False,
+    )
+
+    deployment_distance = models.FloatField(
+        db_column="deployment_distance",
+        verbose_name=_("deployment distance"),
+        help_text=_("Maximum distance to site at which a device can be deployed"),
+        blank=True,
+        null=False,
+        default=0,
+    )
 
     class Meta:
-        verbose_name = _('Sampling Event Type')
+        verbose_name = _("Sampling Event Type")
 
-        verbose_name_plural = _('Sampling Event Types')
-        
-        ordering = ['name']
+        verbose_name_plural = _("Sampling Event Types")
+
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -97,8 +130,9 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
             return
 
         msg = _(
-            'Deployment type %(deployment_type)s is not admitted '
-            'for sampling events of type %(sampling_event_type)s.')
+            "Deployment type %(deployment_type)s is not admitted "
+            "for sampling events of type %(sampling_event_type)s."
+        )
         params = dict(
             deployment_type=deployment_type,
             sampling_event_type=self,
@@ -111,11 +145,10 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
 
         if not self.site_types.filter(pk=site_type.pk).exists():
             msg = _(
-                'Site type %(site_type)s is not admitted for '
-                'sampling events of type %(sampling_event_type)s')
-            params = dict(
-                site_type=site_type,
-                type=self)
+                "Site type %(site_type)s is not admitted for "
+                "sampling events of type %(sampling_event_type)s"
+            )
+            params = dict(site_type=site_type, type=self)
             raise ValidationError(msg % params)
 
     def validate_item_type(self, item_type):
@@ -124,9 +157,8 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
 
         if not self.item_types.filter(pk=item_type.pk).exists():
             msg = _(
-                'Item type %(item_type)s is not admitted for '
-                'sampling events of type %(sampling_event_type)s')
-            params = dict(
-                item_types=item_type,
-                type=self)
+                "Item type %(item_type)s is not admitted for "
+                "sampling events of type %(sampling_event_type)s"
+            )
+            params = dict(item_types=item_type, type=self)
             raise ValidationError(msg % params)

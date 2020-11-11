@@ -10,13 +10,11 @@ class SiteTypeInline(admin.TabularInline):
 
     model = SamplingEventType.site_types.through
 
-    autocomplete_fields = (
-        'sitetype',
-    )
+    autocomplete_fields = ("sitetype",)
 
-    verbose_name = _('Site type')
+    verbose_name = _("Site type")
 
-    verbose_name_plural = _('Site types')
+    verbose_name_plural = _("Site types")
 
 
 class DeploymentTypeInline(admin.TabularInline):
@@ -24,13 +22,11 @@ class DeploymentTypeInline(admin.TabularInline):
 
     model = SamplingEventType.deployment_types.through
 
-    autocomplete_fields = (
-        'deploymenttype',
-    )
+    autocomplete_fields = ("deploymenttype",)
 
-    verbose_name = _('Deployment type')
+    verbose_name = _("Deployment type")
 
-    verbose_name_plural = _('Deployment types')
+    verbose_name_plural = _("Deployment types")
 
 
 class ItemTypeInline(admin.TabularInline):
@@ -38,63 +34,59 @@ class ItemTypeInline(admin.TabularInline):
 
     model = SamplingEventType.item_types.through
 
-    autocomplete_fields = (
-        'itemtype',
-    )
+    autocomplete_fields = ("itemtype",)
 
-    verbose_name = _('Item type')
+    verbose_name = _("Item type")
 
-    verbose_name_plural = _('Item types')
+    verbose_name_plural = _("Item types")
 
 
 class SamplingEventTypeAdmin(IrekuaAdmin):
-    search_fields = (
-        'name',
-    )
+    search_fields = ("name",)
 
     list_display = (
-        'id',
-        'name',
-        'restrict_site_types',
-        'restrict_deployment_types',
-        'created_on',
+        "id",
+        "name",
+        "restrict_site_types",
+        "restrict_deployment_types",
+        "created_on",
     )
 
     list_display_links = (
-        'id',
-        'name',
+        "id",
+        "name",
     )
 
-    list_filter = (
-        'restrict_site_types',
-        'restrict_deployment_types'
-    )
+    list_filter = ("restrict_site_types", "restrict_deployment_types")
 
     autocomplete_fields = [
-        'metadata_schema',
+        "metadata_schema",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'icon'),
-                'description',
-            ),
-        }),
-        ('Schemas', {
-            'fields': (
-                ('metadata_schema'),
-            )
-        }),
-        ('Restrictions', {
-            'fields': (
-                (
-                    'restrict_site_types',
-                    'restrict_deployment_types',
-                    'restrict_item_types',
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "icon"),
+                    "description",
                 ),
-            ),
-        }),
+            },
+        ),
+        ("Schemas", {"fields": (("metadata_schema"),)}),
+        (
+            "Restrictions",
+            {
+                "fields": (
+                    (
+                        "restrict_site_types",
+                        "restrict_deployment_types",
+                        "restrict_item_types",
+                    ),
+                    ("restrict_deployment_positions", "deployment_distance"),
+                ),
+            },
+        ),
     )
 
     inlines = [

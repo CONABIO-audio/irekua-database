@@ -6,47 +6,51 @@ from irekua_geo.models import SiteType
 
 class SiteDescriptorTypeInline(admin.TabularInline):
     extra = 0
+
     model = SiteType.site_descriptor_types.through
-    autocomplete_fields = ('sitedescriptortype',)
-    verbose_name = _('Site descriptor type')
-    verbose_name_plural = _('Site descriptor types')
-    classes = ('collapse', )
+
+    autocomplete_fields = ("sitedescriptortype",)
+
+    verbose_name = _("Site descriptor type")
+
+    verbose_name_plural = _("Site descriptor types")
 
 
 class SiteTypeAdmin(admin.ModelAdmin):
     search_fields = [
-        'name',
+        "name",
     ]
 
     list_display = [
-        'id',
-        'name',
-        'created_on',
+        "id",
+        "name",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
-        'name',
+        "id",
+        "name",
     ]
 
-    autocomplete_fields = [
-        'metadata_schema'
-    ]
+    autocomplete_fields = ["metadata_schema"]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                'name',
-                'description'
-            ),
-        }),
-        ('Schemas', {
-            'fields': (
-                ('metadata_schema'),
-            )
-        }),
+        (
+            None,
+            {
+                "fields": ("name", "description"),
+            },
+        ),
+        (_("Schemas"), {"fields": (("metadata_schema"),)}),
+        (
+            _("Geometry Types"),
+            {
+                "fields": (
+                    ("point_site", "linestring_site", "polygon_site"),
+                    ("multipoint_site", "multilinestring_site", "multipolygon_site"),
+                )
+            },
+        ),
     )
 
-    inlines = [
-        SiteDescriptorTypeInline
-    ]
+    inlines = [SiteDescriptorTypeInline]

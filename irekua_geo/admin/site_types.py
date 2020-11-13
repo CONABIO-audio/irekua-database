@@ -24,7 +24,22 @@ class SiteTypeAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "name",
+        "point_site",
+        "linestring_site",
+        "multilinestring_site",
+        "multipoint_site",
+        "multipolygon_site",
+        "polygon_site",
         "created_on",
+    ]
+
+    list_filter = [
+        "point_site",
+        "linestring_site",
+        "multilinestring_site",
+        "multipoint_site",
+        "multipolygon_site",
+        "polygon_site",
     ]
 
     list_display_links = [
@@ -38,7 +53,7 @@ class SiteTypeAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ("name", "description"),
+                "fields": (("name", "icon"), "description"),
             },
         ),
         (_("Schemas"), {"fields": (("metadata_schema"),)}),

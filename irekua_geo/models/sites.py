@@ -69,14 +69,16 @@ class Site(IrekuaModelBaseUser):
 
         ordering = ["-created_on"]
 
+        unique_together = [
+            ["name", "created_by"],
+        ]
+
     def __str__(self):
         if self.name is not None:
             return self.name
 
         msg = _("%(geometry_type)s %(id)s")
         params = dict(geometry_type=str(self.geometry_type), id=str(self.id))
-
-        print(msg, params)
 
         return msg % params
 

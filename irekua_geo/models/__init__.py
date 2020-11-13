@@ -12,6 +12,25 @@ from .types import SiteDescriptorType
 from .types import SiteType
 
 
+def get_site_class(geom_type):
+    if geom_type == Site.MULTILINESTRING:
+        return MultiLineStringSite
+
+    if geom_type == Site.MULTIPOINT:
+        return MultiPointSite
+
+    if geom_type == Site.MULTIPOLYGON:
+        return MultiPolygonSite
+
+    if geom_type == Site.POINT:
+        return PointSite
+
+    if geom_type == Site.POLYGON:
+        return PolygonSite
+
+    raise NotImplementedError(f"No site with geometry type {geom_type}")
+
+
 __all__ = [
     "LineStringSite",
     "Locality",
@@ -25,4 +44,5 @@ __all__ = [
     "LocalityType",
     "SiteDescriptorType",
     "SiteType",
+    "get_site_class",
 ]

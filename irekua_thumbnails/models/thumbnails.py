@@ -10,10 +10,8 @@ from irekua_items.models import Item
 
 
 def get_thumbnail_path(instance, filename):
-    path_fmt = os.path.join(
-        'thumbnails',
-        '{hash}{ext}')
-    extension = 'jpg'
+    path_fmt = os.path.join("thumbnails", "{hash}{ext}")
+    extension = "jpg"
     hash_string = instance.hash
     return path_fmt.format(hash=hash_string, ext=extension)
 
@@ -23,21 +21,23 @@ class ItemThumbnail(IrekuaModelBase):
         Item,
         models.CASCADE,
         primary_key=True,
-        db_column='item_id',
-        verbose_name=_('item'),
-        help_text=_('Item whose thumbnail is this.'))
+        db_column="item_id",
+        verbose_name=_("item"),
+        help_text=_("Item whose thumbnail is this."),
+    )
 
     thumbnail = ImageField(
         upload_to=get_thumbnail_path,
-        db_column='thumbnail',
-        verbose_name=_('thumbnail'),
-        help_text=_('Thumbnail associated to item'),
+        db_column="thumbnail",
+        verbose_name=_("thumbnail"),
+        help_text=_("Thumbnail associated to item"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     class Meta:
-        verbose_name = _('Item Thumbnail')
+        verbose_name = _("Item Thumbnail")
 
-        verbose_name_plural = _('Items Thumbnails')
+        verbose_name_plural = _("Items Thumbnails")
 
-        ordering = ['created_on']
+        ordering = ["created_on"]

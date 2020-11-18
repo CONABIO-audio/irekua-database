@@ -8,46 +8,47 @@ from irekua_database.base import IrekuaModelBaseUser
 
 class AnnotationVote(IrekuaModelBaseUser):
     annotation = models.ForeignKey(
-        'Annotation',
+        "Annotation",
         on_delete=models.CASCADE,
-        db_column='annotation_id',
-        verbose_name=_('annotation'),
-        help_text=_('Reference to annotation being voted'),
+        db_column="annotation_id",
+        verbose_name=_("annotation"),
+        help_text=_("Reference to annotation being voted"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     incorrect_geometry = models.BooleanField(
-        db_column='incorrect_geometry',
-        verbose_name=_('incorrect geometry'),
-        help_text=_('Is the annotation geometry incorrect?'),
+        db_column="incorrect_geometry",
+        verbose_name=_("incorrect geometry"),
+        help_text=_("Is the annotation geometry incorrect?"),
         blank=True,
         default=False,
-        null=False)
+        null=False,
+    )
 
     labels = models.ManyToManyField(
         Term,
-        db_column='labels',
-        verbose_name=_('labels'),
-        help_text=_('Labels associated with annotation'),
-        blank=True)
+        db_column="labels",
+        verbose_name=_("labels"),
+        help_text=_("Labels associated with annotation"),
+        blank=True,
+    )
 
     class Meta:
-        verbose_name = _('Annotation Vote')
+        verbose_name = _("Annotation Vote")
 
-        verbose_name_plural = _('Annotation Votes')
+        verbose_name_plural = _("Annotation Votes")
 
         unique_together = [
-            ['annotation', 'created_by'],
+            ["annotation", "created_by"],
         ]
 
-        ordering = ['-created_on']
+        ordering = ["-created_on"]
 
     def __str__(self):
-        msg = _('Vote %(id)s on annotation %(annotation)s')
+        msg = _("Vote %(id)s on annotation %(annotation)s")
         # pylint: disable=no-member
-        params = dict(
-            id=self.id,
-            annotation=self.annotation.id)
+        params = dict(id=self.id, annotation=self.annotation.id)
         return msg % params
 
     def clean(self):
@@ -65,7 +66,7 @@ class AnnotationVote(IrekuaModelBaseUser):
             self.validate_labels(self.labels.all())
 
         except ValidationError as error:
-            raise ValidationError({'labels': error}) from error
+            raise ValidationError({"labels": error}) from error
 
     def validate_labels(self, labels):
         for term in labels:
@@ -77,7 +78,8 @@ class AnnotationVote(IrekuaModelBaseUser):
 
             except ValidationError as error:
                 msg = _(
-                        'Labels contain a term (of type %(type)s) that is not '
-                        'valid for the event type')
+                    "Labels contain a term (of type %(type)s) that is not "
+                    "valid for the event type"
+                )
                 params = dict(type=term_type)
                 raise ValidationError(msg, params=params) from error

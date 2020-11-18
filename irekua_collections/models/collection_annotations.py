@@ -8,27 +8,29 @@ from irekua_annotations.models import UserAnnotation
 
 class CollectionAnnotation(UserAnnotation):
     collection = models.ForeignKey(
-        'Collection',
-        db_column='collection_id',
-        verbose_name=_('collection'),
-        help_text=_('Collection to which this annotation belongs'),
+        "Collection",
+        db_column="collection_id",
+        verbose_name=_("collection"),
+        help_text=_("Collection to which this annotation belongs"),
         on_delete=models.PROTECT,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     collection_metadata = models.JSONField(
-        db_column='collection_metadata',
-        verbose_name=_('collection metadata'),
-        help_text=_('Additional metadata associated to annotation in collection'),
+        db_column="collection_metadata",
+        verbose_name=_("collection metadata"),
+        help_text=_("Additional metadata associated to annotation in collection"),
         blank=True,
-        null=True)
+        null=True,
+    )
 
     class Meta:
-        verbose_name = _('Collection Annotation')
+        verbose_name = _("Collection Annotation")
 
-        verbose_name_plural = _('Collection Annotations')
+        verbose_name_plural = _("Collection Annotations")
 
-        ordering = ['-created_on']
+        ordering = ["-created_on"]
 
     def clean(self):
         super().clean()
@@ -53,16 +55,17 @@ class CollectionAnnotation(UserAnnotation):
 
         except ObjectDoesNotExist as error:
             msg = _(
-                'Annotations of type %(annotation_type)s are not allowed in '
-                'collections of type %(collection_type)s')
+                "Annotations of type %(annotation_type)s are not allowed in "
+                "collections of type %(collection_type)s"
+            )
             params = dict(
-                annotation_type=self.annotation_type,
-                collection_type=collection_type)
-            raise ValidationError({'annotation_type': msg % params}) from error
+                annotation_type=self.annotation_type, collection_type=collection_type
+            )
+            raise ValidationError({"annotation_type": msg % params}) from error
 
     def clean_valid_collection_metadata(self, annotation_type_config):
         try:
             annotation_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({'collection_metadata': str(error)}) from error
+            raise ValidationError({"collection_metadata": str(error)}) from error

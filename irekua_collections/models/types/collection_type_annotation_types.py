@@ -1,6 +1,6 @@
 from django.db import models
-
 from django.utils.translation import gettext_lazy as _
+
 from irekua_database.base import IrekuaModelBase
 from irekua_annotations.models import AnnotationType
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
@@ -8,35 +8,35 @@ from irekua_collections.mixins import CollectionMetadataSchemaMixin
 
 class CollectionTypeAnnotationType(IrekuaModelBase, CollectionMetadataSchemaMixin):
     collection_type = models.ForeignKey(
-        'CollectionType',
+        "CollectionType",
         on_delete=models.CASCADE,
-        db_column='collection_type_id',
-        verbose_name=_('collection type'),
-        help_text=_('Collection type in which this annotation type is permitted'),
+        db_column="collection_type_id",
+        verbose_name=_("collection type"),
+        help_text=_("Collection type in which this annotation type is permitted"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     annotation_type = models.ForeignKey(
         AnnotationType,
         on_delete=models.PROTECT,
-        db_column='annotation_type_id',
-        verbose_name=_('annotation type'),
-        help_text=_('Annotation type to be admissible in collections of this type'),
+        db_column="annotation_type_id",
+        verbose_name=_("annotation type"),
+        help_text=_("Annotation type to be admissible in collections of this type"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     class Meta:
-        verbose_name = _('Collection Type Annotation Type')
+        verbose_name = _("Collection Type Annotation Type")
 
-        verbose_name_plural = _('Collection Type Annotation Types')
+        verbose_name_plural = _("Collection Type Annotation Types")
 
-        unique_together = (
-            ('collection_type', 'annotation_type'),
-        )
+        unique_together = (("collection_type", "annotation_type"),)
 
     def __str__(self):
-        msg = _('Collection %(collection)s: Annotation Type %(annotation)s')
+        msg = _("Collection %(collection)s: Annotation Type %(annotation)s")
         params = dict(
-            annotation=str(self.annotation_type),
-            collection=str(self.collection_type))
+            annotation=str(self.annotation_type), collection=str(self.collection_type)
+        )
         return msg % params

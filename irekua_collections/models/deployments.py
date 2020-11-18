@@ -1,7 +1,6 @@
 import datetime
 
 from pytz import timezone as pytz_timezone
-
 from django.db import models
 from django.contrib.gis.geos import Point
 from django.core.exceptions import ValidationError

@@ -11,52 +11,58 @@ class CollectionDevice(IrekuaModelBaseUser):
     physical_device = models.ForeignKey(
         PhysicalDevice,
         on_delete=models.PROTECT,
-        db_column='physical_device_id',
-        verbose_name=_('physical device'),
-        help_text=_('Reference to physical device'),
+        db_column="physical_device_id",
+        verbose_name=_("physical device"),
+        help_text=_("Reference to physical device"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     collection = models.ForeignKey(
-        'Collection',
+        "Collection",
         on_delete=models.CASCADE,
-        db_column='collection_id',
-        verbose_name=_('collection'),
-        help_text=_('Collection to which the device belongs'),
+        db_column="collection_id",
+        verbose_name=_("collection"),
+        help_text=_("Collection to which the device belongs"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     collection_name = models.CharField(
         max_length=64,
-        db_column='collection_name',
-        verbose_name=_('Name within collection'),
-        help_text=_('Nmae of device within the collection (visible to all collection users)'),
-        blank=True)
+        db_column="collection_name",
+        verbose_name=_("Name within collection"),
+        help_text=_(
+            "Nmae of device within the collection (visible to all collection users)"
+        ),
+        blank=True,
+    )
 
     collection_metadata = models.JSONField(
         blank=True,
-        db_column='collection_metadata',
-        verbose_name=_('collection metadata'),
-        help_text=_('Metadata associated with device within collection'),
-        null=True)
+        db_column="collection_metadata",
+        verbose_name=_("collection metadata"),
+        help_text=_("Metadata associated with device within collection"),
+        null=True,
+    )
 
     class Meta:
-        verbose_name = _('Collection Device')
+        verbose_name = _("Collection Device")
 
-        verbose_name_plural = _('Collection Devices')
+        verbose_name_plural = _("Collection Devices")
 
-        ordering = ['-modified_on']
+        ordering = ["-modified_on"]
 
         unique_together = (
-            ('physical_device', 'collection'),
-            ('collection', 'collection_name')
+            ("physical_device", "collection"),
+            ("collection", "collection_name"),
         )
 
     def __str__(self):
         if self.collection_name:
             return self.collection_name
 
-        return _('Collection device {}').format(self.id)
+        return _("Collection device {}").format(self.id)
 
     def clean(self):
         super().clean()
@@ -84,21 +90,21 @@ class CollectionDevice(IrekuaModelBaseUser):
 
         except ObjectDoesNotExist as error:
             msg = _(
-                'Devices of type %(device_type)s are not allowed in '
-                'collections of type %(collection_type)s')
-            params = dict(
-                device_type=device_type,
-                collection_type=collection_type)
-            raise ValidationError({'physical_device': msg % params}) from error
+                "Devices of type %(device_type)s are not allowed in "
+                "collections of type %(collection_type)s"
+            )
+            params = dict(device_type=device_type, collection_type=collection_type)
+            raise ValidationError({"physical_device": msg % params}) from error
 
     def clean_valid_collection_metadata(self, device_type_config):
         try:
             device_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({'collection_metadata': str(error)}) from error
+            raise ValidationError({"collection_metadata": str(error)}) from error
 
     @property
     def items(self):
         from irekua_collections.models import DeploymentItem
+
         return DeploymentItem.objects.filter(deployment__collection_device=self)

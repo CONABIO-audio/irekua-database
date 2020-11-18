@@ -22,6 +22,9 @@ def get_site_class(geom_type):
     if geom_type == Site.MULTIPOLYGON:
         return MultiPolygonSite
 
+    if geom_type == Site.LINESTRING:
+        return LineStringSite
+
     if geom_type == Site.POINT:
         return PointSite
 

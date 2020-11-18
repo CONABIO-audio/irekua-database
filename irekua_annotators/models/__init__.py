@@ -5,8 +5,8 @@ from .annotation_annotator import AnnotationAnnotator
 
 
 __all__ = [
-    'Annotator',
-    'AnnotatorVersion',
-    'AnnotatorModule',
-    'AnnotationAnnotator',
+    "Annotator",
+    "AnnotatorVersion",
+    "AnnotatorModule",
+    "AnnotationAnnotator",
 ]

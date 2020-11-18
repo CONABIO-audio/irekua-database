@@ -41,3 +41,20 @@ class IrekuaUserFilter(IrekuaFilter):
         queryset=get_user_model().objects.all(),
         widget=get_autocomplete_widget(model=get_user_model()),
     )
+
+    owns = filters.BooleanFilter(
+        label=_("mine"),
+        help_text=_("Filter elements created by user"),
+        method="filter_owns",
+    )
+
+    # pylint: disable=no-self-use
+    def filter_owns(self, queryset, name, value):
+        if value is None:
+            return queryset
+
+        request = getattr(self, "request", None)
+        if request is None:
+            return queryset
+
+        return queryset.filter(created_by=request.user)

@@ -13,26 +13,29 @@ class CollectionLicence(Licence):
     upload items to a collection. This licence can be reused
     as many times necesary within its collection.
     """
+
     collection = models.ForeignKey(
-        'Collection',
+        "Collection",
         on_delete=models.CASCADE,
-        db_column='collection_id',
-        verbose_name=_('collection'),
-        help_text=_('Collection to which this licence belongs'),
+        db_column="collection_id",
+        verbose_name=_("collection"),
+        help_text=_("Collection to which this licence belongs"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     collection_metadata = models.JSONField(
         blank=True,
-        db_column='collection_metadata',
-        verbose_name=_('collection metadata'),
-        help_text=_('Metadata associated with licence within collection'),
-        null=True)
+        db_column="collection_metadata",
+        verbose_name=_("collection metadata"),
+        help_text=_("Metadata associated with licence within collection"),
+        null=True,
+    )
 
     class Meta:
-        verbose_name = _('Collection Licence')
-        verbose_name_plural = _('Collection Licences')
-        ordering = ['-created_on']
+        verbose_name = _("Collection Licence")
+        verbose_name_plural = _("Collection Licences")
+        ordering = ["-created_on"]
 
     def clean(self):
         super().clean()
@@ -57,16 +60,17 @@ class CollectionLicence(Licence):
 
         except ObjectDoesNotExist as error:
             msg = _(
-                'Licences of type %(licence_type)s are not allowed in '
-                'collections of type %(collection_type)s')
+                "Licences of type %(licence_type)s are not allowed in "
+                "collections of type %(collection_type)s"
+            )
             params = dict(
-                licence_type=self.licence_type,
-                collection_type=collection_type)
-            raise ValidationError({'licence_type': msg % params}) from error
+                licence_type=self.licence_type, collection_type=collection_type
+            )
+            raise ValidationError({"licence_type": msg % params}) from error
 
     def clean_valid_collection_metadata(self, licence_type_config):
         try:
             licence_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({'collection_metadata': str(error)}) from error
+            raise ValidationError({"collection_metadata": str(error)}) from error

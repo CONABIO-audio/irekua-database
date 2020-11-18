@@ -86,7 +86,7 @@ class Site(IrekuaModelBaseUser):
         super().clean()
 
         # Check that the site falls within the declared locality
-        self.validate_locality()
+        self.clean_locality()
 
     def geom(self):
         try:
@@ -97,7 +97,7 @@ class Site(IrekuaModelBaseUser):
             geom_site = getattr(self, modelname)
             return geom_site.geometry
 
-    def validate_locality(self):
+    def clean_locality(self):
         # Do not validate if locality is null
         if self.locality is None:
             return
@@ -106,8 +106,9 @@ class Site(IrekuaModelBaseUser):
         if self.locality.geometry.intersects(self.geom()):
             return
 
-        msg = _("The LineString not does not touch the locality's geometry")
-        raise ValidationError(msg)
+        msg = _("The %(geometry_type)s not does not touch the locality's geometry")
+        params = dict(geometry_type=self.geometry_type)
+        raise ValidationError({"locality": msg % params})
 
     @property
     def timezone(self):

@@ -62,6 +62,7 @@ def get_autocomplete_widget(
 
     if attrs is None:
         attrs = {
+            "data-width": "100%",
             "data-theme": "bootstrap",
         }
 

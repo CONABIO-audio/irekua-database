@@ -4,9 +4,9 @@ from django.db import migrations, models
 
 
 def remove_duplicates(apps, schema_editor):
-    Institution = apps.get_model('irekua_database', 'Institution')
+    Institution = apps.get_model("irekua_database", "Institution")
 
-    @lru_cache
+    @lru_cache()
     def get_institution_by_name(name):
         return Institution.objects.filter(institution_name=name).first()
 
@@ -32,21 +32,21 @@ def remove_duplicates(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0011_create_user_institutions'),
+        ("irekua_database", "0011_create_user_institutions"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='user',
-            name='institution',
+            model_name="user",
+            name="institution",
         ),
         migrations.AlterUniqueTogether(
-            name='institution',
+            name="institution",
             unique_together=set(),
         ),
         migrations.RemoveField(
-            model_name='institution',
-            name='subdependency',
+            model_name="institution",
+            name="subdependency",
         ),
         migrations.RunPython(
             remove_duplicates,

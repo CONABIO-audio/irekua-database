@@ -11,8 +11,8 @@ from irekua_items.models import Item
 
 def get_thumbnail_path(instance, filename):
     path_fmt = os.path.join("thumbnails", "{hash}{ext}")
-    extension = "jpg"
-    hash_string = instance.hash
+    extension = ".jpg"
+    hash_string = instance.item.hash
     return path_fmt.format(hash=hash_string, ext=extension)
 
 

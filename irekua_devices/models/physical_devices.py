@@ -34,10 +34,18 @@ class PhysicalDevice(IrekuaModelBaseUser):
         null=False,
     )
 
-    metadata = models.JSONField(
-        db_column="metadata",
-        verbose_name=_("metadata"),
+    device_metadata = models.JSONField(
+        db_column="device_metadata",
+        verbose_name=_("device metadata"),
         help_text=_("Metadata associated to device"),
+        null=True,
+        blank=True,
+    )
+
+    device_type_metadata = models.JSONField(
+        db_column="device_type_metadata",
+        verbose_name=_("device type metadata"),
+        help_text=_("Metadata associated to the device type"),
         null=True,
         blank=True,
     )
@@ -62,16 +70,30 @@ class PhysicalDevice(IrekuaModelBaseUser):
     def clean(self):
         super().clean()
 
-        #  Check metadata is valid for this device type
-        self.clean_metadata()
+        # Check metadata is valid for this device type
+        self.clean_device_type_metadata()
 
-    def clean_metadata(self):
+        # Check metadata is valid for this device
+        self.clean_device_metadata()
+
+    def clean_device_metadata(self):
         try:
             # pylint: disable=no-member
-            self.device.validate_metadata(self.metadata)
+            self.device.validate_metadata(self.device_metadata)
 
         except ValidationError as error:
-            raise ValidationError({"metadata": error}) from error
+            raise ValidationError({"device_metadata": error}) from error
+
+    def clean_device_type_metadata(self):
+        # pylint: disable=no-member
+        device_type = self.device.device_type
+
+        try:
+            # pylint: disable=no-member
+            device_type.validate_metadata(self.device_type_metadata)
+
+        except ValidationError as error:
+            raise ValidationError({"device_type_metadata": error}) from error
 
     @cached_property
     def items(self):

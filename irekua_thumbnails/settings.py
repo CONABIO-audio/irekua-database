@@ -8,6 +8,7 @@ IREKUA_THUMBNAILS_APPS = list(
     OrderedDict.fromkeys(
         [
             "irekua_thumbnails",
+            "sorl.thumbnail",
         ]
         + IREKUA_ITEMS_APPS
         + IREKUA_DATABASE_APPS

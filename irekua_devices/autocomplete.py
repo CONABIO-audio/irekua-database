@@ -45,4 +45,7 @@ class DeviceAutocomplete(autocomplete.Select2QuerySetView):
                 Q(model__istartswith=self.q) | Q(brand__name__istartswith=self.q)
             )
 
+        if "device_type" in self.request.GET:
+            qs = qs.filter(device_type=self.request.GET["device_type"])
+
         return qs

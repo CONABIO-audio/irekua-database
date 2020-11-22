@@ -57,6 +57,7 @@ def get_autocomplete_widget(
     This form will allow the user to dynamically search and select an
     option from a model table or a custom autocomplete view.
     """
+
     if view_name is None:
         view_name = model_store.get(model, get_viewname_from_model(model))
 

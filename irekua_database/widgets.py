@@ -32,9 +32,16 @@ class CustomURLMixin:
 
         return f"{url}?{urlencode(self.query)}"
 
+    def _set_url(self, url):
+        self._url = url
+
+    url = property(_get_url, _set_url)
+
 
 class SelectMultiple(CustomURLMixin, autocomplete.ModelSelect2Multiple):
-    pass
+    def _get_url(self):
+        print("GETTING URL")
+        return super()._get_url()
 
 
 class Select(CustomURLMixin, autocomplete.ModelSelect2):

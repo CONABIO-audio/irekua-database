@@ -6,18 +6,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_geo', '0003_include_site_type_models'),
+        ("irekua_geo", "0003_include_site_type_models"),
+        ("irekua_types", "0009_relocate_site_type_models"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='locality',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated to locality', null=True, verbose_name='metadata'),
+            model_name="locality",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Metadata associated to locality",
+                null=True,
+                verbose_name="metadata",
+            ),
         ),
         migrations.AlterField(
-            model_name='sitedescriptor',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated to term', null=True, verbose_name='metadata'),
+            model_name="sitedescriptor",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Metadata associated to term",
+                null=True,
+                verbose_name="metadata",
+            ),
         ),
     ]

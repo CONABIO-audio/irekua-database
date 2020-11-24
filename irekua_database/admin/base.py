@@ -15,25 +15,28 @@ class IrekuaAdmin(admin.ModelAdmin):
     these fields.
     """
 
-    date_hierarchy = 'created_on'
+    date_hierarchy = "created_on"
 
     list_per_page = 50
 
     actions_on_top = True
 
-    readonly_fields = [
-        'created_on',
-        'modified_on'
-    ]
+    readonly_fields = ["created_on", "modified_on"]
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj=obj))
         fieldsets.append(
-            (_('Creation'), {
-                'fields': (
-                    ('created_on', 'modified_on',),
-                ),
-            })
+            (
+                _("Creation"),
+                {
+                    "fields": (
+                        (
+                            "created_on",
+                            "modified_on",
+                        ),
+                    ),
+                },
+            )
         )
         return tuple(fieldsets)
 
@@ -59,22 +62,31 @@ class IrekuaUserAdmin(IrekuaAdmin):
     """
 
     readonly_fields = [
-        'created_on',
-        'modified_on',
-        'created_by',
-        'modified_by',
+        "created_on",
+        "modified_on",
+        "created_by",
+        "modified_by",
     ]
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = list(super().get_fieldsets(request, obj=obj))
         fieldsets.pop()
         fieldsets.append(
-            (_('Creation'), {
-                'fields': (
-                    ('created_on', 'created_by',),
-                    ('modified_on', 'modified_by',),
-                ),
-            })
+            (
+                _("Creation"),
+                {
+                    "fields": (
+                        (
+                            "created_on",
+                            "created_by",
+                        ),
+                        (
+                            "modified_on",
+                            "modified_by",
+                        ),
+                    ),
+                },
+            )
         )
         return tuple(fieldsets)
 

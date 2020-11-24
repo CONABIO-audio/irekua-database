@@ -1,0 +1,43 @@
+- model: irekua_database.institution
+  fields:
+    created_by: 1
+    institution_name: Comisión Nacional para el Conocimiento y Uso de la Biodiversidad
+    institution_code: CONABIO
+    country: MX
+    postal_code: '14010'
+    address: Liga Periférico-Insurgentes Sur No. 4903, Parques del Pedregal, Tlalpan
+    website: https://www.biodiversidad.gob.mx/
+    logo: ''
+
+- model: irekua_database.institution
+  fields:
+    created_by: 1
+    institution_name: Comisión Nacional de Áreas Naturales Protegidas
+    institution_code: CONANP
+    country: MX
+    postal_code: '11320'
+    address: Av Ejército Nacional 223, Anáhuac I Secc, Miguel Hidalgo, Ciudad de México, CDMX
+    website: https://www.gob.mx/conanp
+    logo: ''
+
+- model: irekua_database.institution
+  fields:
+    created_by: 1
+    institution_name: Fondo Mexicano para la Conservación de la Naturaleza, A.C.
+    institution_code: FMCN
+    country: MX
+    postal_code: '03900'
+    address: Damas 49, San José Insurgentes, Benito Juárez, Ciudad de México, CDMX
+    website: https://fmcn.org/
+    logo: ''
+
+- model: irekua_database.institution
+  fields:
+    created_by: 1
+    institution_name: Comisión Nacional Forestal
+    institution_code: CONAFOR
+    country: MX
+    postal_code: '45019'
+    address: Periférico Poniente 5360, San Juan de Ocotán, Jalisco
+    website: https://www.gob.mx/conafor
+    logo: ''

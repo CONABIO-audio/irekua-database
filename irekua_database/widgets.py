@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.http import urlencode
-from dal import autocomplete
+from dal import autocomplete as dal
 
 
 class CustomURLMixin:
@@ -38,11 +38,11 @@ class CustomURLMixin:
     url = property(_get_url, _set_url)
 
 
-class SelectMultiple(CustomURLMixin, autocomplete.ModelSelect2Multiple):
+class SelectMultiple(CustomURLMixin, dal.ModelSelect2Multiple):
     def _get_url(self):
         print("GETTING URL")
         return super()._get_url()
 
 
-class Select(CustomURLMixin, autocomplete.ModelSelect2):
+class Select(CustomURLMixin, dal.ModelSelect2):
     pass

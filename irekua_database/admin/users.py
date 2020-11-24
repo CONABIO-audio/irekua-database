@@ -12,29 +12,27 @@ class UserInstitutionInline(admin.TabularInline):
 
     model = models.UserInstitution
 
-    verbose_name = _('Institution')
+    verbose_name = _("Institution")
 
-    verbose_name_plural = _('Institutions')
+    verbose_name_plural = _("Institutions")
 
     autocomplete_fields = [
-        'institution',
+        "institution",
     ]
 
 
 class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(
-        label=_('Password'),
-        widget=forms.PasswordInput)
+    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     password2 = forms.CharField(
-        label=_('Password confirmation'),
-        widget=forms.PasswordInput)
+        label=_("Password confirmation"), widget=forms.PasswordInput
+    )
 
     class Meta:
         model = models.User
         fields = (
-            'username',
-            'email',
+            "username",
+            "email",
         )
 
     def clean_password2(self):
@@ -62,13 +60,13 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = models.User
         fields = (
-            'email',
-            'password',
-            'is_active',
-            'is_superuser',
-            'is_curator',
-            'is_model',
-            'is_developer',
+            "email",
+            "password",
+            "is_active",
+            "is_superuser",
+            "is_curator",
+            "is_model",
+            "is_developer",
         )
 
     def clean_password(self):
@@ -80,57 +78,59 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
 
     list_display = (
-        'username',
-        'first_name',
-        'last_name',
-        'is_superuser',
-        'is_curator',
-        'is_model',
-        'is_developer',
+        "username",
+        "first_name",
+        "last_name",
+        "is_superuser",
+        "is_curator",
+        "is_model",
+        "is_developer",
+        "is_staff",
     )
 
     list_filter = (
-        'userinstitution__institution',
-        'is_superuser',
-        'is_curator',
-        'is_model',
-        'is_developer',
+        "userinstitution__institution",
+        "is_superuser",
+        "is_curator",
+        "is_model",
+        "is_developer",
+        "is_staff",
     )
 
     fieldsets = (
-        (None, {
-            'fields': (
-                'username',
-                'password')
-            }
-         ),
-        (_('Personal info'), {
-            'fields': (
-                'first_name',
-                'last_name',
-                'email',
-            )
-        }),
-        (_('Permissions'), {
-            'fields': (
-                'is_superuser',
-                'is_curator',
-                'is_model',
-                'is_developer'
-            )}
+        (None, {"fields": ("username", "password")}),
+        (
+            _("Personal info"),
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                )
+            },
+        ),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_superuser",
+                    "is_curator",
+                    "is_model",
+                    "is_developer",
+                    "is_staff",
+                )
+            },
         ),
     )
 
     search_fields = (
-        'email',
-        'username',
-        'first_name',
-        'last_name',
+        "email",
+        "username",
+        "first_name",
+        "last_name",
     )
 
-    ordering = (
-        'username',
-    )
+    ordering = ("username",)
 
     filter_horizontal = ()
 

@@ -47,3 +47,5 @@ INSTALLED_APPS = list(
         + IREKUA_UPLOAD_APPS
     )
 )
+
+ROOT_URLCONF = "irekua_database_project.urls"

@@ -18,7 +18,8 @@ ordering_fields = (
 
 class Filter(IrekuaUserFilter):
     locality = filters.ModelChoiceFilter(
-        queryset=Locality.objects.all(), widget=get_autocomplete_widget(model=Locality)
+        queryset=Locality.objects.all(),
+        widget=get_autocomplete_widget(model=Locality),
     )
 
     class Meta:

@@ -62,8 +62,9 @@ class Filter(IrekuaUserFilter):
         widget=get_autocomplete_widget(model=CollectionSite),
     )
 
-    parent_site__site_type = filters.ModelChoiceFilter(
+    parent_site_type = filters.ModelChoiceFilter(
         queryset=SiteType.objects.all(),
+        field_name="parent_site__site_type",
         widget=get_autocomplete_widget(model=SiteType),
     )
 

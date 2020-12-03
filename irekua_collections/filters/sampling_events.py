@@ -11,7 +11,11 @@ from irekua_database.filters import IrekuaUserFilter
 from irekua_database.autocomplete import get_autocomplete_widget
 
 
-search_fields = ("id", "collection_site__collection_name", "sampling_event_type__name")
+search_fields = (
+    "id",
+    "collection_site__collection_name",
+    "sampling_event_type__name",
+)
 
 
 ordering_fields = (
@@ -53,6 +57,17 @@ class Filter(IrekuaUserFilter):
         queryset=Site.objects.all(),
         field_name="collection_site__site",
         widget=get_autocomplete_widget(model=Site),
+    )
+
+    parent_sampling_event = filters.ModelChoiceFilter(
+        queryset=SamplingEvent.objects.all(),
+        widget=get_autocomplete_widget(model=SamplingEvent),
+    )
+
+    parent_sampling_event_type = filters.ModelChoiceFilter(
+        queryset=SamplingEventType.objects.all(),
+        field_name="parent_sampling_event__sampling_event_type",
+        widget=get_autocomplete_widget(model=SamplingEventType),
     )
 
     class Meta:

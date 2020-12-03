@@ -28,11 +28,18 @@ class Filter(IrekuaFilter):
     )
 
     item_types = filters.ModelChoiceFilter(
-        queryset=ItemType.objects.all(), widget=get_autocomplete_widget(model=ItemType)
+        queryset=ItemType.objects.all(),
+        widget=get_autocomplete_widget(model=ItemType),
     )
 
     site_types = filters.ModelChoiceFilter(
-        queryset=SiteType.objects.all(), widget=get_autocomplete_widget(model=SiteType)
+        queryset=SiteType.objects.all(),
+        widget=get_autocomplete_widget(model=SiteType),
+    )
+
+    subsampling_event_types = filters.ModelChoiceFilter(
+        queryset=SamplingEventType.objects.all(),
+        widget=get_autocomplete_widget(model=SamplingEventType),
     )
 
     class Meta:
@@ -48,4 +55,6 @@ class Filter(IrekuaFilter):
             "site_types__name": ["exact", "icontains"],
             "restrict_deployment_positions": ["exact"],
             "deployment_distance": ["exact", "lt", "gt", "lte", "gte"],
+            "can_have_subsampling_events": ["exact"],
+            "restrict_subsampling_event_types": ["exact"],
         }

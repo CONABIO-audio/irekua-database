@@ -32,7 +32,12 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
         null=True,
     )
 
-    site_descriptor_types = models.ManyToManyField("SiteDescriptorType", blank=True)
+    site_descriptor_types = models.ManyToManyField(
+        "SiteDescriptorType",
+        blank=True,
+        verbose_name=_("site descriptor types"),
+        help_text=_("Descriptor types to be used when describing sites of this type"),
+    )
 
     point_site = models.BooleanField(
         default=True,
@@ -88,6 +93,37 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
         help_text=_("Determines if polygon sites can be of this type"),
     )
 
+    can_have_subsites = models.BooleanField(
+        default=False,
+        db_column="can_have_subsites",
+        blank=True,
+        null=False,
+        verbose_name=_("can have subsites"),
+        help_text=_(
+            "Determines if sites of this type can have subsites",
+        ),
+    )
+
+    restrict_subsite_types = models.BooleanField(
+        default=False,
+        db_column="restrict_subsite_types",
+        blank=True,
+        null=False,
+        verbose_name=_("restrict subsite types"),
+        help_text=_(
+            "Can any site type be declared as a subsite?",
+        ),
+    )
+
+    subsite_types = models.ManyToManyField(
+        "self",
+        blank=True,
+        verbose_name=_("subsite types"),
+        help_text=_(
+            "Site types that can be declared as subsites of sites of this type"
+        ),
+    )
+
     class Meta:
         verbose_name = _("Site Type")
 
@@ -134,4 +170,24 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
                 "for site of types %(site_type)s."
             )
             params = dict(descriptor_type=descriptor_type, site_type=self)
+            raise ValidationError(msg % params)
+
+    def validate_subsite_type(self, site_type):
+        if site_type is None:
+            return
+
+        if not self.can_have_subsites:
+            msg = _("Sites of type %(site_type)s cannot have subsites")
+            params = dict(site_type=self)
+            raise ValidationError(msg % params)
+
+        if not self.restrict_subsite_types:
+            return
+
+        if not self.subsite_types.filter(pk=site_type.pk).exists():
+            msg = _(
+                "A site of type %(site_type)s cannot be declared as a subsite "
+                "of site of type %(self_type)s."
+            )
+            params = dict(site_type=site_type, self_type=self)
             raise ValidationError(msg % params)

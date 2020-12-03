@@ -16,6 +16,20 @@ class SiteDescriptorTypeInline(admin.TabularInline):
     verbose_name_plural = _("Site descriptor types")
 
 
+class SubSiteTypeInline(admin.TabularInline):
+    extra = 0
+
+    model = SiteType.subsite_types.through
+
+    fk_name = "to_sitetype"
+
+    autocomplete_fields = ("from_sitetype",)
+
+    verbose_name = _("Sub Site type")
+
+    verbose_name_plural = _("Sub Site types")
+
+
 class SiteTypeAdmin(admin.ModelAdmin):
     search_fields = [
         "name",
@@ -30,6 +44,7 @@ class SiteTypeAdmin(admin.ModelAdmin):
         "multipoint_site",
         "multipolygon_site",
         "polygon_site",
+        "can_have_subsites",
         "created_on",
     ]
 
@@ -40,6 +55,8 @@ class SiteTypeAdmin(admin.ModelAdmin):
         "multipoint_site",
         "multipolygon_site",
         "polygon_site",
+        "can_have_subsites",
+        "restrict_subsite_types",
     ]
 
     list_display_links = [
@@ -56,7 +73,7 @@ class SiteTypeAdmin(admin.ModelAdmin):
                 "fields": (("name", "icon"), "description"),
             },
         ),
-        (_("Schemas"), {"fields": (("metadata_schema"),)}),
+        (_("Schemas"), {"fields": ("metadata_schema",)}),
         (
             _("Geometry Types"),
             {
@@ -66,6 +83,15 @@ class SiteTypeAdmin(admin.ModelAdmin):
                 )
             },
         ),
+        (
+            _("Subsites"),
+            {
+                "fields": (("can_have_subsites", "restrict_subsite_types"),),
+            },
+        ),
     )
 
-    inlines = [SiteDescriptorTypeInline]
+    inlines = [
+        SiteDescriptorTypeInline,
+        SubSiteTypeInline,
+    ]

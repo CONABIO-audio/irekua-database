@@ -23,8 +23,8 @@ class SamplingEvent(IrekuaModelBaseUser):
         verbose_name=_("collection site"),
         help_text=_("Reference to site at which sampling took place"),
         on_delete=models.PROTECT,
-        blank=True,
-        null=True,
+        blank=False,
+        null=False,
     )
 
     commentaries = models.TextField(
@@ -76,6 +76,16 @@ class SamplingEvent(IrekuaModelBaseUser):
         null=False,
     )
 
+    parent_sampling_event = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        db_column="parent_sampling_event",
+        verbose_name=_("parent sampling event"),
+        help_text=_("Is this sampling event is part of a larger sampling event?"),
+        blank=True,
+        null=True,
+    )
+
     class Meta:
         verbose_name = _("Sampling Event")
 
@@ -84,9 +94,13 @@ class SamplingEvent(IrekuaModelBaseUser):
         ordering = ["-created_on"]
 
     def __str__(self):
+        if self.started_on is None:
+            return _("Sampling Event: %s") % self.collection_site
+
         msg = _("%(site)s - %(date)s")
         params = dict(
-            site=str(self.collection_site), date=self.started_on.strftime("%m/%Y")
+            site=self.collection_site,
+            date=self.started_on.strftime("%m/%Y"),
         )
         return msg % params
 
@@ -113,6 +127,12 @@ class SamplingEvent(IrekuaModelBaseUser):
         # date range
         self.clean_consistent_item_dates()
 
+        # Check that the parent sampling event is valid if defined. This requires
+        # that the parent sampling event type allows for subsampling events of this
+        # type and that the declared site is a subsite of the parent sampling
+        # event's site.
+        self.clean_parent_sampling_event()
+
         # pylint: disable=no-member
         collection_type = self.collection.collection_type
 
@@ -135,6 +155,12 @@ class SamplingEvent(IrekuaModelBaseUser):
             raise ValidationError({"collection_site": msg})
 
     def clean_valid_dates(self):
+        if self.started_on is None:
+            return
+
+        if self.ended_on is None:
+            return
+
         if self.started_on > self.ended_on:
             msg = _("Starting date cannot be greater than ending date")
             raise ValidationError({"started_on": msg})
@@ -163,6 +189,40 @@ class SamplingEvent(IrekuaModelBaseUser):
 
         except ValidationError as error:
             raise ValidationError({"metadata": error}) from error
+
+    def clean_parent_sampling_event(self):
+        if self.parent_sampling_event is None:
+            return
+
+        if self.collection != self.parent_sampling_event.collection:
+            msg = _(
+                "The declared parent sampling event does not belong to "
+                "the same collection as this sampling event"
+            )
+            raise ValidationError({"parent_sampling_event": msg})
+
+        try:
+            # pylint: disable=no-member
+            self.parent_sampling_event.sampling_event_type.validate_subsampling_event_type(
+                self.sampling_event_type
+            )
+        except ValidationError as error:
+            raise ValidationError({"parent_sampling_event": error}) from error
+
+        #  Check that the parent sampling event occurred in
+        # a super site of the site of this sampling event
+        self.clean_parent_sampling_event_site()
+
+    def clean_parent_sampling_event_site(self):
+        parent_site = self.parent_sampling_event.collection_site
+
+        # pylint: disable=no-member
+        if parent_site != self.collection_site.parent_site:
+            msg = _(
+                "A subsampling event can only be registered at a subsite of "
+                "the parent sampling event site."
+            )
+            raise ValidationError({"collection_site": msg})
 
     def clean_allowed_sampling_event_type(self, collection_type):
         try:

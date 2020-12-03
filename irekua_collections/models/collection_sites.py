@@ -131,7 +131,7 @@ class CollectionSite(IrekuaModelBaseUser):
             self.site_type.validate_metadata(self.metadata)
 
         except ValidationError as error:
-            raise ValidationError({"metadata": str(error)}) from error
+            raise ValidationError({"metadata": error}) from error
 
     def clean_allowed_site_type(self, collection_type):
         try:
@@ -151,27 +151,27 @@ class CollectionSite(IrekuaModelBaseUser):
 
         if self.parent_site.collection != self.collection:
             msg = _("Parent site does not belong to the same collection as this site")
-            raise ValidationError({"parent_site": msg % params})
+            raise ValidationError({"parent_site": msg})
 
         try:
-            self.parent_site.validate_subsite_type(self.site_type)
+            self.parent_site.site_type.validate_subsite_type(self.site_type)
 
         except ValidationError as error:
-            raise ValidationError({"parent_site": str(error)}) from error
+            raise ValidationError({"parent_site": error}) from error
 
     def clean_valid_collection_metadata(self, site_type_config):
         try:
             site_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({"collection_metadata": str(error)}) from error
+            raise ValidationError({"collection_metadata": error}) from error
 
     def clean_compatible_geometry_and_site_type(self):
         try:
             self.site_type.validate_site_geometry_type(self.site)
 
         except ValidationError as error:
-            raise ValidationError({"site": str(error)}) from error
+            raise ValidationError({"site": error}) from error
 
     def validate_descriptor(self, descriptor):
         if self.id is None:

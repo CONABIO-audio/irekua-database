@@ -29,6 +29,20 @@ class DeploymentTypeInline(admin.TabularInline):
     verbose_name_plural = _("Deployment types")
 
 
+class SubSamplingEventTypesInline(admin.TabularInline):
+    extra = 0
+
+    model = SamplingEventType.subsampling_event_types.through
+
+    fk_name = "from_samplingeventtype"
+
+    autocomplete_fields = ("to_samplingeventtype",)
+
+    verbose_name = _("Subsampling event type")
+
+    verbose_name_plural = _("Subsampling event types")
+
+
 class ItemTypeInline(admin.TabularInline):
     extra = 0
 
@@ -49,6 +63,8 @@ class SamplingEventTypeAdmin(IrekuaAdmin):
         "name",
         "restrict_site_types",
         "restrict_deployment_types",
+        "can_have_subsampling_events",
+        "restrict_subsampling_event_types",
         "created_on",
     )
 
@@ -84,6 +100,7 @@ class SamplingEventTypeAdmin(IrekuaAdmin):
                         "restrict_item_types",
                     ),
                     ("restrict_deployment_positions", "deployment_distance"),
+                    ("can_have_subsampling_events", "restrict_subsampling_event_types"),
                 ),
             },
         ),
@@ -93,4 +110,5 @@ class SamplingEventTypeAdmin(IrekuaAdmin):
         SiteTypeInline,
         DeploymentTypeInline,
         ItemTypeInline,
+        SubSamplingEventTypesInline,
     ]

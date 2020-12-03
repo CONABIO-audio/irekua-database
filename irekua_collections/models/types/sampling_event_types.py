@@ -112,6 +112,39 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
         default=0,
     )
 
+    can_have_subsampling_events = models.BooleanField(
+        db_column="can_have_subsampling_events",
+        verbose_name=_("can have subsampling events"),
+        help_text=_(
+            "Determines if sampling events of this type can have sub-sampling events"
+        ),
+        blank=True,
+        null=False,
+        default=False,
+    )
+
+    restrict_subsampling_event_types = models.BooleanField(
+        db_column="restrict_subsampling_event_types",
+        verbose_name=_("restrict subsampling event types"),
+        help_text=_(
+            "If false a sampling event of any type can be declared as a subsampling event "
+            "for sampling events of this type."
+        ),
+        blank=True,
+        null=False,
+        default=True,
+    )
+
+    subsampling_event_types = models.ManyToManyField(
+        "self",
+        blank=True,
+        verbose_name=_("subsampling event types"),
+        help_text=_(
+            "List of sampling event types that can be registered as subsampling "
+            "events of sampling events of this type."
+        ),
+    )
+
     class Meta:
         verbose_name = _("Sampling Event Type")
 
@@ -161,4 +194,24 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
                 "sampling events of type %(sampling_event_type)s"
             )
             params = dict(item_types=item_type, type=self)
+            raise ValidationError(msg % params)
+
+    def validate_subsampling_event_type(self, sampling_event_type):
+        if sampling_event_type is None:
+            return
+
+        if not self.can_have_subsampling_events:
+            msg = _("Sampling events of type %(self)s cannot have subsampling events")
+            params = dict(self=self)
+            raise ValidationError(msg % params)
+
+        if not self.restrict_subsampling_event_types:
+            return
+
+        if not self.subsampling_event_types.filter(pk=sampling_event_type.pk).exists():
+            msg = _(
+                "Sampling events of type %(self)s do not admit sampling events "
+                "of type %(sampling_event_type)s as subsampling events"
+            )
+            params = dict(sampling_event_type=sampling_event_type, self=self)
             raise ValidationError(msg % params)

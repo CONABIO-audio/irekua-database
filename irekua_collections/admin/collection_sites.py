@@ -100,6 +100,7 @@ class CollectionSiteAdmin(IrekuaUserAdmin):
 
     autocomplete_fields = [
         "collection",
+        "site",
         "site_type",
         "parent_site",
     ]

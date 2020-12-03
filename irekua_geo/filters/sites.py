@@ -7,7 +7,7 @@ from irekua_database.filters import IrekuaUserFilter
 from irekua_database.autocomplete import get_autocomplete_widget
 
 
-search_fields = ("name", "locality__name")
+search_fields = ("name", "localities__name")
 
 
 ordering_fields = (
@@ -17,7 +17,7 @@ ordering_fields = (
 
 
 class Filter(IrekuaUserFilter):
-    locality = filters.ModelChoiceFilter(
+    localities = filters.ModelChoiceFilter(
         queryset=Locality.objects.all(),
         widget=get_autocomplete_widget(model=Locality),
     )
@@ -28,5 +28,5 @@ class Filter(IrekuaUserFilter):
         fields = {
             "name": ["exact", "icontains"],
             "geometry_type": ["exact"],
-            "locality__name": ["exact", "icontains"],
+            "localities__name": ["exact", "icontains"],
         }

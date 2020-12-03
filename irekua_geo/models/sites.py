@@ -42,14 +42,11 @@ class Site(IrekuaModelBaseUser):
         null=True,
     )
 
-    locality = models.ForeignKey(
+    localities = models.ManyToManyField(
         "Locality",
-        on_delete=models.PROTECT,
-        db_column="locality_id",
         verbose_name=_("locality"),
-        help_text=_("Name of locality in which the site is located"),
+        help_text=_("Localities in which the site is located"),
         blank=True,
-        null=True,
     )
 
     geometry_type = models.CharField(
@@ -85,8 +82,13 @@ class Site(IrekuaModelBaseUser):
     def clean(self):
         super().clean()
 
-        # Check that the site falls within the declared locality
-        self.clean_locality()
+        if self.id is None:
+            # Do not run the following validations if
+            # object hasn't been created
+            return
+
+        # Check that the site falls within the declared localities
+        self.clean_localities()
 
     def geom(self):
         try:
@@ -97,18 +99,14 @@ class Site(IrekuaModelBaseUser):
             geom_site = getattr(self, modelname)
             return geom_site.geometry
 
-    def clean_locality(self):
-        # Do not validate if locality is null
-        if self.locality is None:
-            return
+    def clean_localities(self):
+        for locality in self.localities.all():
+            if locality.geometry.intersects(self.geom()):
+                continue
 
-        # pylint: disable=no-member
-        if self.locality.geometry.intersects(self.geom()):
-            return
-
-        msg = _("The %(geometry_type)s not does not touch the locality's geometry")
-        params = dict(geometry_type=self.geometry_type)
-        raise ValidationError({"locality": msg % params})
+            msg = _("The site %(site)s not does not touch the locality %(locality)s")
+            params = dict(site=self, locality=locality)
+            raise ValidationError({"locality": msg % params})
 
     @property
     def timezone(self):

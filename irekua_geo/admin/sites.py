@@ -1,4 +1,20 @@
+from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 from irekua_database.admin.base import IrekuaUserAdmin
+
+from irekua_geo.models import Site
+
+
+class LocalitiesInline(admin.TabularInline):
+    extra = 0
+
+    model = Site.localities.through
+
+    autocomplete_fields = ("locality",)
+
+    verbose_name = _("Locality")
+
+    verbose_name_plural = _("Localities")
 
 
 class SiteAdmin(IrekuaUserAdmin):
@@ -11,7 +27,6 @@ class SiteAdmin(IrekuaUserAdmin):
         "id",
         "name",
         "geometry_type",
-        "locality",
         "created_on",
     ]
 
@@ -24,10 +39,6 @@ class SiteAdmin(IrekuaUserAdmin):
         "created_on",
     ]
 
-    autocomplete_fields = [
-        "locality",
-    ]
-
     readonly_fields = [
         *IrekuaUserAdmin.readonly_fields,
         "geom",
@@ -36,7 +47,9 @@ class SiteAdmin(IrekuaUserAdmin):
     fieldsets = (
         (
             None,
-            {"fields": (("name", "locality"),)},
+            {
+                "fields": (("name", "geometry_type"),),
+            },
         ),
         (
             None,
@@ -45,3 +58,7 @@ class SiteAdmin(IrekuaUserAdmin):
             },
         ),
     )
+
+    inlines = [
+        LocalitiesInline,
+    ]

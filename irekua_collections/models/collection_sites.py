@@ -109,6 +109,9 @@ class CollectionSite(IrekuaModelBaseUser):
         # Check that geometry type of site is compatible with the site type
         self.clean_compatible_geometry_and_site_type()
 
+        # Check if parent site allows this site as subsite
+        self.clean_valid_parent_site()
+
         # pylint: disable=no-member
         collection_type = self.collection.collection_type
 
@@ -141,6 +144,20 @@ class CollectionSite(IrekuaModelBaseUser):
             )
             params = dict(site_type=self.site_type, collection_type=collection_type)
             raise ValidationError({"site_type": msg % params}) from error
+
+    def clean_valid_parent_site(self):
+        if self.parent_site is None:
+            return
+
+        if self.parent_site.collection != self.collection:
+            msg = _("Parent site does not belong to the same collection as this site")
+            raise ValidationError({"parent_site": msg % params})
+
+        try:
+            self.parent_site.validate_subsite_type(self.site_type)
+
+        except ValidationError as error:
+            raise ValidationError({"parent_site": str(error)}) from error
 
     def clean_valid_collection_metadata(self, site_type_config):
         try:

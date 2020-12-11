@@ -216,13 +216,18 @@ class SamplingEvent(IrekuaModelBaseUser):
     def clean_parent_sampling_event_site(self):
         parent_site = self.parent_sampling_event.collection_site
 
+        if parent_site == self.collection_site:
+            return
+
         # pylint: disable=no-member
-        if parent_site != self.collection_site.parent_site:
-            msg = _(
-                "A subsampling event can only be registered at a subsite of "
-                "the parent sampling event site."
-            )
-            raise ValidationError({"collection_site": msg})
+        if parent_site == self.collection_site.parent_site:
+            return
+
+        msg = _(
+            "A subsampling event can only be registered at a the same site or a subsite of "
+            "the parent sampling event's site."
+        )
+        raise ValidationError({"collection_site": msg})
 
     def clean_allowed_sampling_event_type(self, collection_type):
         try:

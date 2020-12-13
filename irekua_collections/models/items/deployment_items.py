@@ -4,44 +4,31 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .sampling_event_items import SamplingEventItem
-from .device_items import DeviceItem
+from irekua_items.models import Item
+from .sampling_event_items import SamplingEventItemMixin
+from .device_items import DeviceItemMixin
 
 
-class DeploymentItem(DeviceItem, SamplingEventItem):
-    upload_to_format = os.path.join(
-        'items',
-        'collection',
-        '{collection}',
-        'sampling_event',
-        '{sampling_event}',
-        'deployment',
-        '{deployment}',
-        '{hash}{ext}'
-    )
-
+class DeploymentItemMixin(SamplingEventItemMixin, DeviceItemMixin):
     deployment = models.ForeignKey(
-        'Deployment',
-        db_column='deployment_id',
-        verbose_name=_('deployment'),
-        help_text=_('Deployment of device in which this item was captured'),
+        "Deployment",
+        db_column="deployment_id",
+        verbose_name=_("deployment"),
+        help_text=_("Deployment of device in which this item was captured"),
         on_delete=models.PROTECT,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     class Meta:
-        verbose_name = _('Deployment Item')
-
-        verbose_name_plural = _('Deployment Items')
-
-        ordering = ['-created_on']
+        abstract = True
 
     def clean(self):
-        # Check that the samplign event coincides with the one declared by
+        #  Check that the samplign event coincides with the one declared by
         # the deployment
         self.clean_compatible_deployment_and_sampling_event()
 
-        # Check that the device used coincides with the one delared by the
+        #  Check that the device used coincides with the one delared by the
         # deployment
         self.clean_compatible_deployment_and_device()
 
@@ -57,12 +44,11 @@ class DeploymentItem(DeviceItem, SamplingEventItem):
             return
 
         msg = _(
-            'The deployment in which the item was captured (%(deployment)s) '
-            'does not belong to the sampling event %(sampling_event)s.')
-        params = dict(
-            deployment=self.deployment,
-            sampling_event=self.sampling_event)
-        raise ValidationError({'deployment': msg % params})
+            "The deployment in which the item was captured (%(deployment)s) "
+            "does not belong to the sampling event %(sampling_event)s."
+        )
+        params = dict(deployment=self.deployment, sampling_event=self.sampling_event)
+        raise ValidationError({"deployment": msg % params})
 
     def clean_compatible_deployment_and_device(self):
         if self.collection_device is None:
@@ -74,22 +60,13 @@ class DeploymentItem(DeviceItem, SamplingEventItem):
             return
 
         msg = _(
-            'The device that captured the item (%(collection_device)s) '
-            'does not coincide with the deployed device %(deployment)s.')
+            "The device that captured the item (%(collection_device)s) "
+            "does not coincide with the deployed device %(deployment)s."
+        )
         params = dict(
-            collection_device=self.collection_device,
-            deployment=self.deployment)
-        raise ValidationError({'deployment': msg % params})
-
-    def clean_allowed_item_level(self, item_type_config):
-        if not item_type_config.deployment_item:
-            msg = _(
-                'Item of type %(item_type)s are cannot be declared at a deployment '
-                'level for collections of type %(collection_type)s')
-            params = dict(
-                item_type=self.item_type,
-                collection_type=item_type_config.collection_type)
-            raise ValidationError({'item_type': msg % params})
+            collection_device=self.collection_device, deployment=self.deployment
+        )
+        raise ValidationError({"deployment": msg % params})
 
     def clean_compatible_item_type(self):
         # pylint: disable=no-member
@@ -98,7 +75,7 @@ class DeploymentItem(DeviceItem, SamplingEventItem):
         try:
             deployment_type.validate_item_type(self.item_type)
         except ValidationError as error:
-            raise ValidationError({'item_type': error}) from error
+            raise ValidationError({"item_type": error}) from error
 
     def clean_valid_captured_on(self):
         if self.captured_on is None:
@@ -109,11 +86,43 @@ class DeploymentItem(DeviceItem, SamplingEventItem):
             self.deployment.validate_date(self.captured_on)
 
         except ValidationError as error:
-            raise ValidationError({'captured_on': error}) from error
+            raise ValidationError({"captured_on": error}) from error
 
     def get_upload_to_format_arguments(self):
         return {
             **super().get_upload_to_format_arguments(),
             # pylint: disable=no-member
-            'deployment': self.deployment.id,
+            "deployment": self.deployment.id,
         }
+
+
+class DeploymentItem(Item, DeploymentItemMixin):
+    upload_to_format = os.path.join(
+        "items",
+        "collection",
+        "{collection}",
+        "sampling_event",
+        "{sampling_event}",
+        "deployment",
+        "{deployment}",
+        "{hash}{ext}",
+    )
+
+    class Meta:
+        verbose_name = _("Deployment Item")
+
+        verbose_name_plural = _("Deployment Items")
+
+        ordering = ["-created_on"]
+
+    def clean_allowed_item_level(self, item_type_config):
+        if not item_type_config.deployment_item:
+            msg = _(
+                "Item of type %(item_type)s are cannot be declared at a deployment "
+                "level for collections of type %(collection_type)s"
+            )
+            params = dict(
+                item_type=self.item_type,
+                collection_type=item_type_config.collection_type,
+            )
+            raise ValidationError({"item_type": msg % params})

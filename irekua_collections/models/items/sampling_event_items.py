@@ -4,40 +4,29 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from .site_items import SiteItem
+from irekua_items.models import Item
+from .site_items import SiteItemMixin
 
 
-class SamplingEventItem(SiteItem):
-    upload_to_format = os.path.join(
-        'items',
-        'collection',
-        '{collection}',
-        'sampling_event',
-        '{sampling_event}',
-        '{hash}{ext}'
-    )
-
+class SamplingEventItemMixin(SiteItemMixin):
     sampling_event = models.ForeignKey(
-        'SamplingEvent',
-        db_column='sampling_event_id',
-        verbose_name=_('sampling event'),
-        help_text=_('Sampling event in which this item was captured'),
+        "SamplingEvent",
+        db_column="sampling_event_id",
+        verbose_name=_("sampling event"),
+        help_text=_("Sampling event in which this item was captured"),
         on_delete=models.PROTECT,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     class Meta:
-        verbose_name = _('Sampling Event Item')
-
-        verbose_name_plural = _('Sampling Event Items')
-
-        ordering = ['-created_on']
+        abstract = True
 
     def clean(self):
         # Check that sampling event belongs to the declared collection
         self.clean_compatible_sampling_event_and_collection()
 
-        # Check that collection site coincides with the one declared by
+        #  Check that collection site coincides with the one declared by
         # the sampling event
         self.clean_compatible_sampling_event_and_site()
 
@@ -61,12 +50,11 @@ class SamplingEventItem(SiteItem):
             return
 
         msg = _(
-            'The sampling event in which the item was captured (%(sampling_event)s) '
-            'does not belong to the collection %(collection)s.')
-        params = dict(
-            sampling_event=self.sampling_event,
-            collection=self.collection)
-        raise ValidationError({'sampling_event': msg % params})
+            "The sampling event in which the item was captured (%(sampling_event)s) "
+            "does not belong to the collection %(collection)s."
+        )
+        params = dict(sampling_event=self.sampling_event, collection=self.collection)
+        raise ValidationError({"sampling_event": msg % params})
 
     def clean_compatible_sampling_event_and_site(self):
         if self.collection_site is None:
@@ -78,22 +66,13 @@ class SamplingEventItem(SiteItem):
             return
 
         msg = _(
-            'The sampling event %(sampling_event)s occured on a different site than'
-            'what was declared %(collection_site)s')
+            "The sampling event %(sampling_event)s occured on a different site than"
+            "what was declared %(collection_site)s"
+        )
         params = dict(
-            sampling_event=self.sampling_event,
-            collection_site=self.collection_site)
-        raise ValidationError({'sampling_event': msg % params})
-
-    def clean_allowed_item_level(self, item_type_config):
-        if not item_type_config.sampling_event_item:
-            msg = _(
-                'Item of type %(item_type)s are cannot be declared at the sampling '
-                'event level for collections of type %(collection_type)s')
-            params = dict(
-                item_type=self.item_type,
-                collection_type=item_type_config.collection_type)
-            raise ValidationError({'item_type': msg % params})
+            sampling_event=self.sampling_event, collection_site=self.collection_site
+        )
+        raise ValidationError({"sampling_event": msg % params})
 
     def clean_compatible_item_type(self):
         # pylint: disable=no-member
@@ -102,7 +81,7 @@ class SamplingEventItem(SiteItem):
         try:
             sampling_event_type.validate_item_type(self.item_type)
         except ValidationError as error:
-            raise ValidationError({'item_type': error}) from error
+            raise ValidationError({"item_type": error}) from error
 
     def clean_valid_captured_on(self):
         if self.captured_on is None:
@@ -113,11 +92,41 @@ class SamplingEventItem(SiteItem):
             self.sampling_event.validate_date(self.captured_on)
 
         except ValidationError as error:
-            raise ValidationError({'captured_on': error}) from error
+            raise ValidationError({"captured_on": error}) from error
+
+
+class SamplingEventItem(Item, SamplingEventItemMixin):
+    upload_to_format = os.path.join(
+        "items",
+        "collection",
+        "{collection}",
+        "sampling_event",
+        "{sampling_event}",
+        "{hash}{ext}",
+    )
+
+    class Meta:
+        verbose_name = _("Sampling Event Item")
+
+        verbose_name_plural = _("Sampling Event Items")
+
+        ordering = ["-created_on"]
+
+    def clean_allowed_item_level(self, item_type_config):
+        if not item_type_config.sampling_event_item:
+            msg = _(
+                "Item of type %(item_type)s are cannot be declared at the sampling "
+                "event level for collections of type %(collection_type)s"
+            )
+            params = dict(
+                item_type=self.item_type,
+                collection_type=item_type_config.collection_type,
+            )
+            raise ValidationError({"item_type": msg % params})
 
     def get_upload_to_format_arguments(self):
         return {
             **super().get_upload_to_format_arguments(),
             # pylint: disable=no-member
-            'sampling_event': self.sampling_event.id,
+            "sampling_event": self.sampling_event.id,
         }

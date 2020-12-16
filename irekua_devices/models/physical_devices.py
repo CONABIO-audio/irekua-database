@@ -97,20 +97,24 @@ class PhysicalDevice(IrekuaModelBaseUser):
 
     @cached_property
     def items(self):
-        from irekua_collections.models import DeploymentItem
+        from irekua_collections.models import CollectionItem
 
-        return DeploymentItem.objects.filter(
-            deployment__collection_device__physical_device=self
+        return CollectionItem.objects.filter(
+            collection_device__physical_device=self
         )
 
     @cached_property
     def sampling_events(self):
         from irekua_collections.models import SamplingEvent
 
-        return SamplingEvent.objects.filter(collection_device__physical_device=self)
+        return SamplingEvent.objects.filter(
+            collection_device__physical_device=self
+        )
 
     @cached_property
     def deployments(self):
         from irekua_collections.models import Deployment
 
-        return Deployment.objects.filter(collection_device__physical_device=self)
+        return Deployment.objects.filter(
+            collection_device__physical_device=self
+        )

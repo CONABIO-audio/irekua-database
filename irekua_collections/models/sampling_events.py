@@ -45,7 +45,9 @@ class SamplingEvent(IrekuaModelBaseUser):
     collection_metadata = models.JSONField(
         db_column="collection_metadata",
         verbose_name=_("collection metadata"),
-        help_text=_("Additional metadata associated to sampling event in collection"),
+        help_text=_(
+            "Additional metadata associated to sampling event in collection"
+        ),
         blank=True,
         null=True,
     )
@@ -81,7 +83,9 @@ class SamplingEvent(IrekuaModelBaseUser):
         on_delete=models.SET_NULL,
         db_column="parent_sampling_event",
         verbose_name=_("parent sampling event"),
-        help_text=_("Is this sampling event is part of a larger sampling event?"),
+        help_text=_(
+            "Is this sampling event is part of a larger sampling event?"
+        ),
         blank=True,
         null=True,
     )
@@ -123,14 +127,14 @@ class SamplingEvent(IrekuaModelBaseUser):
         # date range
         self.clean_consistent_deployment_dates()
 
-        # Check that any registered items do fall outside the the sampling event's
-        # date range
+        # Check that any registered items do fall outside the the sampling
+        # event's date range
         self.clean_consistent_item_dates()
 
-        # Check that the parent sampling event is valid if defined. This requires
-        # that the parent sampling event type allows for subsampling events of this
-        # type and that the declared site is a subsite of the parent sampling
-        # event's site.
+        # Check that the parent sampling event is valid if defined. This
+        # requires that the parent sampling event type allows for subsampling
+        # events of this type and that the declared site is a subsite of the
+        # parent sampling event's site.
         self.clean_parent_sampling_event()
 
         # pylint: disable=no-member
@@ -143,9 +147,12 @@ class SamplingEvent(IrekuaModelBaseUser):
 
         # Check that this sampling event type is registered for this collection
         # type
-        sampling_event_config = self.clean_allowed_sampling_event_type(collection_type)
+        sampling_event_config = self.clean_allowed_sampling_event_type(
+            collection_type
+        )
 
-        # Check if additional collection metadata is valid for this sampling event type
+        # Check if additional collection metadata is valid for this sampling
+        # event type
         self.clean_valid_collection_metadata(sampling_event_config)
 
     def clean_equal_collections(self):
@@ -178,7 +185,8 @@ class SamplingEvent(IrekuaModelBaseUser):
                 "be declared in a site of type %(site_type)s"
             )
             params = dict(
-                sampling_event_type=self.sampling_event_type, site_type=site_type
+                sampling_event_type=self.sampling_event_type,
+                site_type=site_type,
             )
             raise ValidationError({"collection_site": msg % params}) from error
 
@@ -203,7 +211,10 @@ class SamplingEvent(IrekuaModelBaseUser):
 
         try:
             # pylint: disable=no-member
-            self.parent_sampling_event.sampling_event_type.validate_subsampling_event_type(
+            sampling_event_type = (
+                self.parent_sampling_event.sampling_event_type
+            )
+            sampling_event_type.validate_subsampling_event_type(
                 self.sampling_event_type
             )
         except ValidationError as error:
@@ -224,32 +235,38 @@ class SamplingEvent(IrekuaModelBaseUser):
             return
 
         msg = _(
-            "A subsampling event can only be registered at a the same site or a subsite of "
-            "the parent sampling event's site."
+            "A subsampling event can only be registered at a the same site or "
+            "a subsite of the parent sampling event's site."
         )
         raise ValidationError({"collection_site": msg})
 
     def clean_allowed_sampling_event_type(self, collection_type):
         try:
-            return collection_type.get_sampling_event_type(self.sampling_event_type)
+            return collection_type.get_sampling_event_type(
+                self.sampling_event_type
+            )
 
         except ObjectDoesNotExist as error:
             msg = _(
-                "Sampling events of type %(sampling_event_type)s are not allowed in "
-                "collections of type %(collection_type)s"
+                "Sampling events of type %(sampling_event_type)s are "
+                "not allowed in collections of type %(collection_type)s"
             )
             params = dict(
                 sampling_event_type=self.sampling_event_type,
                 collection_type=collection_type,
             )
-            raise ValidationError({"sampling_event_type": msg % params}) from error
+            raise ValidationError(
+                {"sampling_event_type": msg % params}
+            ) from error
 
     def clean_valid_collection_metadata(self, sampling_event_config):
         try:
             sampling_event_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({"collection_metadata": str(error)}) from error
+            raise ValidationError(
+                {"collection_metadata": str(error)}
+            ) from error
 
     def clean_consistent_deployment_dates(self):
         if self.id is None:
@@ -293,7 +310,7 @@ class SamplingEvent(IrekuaModelBaseUser):
 
         #  Check on all sampling event items but exclude deployment items
         # since their dates are validated when associated to the deployment.
-        queryset = self.samplingeventitem_set.filter(deploymentitem__isnull=True)
+        queryset = self.collectionitem_set.filter(deployment__isnull=True)
 
         if self.started_on is not None:
             if queryset.filter(captured_on__lt=self.started_on).exists():
@@ -314,7 +331,9 @@ class SamplingEvent(IrekuaModelBaseUser):
     def validate_date(self, date_info):
         if self.started_on is not None:
             if date_info < self.started_on:
-                msg = _("Date provided is earlier that the sampling event start")
+                msg = _(
+                    "Date provided is earlier that the sampling event start"
+                )
                 raise ValidationError(msg)
 
         if self.ended_on is not None:
@@ -324,6 +343,6 @@ class SamplingEvent(IrekuaModelBaseUser):
 
     @property
     def items(self):
-        from irekua_collections.models import SamplingEventItem
+        from irekua_collections.models import CollectionItem
 
-        return SamplingEventItem.objects.filter(sampling_event=self)
+        return CollectionItem.objects.filter(sampling_event=self)

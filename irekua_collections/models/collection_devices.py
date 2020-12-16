@@ -33,7 +33,8 @@ class CollectionDevice(IrekuaModelBaseUser):
         db_column="collection_name",
         verbose_name=_("Name within collection"),
         help_text=_(
-            "Nmae of device within the collection (visible to all collection users)"
+            "Nmae of device within the collection "
+            "(visible to all collection users)"
         ),
         blank=True,
     )
@@ -93,7 +94,10 @@ class CollectionDevice(IrekuaModelBaseUser):
                 "Devices of type %(device_type)s are not allowed in "
                 "collections of type %(collection_type)s"
             )
-            params = dict(device_type=device_type, collection_type=collection_type)
+            params = dict(
+                device_type=device_type,
+                collection_type=collection_type,
+            )
             raise ValidationError({"physical_device": msg % params}) from error
 
     def clean_valid_collection_metadata(self, device_type_config):
@@ -101,10 +105,12 @@ class CollectionDevice(IrekuaModelBaseUser):
             device_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({"collection_metadata": str(error)}) from error
+            raise ValidationError(
+                {"collection_metadata": str(error)}
+            ) from error
 
     @property
     def items(self):
-        from irekua_collections.models import DeploymentItem
+        from irekua_collections.models import CollectionItem
 
-        return DeploymentItem.objects.filter(deployment__collection_device=self)
+        return CollectionItem.objects.filter(deployment=self)

@@ -104,7 +104,10 @@ class Site(IrekuaModelBaseUser):
             if locality.geometry.intersects(self.geom()):
                 continue
 
-            msg = _("The site %(site)s not does not touch the locality %(locality)s")
+            msg = _(
+                "The site %(site)s not does not touch the "
+                "locality %(locality)s"
+            )
             params = dict(site=self, locality=locality)
             raise ValidationError({"locality": msg % params})
 
@@ -118,9 +121,9 @@ class Site(IrekuaModelBaseUser):
 
     @cached_property
     def items(self):
-        from irekua_collections.models import SiteItem
+        from irekua_collections.models import CollectionItem
 
-        return SiteItem.objects.filter(collection_site__site=self)
+        return CollectionItem.objects.filter(collection_site__site=self)
 
     @cached_property
     def sampling_events(self):

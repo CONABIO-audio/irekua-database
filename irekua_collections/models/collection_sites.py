@@ -62,7 +62,8 @@ class CollectionSite(IrekuaModelBaseUser):
         db_column="collection_name",
         verbose_name=_("collection name"),
         help_text=_(
-            "Name of site within the collection (visible to all collection users)"
+            "Name of site within the collection "
+            "(visible to all collection users)"
         ),
         blank=True,
     )
@@ -142,7 +143,9 @@ class CollectionSite(IrekuaModelBaseUser):
                 "Sites of type %(site_type)s are not allowed in "
                 "collections of type %(collection_type)s"
             )
-            params = dict(site_type=self.site_type, collection_type=collection_type)
+            params = dict(
+                site_type=self.site_type, collection_type=collection_type
+            )
             raise ValidationError({"site_type": msg % params}) from error
 
     def clean_valid_parent_site(self):
@@ -150,7 +153,10 @@ class CollectionSite(IrekuaModelBaseUser):
             return
 
         if self.parent_site.collection != self.collection:
-            msg = _("Parent site does not belong to the same collection as this site")
+            msg = _(
+                "Parent site does not belong to the same collection as "
+                "this site"
+            )
             raise ValidationError({"parent_site": msg})
 
         try:
@@ -182,11 +188,9 @@ class CollectionSite(IrekuaModelBaseUser):
 
     @property
     def items(self):
-        from irekua_collections.models import SamplingEventItemItem
+        from irekua_collections.models import CollectionItem
 
-        return SamplingEventItemItem.objects.filter(
-            sampling_event__collection_site=self
-        )
+        return CollectionItem.objects.filter(collection_site=self)
 
     @cached_property
     def deployments(self):

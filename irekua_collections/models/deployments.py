@@ -112,7 +112,9 @@ class Deployment(IrekuaModelBaseUser):
     collection_metadata = models.JSONField(
         db_column="collection_metadata",
         verbose_name=_("collection metadata"),
-        help_text=_("Additional metadata associated to deployment in collection"),
+        help_text=_(
+            "Additional metadata associated to deployment in collection"
+        ),
         blank=True,
         null=True,
     )
@@ -136,7 +138,10 @@ class Deployment(IrekuaModelBaseUser):
 
     def __str__(self):
         msg = _("%(device)s deployed on %(sampling_event)s")
-        params = dict(device=self.collection_device, sampling_event=self.sampling_event)
+        params = dict(
+            device=self.collection_device,
+            sampling_event=self.sampling_event,
+        )
         return msg % params
 
     def save(self, *args, **kwargs):
@@ -192,7 +197,9 @@ class Deployment(IrekuaModelBaseUser):
             return
 
         # Check that deployment type is registered for this collection type
-        deployment_type_config = self.clean_allowed_deployment_type(collection_type)
+        deployment_type_config = self.clean_allowed_deployment_type(
+            collection_type
+        )
 
         #  Check that collection-specific metadata is valid for deployment type
         self.clean_valid_collection_metadata(deployment_type_config)
@@ -225,7 +232,9 @@ class Deployment(IrekuaModelBaseUser):
                 "(> %(distance)s)"
             )
             params = dict(distance=distance)
-            raise ValidationError({"latitude": msg % params, "longitude": msg % params})
+            raise ValidationError(
+                {"latitude": msg % params, "longitude": msg % params}
+            )
 
     def clean_allowed_deployment_type(self, collection_type):
         try:
@@ -237,7 +246,8 @@ class Deployment(IrekuaModelBaseUser):
                 "collections of type %(collection_type)s"
             )
             params = dict(
-                deployment_type=self.deployment_type, collection_type=collection_type
+                deployment_type=self.deployment_type,
+                collection_type=collection_type,
             )
             raise ValidationError({"deployment_type": msg % params}) from error
 
@@ -253,7 +263,9 @@ class Deployment(IrekuaModelBaseUser):
         try:
             deployment_type_config.validate_metadata(self.collection_metadata)
         except ValidationError as error:
-            raise ValidationError({"collection_metadata": str(error)}) from error
+            raise ValidationError(
+                {"collection_metadata": str(error)}
+            ) from error
 
     def clean_valid_configuration(self):
         # pylint: disable=no-member
@@ -272,7 +284,8 @@ class Deployment(IrekuaModelBaseUser):
                 "as the sampling event %(sampling_event)s"
             )
             params = dict(
-                device=self.collection_device, sampling_event=self.sampling_event
+                device=self.collection_device,
+                sampling_event=self.sampling_event,
             )
             raise ValidationError({"collection_device": msg % params})
 
@@ -328,7 +341,7 @@ class Deployment(IrekuaModelBaseUser):
         if (self.deployed_on is None) and (self.recovered_on is None):
             return
 
-        queryset = self.deploymentitem_set.all()
+        queryset = self.collectionitem_set.all()
 
         if self.deployed_on is not None:
             if queryset.filter(captured_on__lt=self.deployed_on).exists():
@@ -387,7 +400,9 @@ class Deployment(IrekuaModelBaseUser):
             minute = self.deployed_on.minute
             second = self.deployed_on.second
 
-        return datetime.datetime(year, month, day, hour, minute, second, 0, time_zone)
+        return datetime.datetime(
+            year, month, day, hour, minute, second, 0, time_zone
+        )
 
     def get_timezone(self, time_zone=None):
         if time_zone is None:
@@ -397,14 +412,16 @@ class Deployment(IrekuaModelBaseUser):
         return pytz_timezone(time_zone)
 
     def validate_date(self, date_info):
-        time_zone = self.get_timezone(time_zone=date_info.get("time_zone", None))
+        time_zone = self.get_timezone(
+            time_zone=date_info.get("time_zone", None)
+        )
         hdate = self.get_best_date_estimate(date_info, time_zone)
         hdate_up = self.recovered_on.astimezone(time_zone)
         hdate_down = self.deployed_on.astimezone(time_zone)
 
         if hdate < hdate_down or hdate > hdate_up:
             mssg = _(
-                "Date is not within the ranges in which the device was deployed: \n"
-                "Deployment: {} \t Recovery: {} \t Date: {}"
+                "Date is not within the ranges in which the device was"
+                " deployed: \n Deployment: {} \t Recovery: {} \t Date: {}"
             ).format(hdate_down, hdate_up, hdate)
             raise ValidationError(mssg)

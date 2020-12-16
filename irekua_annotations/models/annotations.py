@@ -40,7 +40,7 @@ class Annotation(IrekuaModelBaseUser):
         verbose_name=_("annotation"),
         help_text=_("Information of annotation location within item"),
         blank=True,
-        null=False,
+        null=True,
     )
 
     annotation_metadata = models.JSONField(

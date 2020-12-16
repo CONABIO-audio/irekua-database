@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
 
 from irekua_annotations.models import Annotation
@@ -35,9 +36,11 @@ class Filter(IrekuaUserFilter):
         widget=get_autocomplete_widget(model=Term),
     )
 
-    labels__term_type = filters.ModelChoiceFilter(
+    term_type = filters.ModelChoiceFilter(
         queryset=TermType.objects.all(),
         widget=get_autocomplete_widget(model=TermType),
+        field_name="labels__term_type",
+        label=_("Term type"),
     )
 
     event_type = filters.ModelChoiceFilter(
@@ -50,9 +53,11 @@ class Filter(IrekuaUserFilter):
         widget=get_autocomplete_widget(model=Item),
     )
 
-    item__item_type = filters.ModelChoiceFilter(
+    item_type = filters.ModelChoiceFilter(
         queryset=ItemType.objects.all(),
         widget=get_autocomplete_widget(model=ItemType),
+        field_name="item__item_type",
+        label=_("Item type"),
     )
 
     class Meta:

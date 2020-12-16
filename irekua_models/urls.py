@@ -1,7 +1,6 @@
-from django.urls import path, include
-# from irekua_models.api.router import router
+from django.conf.urls import url, include
 
 
 urlpatterns = [
-    # path('api/', include(router.urls)),
+    url("", include("irekua_models.autocomplete")),
 ]

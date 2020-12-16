@@ -1,3 +1,4 @@
+from django.db.models import Q
 from dal import autocomplete
 
 from irekua_terms.models import Term
@@ -25,6 +26,9 @@ class TermsAutocomplete(autocomplete.Select2QuerySetView):
         qs = Term.objects.all()
 
         if self.q:
-            qs = qs.filter(value__istartswith=self.q)
+            qs = qs.filter(
+                Q(value__istartswith=self.q)
+                | Q(term_type__name__istartswith=self.q)
+            )
 
         return qs

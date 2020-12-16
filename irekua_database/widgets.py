@@ -39,9 +39,7 @@ class CustomURLMixin:
 
 
 class SelectMultiple(CustomURLMixin, dal.ModelSelect2Multiple):
-    def _get_url(self):
-        print("GETTING URL")
-        return super()._get_url()
+    pass
 
 
 class Select(CustomURLMixin, dal.ModelSelect2):

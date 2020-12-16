@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
 
 from irekua_collections.models import CollectionItem
@@ -34,6 +35,7 @@ class Filter(items.Filter):
     collection_type = filters.ModelChoiceFilter(
         queryset=CollectionType.objects.all(),
         field_name="collection__collection_type",
+        label=_("Collection type"),
         widget=get_autocomplete_widget(model=CollectionType),
     )
 
@@ -45,23 +47,27 @@ class Filter(items.Filter):
     physical_device = filters.ModelChoiceFilter(
         queryset=PhysicalDevice.objects.all(),
         field_name="collection_device__physical_device",
+        label=_("Physical device"),
         widget=get_autocomplete_widget(model=PhysicalDevice),
     )
 
     device = filters.ModelChoiceFilter(
         queryset=Device.objects.all(),
         field_name="collection_device__physical_device__device",
+        label=_("Device"),
         widget=get_autocomplete_widget(model=Device),
     )
 
     brand = filters.ModelChoiceFilter(
         queryset=DeviceBrand.objects.all(),
+        label=_("Brand"),
         field_name="collection_device__physical_device__device__brand",
         widget=get_autocomplete_widget(model=DeviceBrand),
     )
 
     device_type = filters.ModelChoiceFilter(
         queryset=DeviceType.objects.all(),
+        label=_("Device type"),
         field_name="collection_device__physical_device__device__device_type",
         widget=get_autocomplete_widget(model=DeviceType),
     )
@@ -73,6 +79,7 @@ class Filter(items.Filter):
 
     sampling_event_type = filters.ModelChoiceFilter(
         queryset=SamplingEventType.objects.all(),
+        label=_("Sampling event type"),
         field_name="sampling_event__sampling_event_type",
         widget=get_autocomplete_widget(model=SamplingEventType),
     )
@@ -85,6 +92,7 @@ class Filter(items.Filter):
     deployment_type = filters.ModelChoiceFilter(
         queryset=DeploymentType.objects.all(),
         field_name="deployment__deployment_type",
+        label=_("Deployment type"),
         widget=get_autocomplete_widget(model=DeploymentType),
     )
 
@@ -96,12 +104,14 @@ class Filter(items.Filter):
     site = filters.ModelChoiceFilter(
         queryset=Site.objects.all(),
         field_name="collection_site__site",
+        label=_("Site"),
         widget=get_autocomplete_widget(model=Site),
     )
 
     site_type = filters.ModelChoiceFilter(
         queryset=SiteType.objects.all(),
         field_name="collection_site__site_type",
+        label=_("Site type"),
         widget=get_autocomplete_widget(model=SiteType),
     )
 

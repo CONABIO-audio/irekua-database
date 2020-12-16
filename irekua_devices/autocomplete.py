@@ -4,6 +4,7 @@ from dal import autocomplete
 from irekua_devices.models import DeviceType
 from irekua_devices.models import DeviceBrand
 from irekua_devices.models import Device
+from irekua_devices.models import PhysicalDevice
 from irekua_database.autocomplete import register_autocomplete
 
 
@@ -42,10 +43,25 @@ class DeviceAutocomplete(autocomplete.Select2QuerySetView):
 
         if self.q:
             qs = qs.filter(
-                Q(model__istartswith=self.q) | Q(brand__name__istartswith=self.q)
+                Q(model__istartswith=self.q)
+                | Q(brand__name__istartswith=self.q)
             )
 
         if "device_type" in self.request.GET:
             qs = qs.filter(device_type=self.request.GET["device_type"])
+
+        return qs
+
+
+@register_autocomplete(PhysicalDevice, urlpatterns)
+class PhysicalDeviceAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = PhysicalDevice.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        if "device_type" in self.request.GET:
+            qs = qs.filter(device__device_type=self.request.GET["device_type"])
 
         return qs

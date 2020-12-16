@@ -22,14 +22,16 @@ ordering_fields = (
 
 
 class Filter(IrekuaUserFilter):
-    device__device_type = filters.ModelChoiceFilter(
+    device_type = filters.ModelChoiceFilter(
         queryset=DeviceType.objects.all(),
         widget=get_autocomplete_widget(model=DeviceType),
+        field_name="device__device_type",
     )
 
-    device__brand = filters.ModelChoiceFilter(
+    brand = filters.ModelChoiceFilter(
         queryset=DeviceBrand.objects.all(),
         widget=get_autocomplete_widget(model=DeviceBrand),
+        field_name="device__brand",
     )
 
     device = filters.ModelChoiceFilter(
@@ -37,12 +39,16 @@ class Filter(IrekuaUserFilter):
         widget=get_autocomplete_widget(model=Device),
     )
 
+    model = filters.CharFilter(
+        field_name="device__model",
+        lookup_expr="icontains",
+    )
+
     class Meta:
         model = PhysicalDevice
 
         fields = {
             "name": ["exact", "icontains"],
-            "device__brand__name": ["exact", "icontains"],
             "device__device_type__name": ["exact", "icontains"],
             "device__model": ["exact", "icontains"],
             "serial_number": ["exact", "icontains"],

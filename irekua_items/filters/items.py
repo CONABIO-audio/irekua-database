@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
 
 from irekua_database.models import User
@@ -39,6 +40,7 @@ class Filter(IrekuaUserFilter):
     licence_type = filters.ModelChoiceFilter(
         queryset=LicenceType.objects.all(),
         widget=get_autocomplete_widget(model=LicenceType),
+        label=_("Licence type"),
         to_field_name="licence__licence_type",
     )
 
@@ -58,7 +60,6 @@ class Filter(IrekuaUserFilter):
         fields = {
             "captured_on": ["exact", "lt", "gt", "lte", "gte"],
             "filesize": ["exact", "lt", "gt", "lte", "gte"],
-            "mime_type__mime_type": ["exact", "icontains"],
             "item_type__name": ["exact", "icontains"],
             "licence__is_active": ["exact"],
             "licence__licence_type__name": ["exact", "icontains"],

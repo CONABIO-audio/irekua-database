@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
 
 from irekua_collections.models import Collection
@@ -34,6 +35,7 @@ class Filter(IrekuaUserFilter):
     collection_type = filters.ModelChoiceFilter(
         queryset=CollectionType.objects.all(),
         field_name="collection__collection_type",
+        label=_("Collection type"),
         widget=get_autocomplete_widget(model=CollectionType),
     )
 
@@ -50,12 +52,14 @@ class Filter(IrekuaUserFilter):
     site_type = filters.ModelChoiceFilter(
         queryset=SiteType.objects.all(),
         field_name="collection_site__site_type",
+        label=_("Site type"),
         widget=get_autocomplete_widget(model=SiteType),
     )
 
     site = filters.ModelChoiceFilter(
         queryset=Site.objects.all(),
         field_name="collection_site__site",
+        label=_("Site"),
         widget=get_autocomplete_widget(model=Site),
     )
 
@@ -67,6 +71,7 @@ class Filter(IrekuaUserFilter):
     parent_sampling_event_type = filters.ModelChoiceFilter(
         queryset=SamplingEventType.objects.all(),
         field_name="parent_sampling_event__sampling_event_type",
+        label=_("Parent sampling event type"),
         widget=get_autocomplete_widget(model=SamplingEventType),
     )
 

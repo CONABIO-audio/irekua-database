@@ -2,11 +2,11 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.base import IrekuaModelBase
+from irekua_database.base import IrekuaModelBaseUser
 from irekua_items.models import Item
 
 
-class ModelRun(IrekuaModelBase):
+class ModelRun(IrekuaModelBaseUser):
     model_version = models.ForeignKey(
         "ModelVersion",
         on_delete=models.PROTECT,

@@ -9,16 +9,6 @@ from .collection_items import CollectionItemMixin
 
 
 class SiteItemMixin(CollectionItemMixin):
-    collection_site = models.ForeignKey(
-        "CollectionSite",
-        db_column="collection_site_id",
-        verbose_name=_("collection site"),
-        help_text=_("Site in which this item was captured"),
-        on_delete=models.PROTECT,
-        blank=False,
-        null=False,
-    )
-
     class Meta:
         abstract = True
 
@@ -45,8 +35,15 @@ class SiteItemMixin(CollectionItemMixin):
         params = dict(collection_site=self.collection_site, collection=self.collection)
         raise ValidationError({"collection_site": msg % params})
 
+    def get_upload_to_format_arguments(self):
+        return {
+            **super().get_upload_to_format_arguments(),
+            # pylint: disable=no-member
+            "site": self.collection_site.id,
+        }
 
-class SiteItem(Item, SiteItemMixin):
+
+class SiteItemTmp(Item, SiteItemMixin):
     upload_to_format = os.path.join(
         "items",
         "collection" "{collection}",
@@ -72,10 +69,3 @@ class SiteItem(Item, SiteItemMixin):
                 collection_type=item_type_config.collection_type,
             )
             raise ValidationError({"item_type": msg % params})
-
-    def get_upload_to_format_arguments(self):
-        return {
-            **super().get_upload_to_format_arguments(),
-            # pylint: disable=no-member
-            "site": self.collection_site.id,
-        }

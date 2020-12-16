@@ -7,17 +7,16 @@ import django.db.models.deletion
 def add_mime_type_to_items(apps, schema_editor):
     mimetypes.init()
 
-    Item = apps.get_model('irekua_items', 'Item')
-    MimeType = apps.get_model('irekua_items', 'MimeType')
+    Item = apps.get_model("irekua_items", "Item")
+    MimeType = apps.get_model("irekua_items", "MimeType")
 
     mime_types = {}
+
     def get_mime_type(mime_type_name):
         if mime_type_name in mime_types:
             return mime_types[mime_type_name]
 
-        mime_type, _ = MimeType.objects.get_or_create(
-            mime_type=mime_type_name
-        )
+        mime_type, _ = MimeType.objects.get_or_create(mime_type=mime_type_name)
         mime_types[mime_type_name] = mime_type
         return mime_type
 
@@ -35,41 +34,116 @@ def add_mime_type_to_items(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('irekua_items', '0011_delete_itemthumbnail'),
+        ("irekua_schemas", "0002_auto_20201018_2158"),
+        ("irekua_items", "0011_delete_itemthumbnail"),
+        ("irekua_devices", "0006_move_mime_type_to_item"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='mimetype',
-            name='media_info_schema',
-            field=models.ForeignKey(blank=True, db_column='media_info_schema_id', help_text='JSON Schema for basic media info of files of this mime type', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='media_info_schema', to='irekua_schemas.schema', verbose_name='media info schema'),
+            model_name="mimetype",
+            name="media_info_schema",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="media_info_schema_id",
+                help_text="JSON Schema for basic media info of files of this mime type",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="media_info_schema",
+                to="irekua_schemas.schema",
+                verbose_name="media info schema",
+            ),
         ),
         migrations.CreateModel(
-            name='MediaInfoType',
+            name="MediaInfoType",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('name', models.CharField(db_column='name', help_text='Name of media info type', max_length=64, unique=True, verbose_name='name')),
-                ('description', models.TextField(db_column='description', help_text='Description of media info type', verbose_name='description')),
-                ('media_info_schema', models.ForeignKey(db_column='media_info_schema_id', help_text='JSON Schema for media info', on_delete=django.db.models.deletion.PROTECT, to='irekua_schemas.schema', verbose_name='media info schema')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        db_column="name",
+                        help_text="Name of media info type",
+                        max_length=64,
+                        unique=True,
+                        verbose_name="name",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        db_column="description",
+                        help_text="Description of media info type",
+                        verbose_name="description",
+                    ),
+                ),
+                (
+                    "media_info_schema",
+                    models.ForeignKey(
+                        db_column="media_info_schema_id",
+                        help_text="JSON Schema for media info",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_schemas.schema",
+                        verbose_name="media info schema",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Media Info Type',
-                'verbose_name_plural': 'Media Info Types',
-                'ordering': ['-created_on'],
+                "verbose_name": "Media Info Type",
+                "verbose_name_plural": "Media Info Types",
+                "ordering": ["-created_on"],
             },
         ),
         migrations.AddField(
-            model_name='itemtype',
-            name='media_info_type',
-            field=models.ForeignKey(blank=True, db_column='media_info_type_id', help_text='Type of media info associated to items of this type', null=True, on_delete=django.db.models.deletion.PROTECT, to='irekua_items.mediainfotype', verbose_name='media info type'),
+            model_name="itemtype",
+            name="media_info_type",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="media_info_type_id",
+                help_text="Type of media info associated to items of this type",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_items.mediainfotype",
+                verbose_name="media info type",
+            ),
         ),
         migrations.AddField(
-            model_name='item',
-            name='mime_type',
-            field=models.ForeignKey(db_column='mime_type_id', blank=True, null=True, help_text='MIME type of resource', on_delete=django.db.models.deletion.PROTECT, to='irekua_items.mimetype', verbose_name='mime type'),
+            model_name="item",
+            name="mime_type",
+            field=models.ForeignKey(
+                db_column="mime_type_id",
+                blank=True,
+                null=True,
+                help_text="MIME type of resource",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_items.mimetype",
+                verbose_name="mime type",
+            ),
         ),
         migrations.RunPython(
             add_mime_type_to_items,

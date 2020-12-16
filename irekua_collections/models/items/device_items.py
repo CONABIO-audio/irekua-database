@@ -8,25 +8,16 @@ from irekua_items.models import Item
 from .collection_items import CollectionItemMixin
 
 
-class DeviceItemMixin(CollectionItemMixin):
-    collection_device = models.ForeignKey(
-        "CollectionDevice",
-        db_column="collection_device_id",
-        verbose_name=_("collection device"),
-        help_text=_("Device used to capture the item"),
-        on_delete=models.PROTECT,
-        blank=False,
-        null=False,
-    )
-
+class DeviceItemMixin:
     class Meta:
         abstract = True
 
     def clean(self):
-        super().clean()
         # Check that collection device belongs and
         # collection coincide
         self.clean_compatible_device_and_collection()
+
+        super().clean()
 
     def clean_compatible_device_and_collection(self):
         if self.collection is None:
@@ -47,8 +38,15 @@ class DeviceItemMixin(CollectionItemMixin):
         )
         raise ValidationError({"collection_device": msg % params})
 
+    def get_upload_to_format_arguments(self):
+        return {
+            **super().get_upload_to_format_arguments(),
+            # pylint: disable=no-member
+            "device": self.collection_device.id,
+        }
 
-class DeviceItem(Item, DeviceItemMixin):
+
+class DeviceItemTmp(Item, CollectionItemMixin, DeviceItemMixin):
     upload_to_format = os.path.join(
         "items",
         "collection" "{collection}",
@@ -74,10 +72,3 @@ class DeviceItem(Item, DeviceItemMixin):
                 collection_type=item_type_config.collection_type,
             )
             raise ValidationError({"item_type": msg % params})
-
-    def get_upload_to_format_arguments(self):
-        return {
-            **super().get_upload_to_format_arguments(),
-            # pylint: disable=no-member
-            "device": self.collection_device.id,
-        }

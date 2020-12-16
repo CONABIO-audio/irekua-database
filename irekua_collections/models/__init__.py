@@ -7,11 +7,7 @@ from .data_collections import Collection
 from .deployments import Deployment
 from .sampling_events import SamplingEvent
 
-from .items import SamplingEventItem
-from .items import CollectionItem
-from .items import DeploymentItem
-from .items import DeviceItem
-from .items import SiteItem
+from .collection_items import CollectionItem
 
 from .types import CollectionTypeAnnotationType
 from .types import CollectionTypeDeploymentType
@@ -28,27 +24,25 @@ from .types import CollectionType
 
 
 __all__ = [
-    'Collection',
-    'CollectionAnnotation',
-    'CollectionDevice',
-    'CollectionItem',
-    'CollectionLicence',
-    'CollectionSite',
-    'CollectionUser',
-    'CollectionTypeDeviceType',
-    'CollectionTypeItemType',
-    'CollectionTypeRole',
-    'CollectionType',
-    'CollectionTypeAnnotationType',
-    'CollectionTypeDeploymentType',
-    'CollectionTypeEventType',
-    'CollectionTypeLicenceType',
-    'CollectionTypeSamplingEventType',
-    'CollectionTypeSiteType',
-    'Deployment',
-    'DeploymentItem',
-    'SamplingEvent',
-    'SamplingEventItem',
-    'DeploymentType',
-    'SamplingEventType',
+    "Collection",
+    "CollectionAnnotation",
+    "CollectionDevice",
+    "CollectionLicence",
+    "CollectionSite",
+    "CollectionUser",
+    "CollectionTypeDeviceType",
+    "CollectionTypeItemType",
+    "CollectionTypeRole",
+    "CollectionType",
+    "CollectionTypeAnnotationType",
+    "CollectionTypeDeploymentType",
+    "CollectionTypeEventType",
+    "CollectionTypeLicenceType",
+    "CollectionTypeSamplingEventType",
+    "CollectionTypeSiteType",
+    "Deployment",
+    "DeploymentType",
+    "SamplingEvent",
+    "SamplingEventType",
+    "CollectionItem",
 ]

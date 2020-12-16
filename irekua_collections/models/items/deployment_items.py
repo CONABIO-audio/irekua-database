@@ -10,16 +10,6 @@ from .device_items import DeviceItemMixin
 
 
 class DeploymentItemMixin(SamplingEventItemMixin, DeviceItemMixin):
-    deployment = models.ForeignKey(
-        "Deployment",
-        db_column="deployment_id",
-        verbose_name=_("deployment"),
-        help_text=_("Deployment of device in which this item was captured"),
-        on_delete=models.PROTECT,
-        blank=False,
-        null=False,
-    )
-
     class Meta:
         abstract = True
 
@@ -28,7 +18,7 @@ class DeploymentItemMixin(SamplingEventItemMixin, DeviceItemMixin):
         # the deployment
         self.clean_compatible_deployment_and_sampling_event()
 
-        #  Check that the device used coincides with the one delared by the
+        # Check that the device used coincides with the one delared by the
         # deployment
         self.clean_compatible_deployment_and_device()
 
@@ -96,7 +86,7 @@ class DeploymentItemMixin(SamplingEventItemMixin, DeviceItemMixin):
         }
 
 
-class DeploymentItem(Item, DeploymentItemMixin):
+class DeploymentItemTmp(Item, DeploymentItemMixin):
     upload_to_format = os.path.join(
         "items",
         "collection",

@@ -1,9 +1,7 @@
 from .organisms import Organism
 from .organism_captures import OrganismCapture
-from .organism_capture_items import OrganismCaptureItem
 from .organism_items import OrganismItem
 from .organism_observations import OrganismObservation
-from .organism_observation_items import OrganismObservationItem
 from .types import CollectionTypeOrganismCaptureType
 from .types import CollectionTypeOrganismConfig
 from .types import CollectionTypeOrganismObservationType
@@ -20,11 +18,9 @@ __all__ = [
     "CollectionTypeOrganismType",
     "Organism",
     "OrganismCapture",
-    "OrganismCaptureItem",
     "OrganismCaptureType",
     "OrganismItem",
     "OrganismObservation",
-    "OrganismObservationItem",
     "OrganismObservationType",
     "OrganismType",
 ]

@@ -9,16 +9,6 @@ from .site_items import SiteItemMixin
 
 
 class SamplingEventItemMixin(SiteItemMixin):
-    sampling_event = models.ForeignKey(
-        "SamplingEvent",
-        db_column="sampling_event_id",
-        verbose_name=_("sampling event"),
-        help_text=_("Sampling event in which this item was captured"),
-        on_delete=models.PROTECT,
-        blank=False,
-        null=False,
-    )
-
     class Meta:
         abstract = True
 
@@ -94,8 +84,15 @@ class SamplingEventItemMixin(SiteItemMixin):
         except ValidationError as error:
             raise ValidationError({"captured_on": error}) from error
 
+    def get_upload_to_format_arguments(self):
+        return {
+            **super().get_upload_to_format_arguments(),
+            # pylint: disable=no-member
+            "sampling_event": self.sampling_event.id,
+        }
 
-class SamplingEventItem(Item, SamplingEventItemMixin):
+
+class SamplingEventItemTmp(Item, SamplingEventItemMixin):
     upload_to_format = os.path.join(
         "items",
         "collection",
@@ -123,10 +120,3 @@ class SamplingEventItem(Item, SamplingEventItemMixin):
                 collection_type=item_type_config.collection_type,
             )
             raise ValidationError({"item_type": msg % params})
-
-    def get_upload_to_format_arguments(self):
-        return {
-            **super().get_upload_to_format_arguments(),
-            # pylint: disable=no-member
-            "sampling_event": self.sampling_event.id,
-        }

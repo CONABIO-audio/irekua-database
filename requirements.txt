@@ -23,7 +23,6 @@ hypothesis==5.37.3
 idna==2.10
 ipython==7.18.1
 ipython-genutils==0.2.0
-irekua-database==0.1.2
 itypes==1.2.0
 jedi==0.17.2
 Jinja2==2.11.2

@@ -52,7 +52,7 @@ class DeviceType(IrekuaModelBase, MetadataSchemaMixin):
     def validate_mime_type(self, mime_type):
         if not self.mime_types.filter(pk=mime_type.pk).exists():
             msg = _(
-                "Device type %(device_type)s does not "
+                "Device type %(device_type)s do not "
                 "support files of mime type %(mime_type)s"
             )
             params = dict(device_type=self.name, mime_type=mime_type)

@@ -27,7 +27,7 @@ class Filter(IrekuaUserFilter):
         widget=get_autocomplete_widget(model=CollectionType),
     )
 
-    institution = filters.ModelChoiceFilter(
+    institutions = filters.ModelChoiceFilter(
         queryset=Institution.objects.all(),
         widget=get_autocomplete_widget(model=Institution),
     )

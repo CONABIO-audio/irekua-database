@@ -10,18 +10,28 @@ class UsersInline(admin.TabularInline):
 
     model = Collection.users.through
 
-    verbose_name = _('User')
+    verbose_name = _("User")
 
-    verbose_name_plural = _('Users')
+    verbose_name_plural = _("Users")
 
-    autocomplete_fields = [
-        'user'
-    ]
+    autocomplete_fields = ["user"]
 
     readonly_fields = [
-        'created_by',
-        'created_on',
+        "created_by",
+        "created_on",
     ]
+
+
+class InstitutionsInline(admin.TabularInline):
+    extra = 0
+
+    model = Collection.institutions.through
+
+    verbose_name = _("Institution")
+
+    verbose_name_plural = _("Institutions")
+
+    autocomplete_fields = ["institution"]
 
 
 class AdministratorsInline(admin.TabularInline):
@@ -29,67 +39,67 @@ class AdministratorsInline(admin.TabularInline):
 
     model = Collection.administrators.through
 
-    verbose_name = _('Administrator')
+    verbose_name = _("Administrator")
 
-    verbose_name_plural = _('Administrators')
+    verbose_name_plural = _("Administrators")
 
-    autocomplete_fields = [
-        'user'
-    ]
+    autocomplete_fields = ["user"]
 
 
 class CollectionAdmin(IrekuaUserAdmin):
     search_fields = [
-        'name',
-        'collection_type__name',
-        'institution__institution_name',
+        "name",
+        "collection_type__name",
+        "institutions__institution_name",
     ]
 
     list_display = [
-        'id',
-        '__str__',
-        'collection_type',
-        'institution',
-        'is_open',
-        'created_by',
-        'created_on',
+        "id",
+        "__str__",
+        "collection_type",
+        "is_open",
+        "created_by",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
-        '__str__',
+        "id",
+        "__str__",
     ]
 
     list_filter = [
-        'is_open',
-        'institution',
-        'collection_type',
+        "is_open",
+        "institutions",
+        "collection_type",
     ]
 
     autocomplete_fields = [
-        'collection_type',
-        'institution',
+        "collection_type",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'collection_type'),
-                'description',
-                ('institution', 'logo', 'is_open')
-            )
-        }),
-        (_('Additional Metadata'), {
-            'fields': (
-                'metadata',
-            ),
-        }),
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "collection_type"),
+                    "description",
+                    ("logo", "is_open"),
+                )
+            },
+        ),
+        (
+            _("Additional Metadata"),
+            {
+                "fields": ("metadata",),
+            },
+        ),
     )
-
 
     inlines = [
         AdministratorsInline,
         UsersInline,
+        InstitutionsInline,
     ]
 
     def save_related(self, request, form, formsets, change):

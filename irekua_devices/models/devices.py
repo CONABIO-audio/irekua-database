@@ -40,7 +40,7 @@ class Device(IrekuaModelBase, MetadataSchemaMixin):
         Schema,
         models.PROTECT,
         related_name="configuration_schema",
-        db_column="configuration schema",
+        db_column="configuration_schema_id",
         verbose_name=_("configuration schema"),
         help_text=_("JSON Schema for configuration info of device"),
         null=True,
@@ -58,7 +58,9 @@ class Device(IrekuaModelBase, MetadataSchemaMixin):
 
     def __str__(self):
         msg = "%(device_type)s: %(brand)s - %(model)s"
-        params = dict(device_type=self.device_type, brand=self.brand, model=self.model)
+        params = dict(
+            device_type=self.device_type, brand=self.brand, model=self.model
+        )
         return msg % params
 
     def validate_configuration(self, configuration):

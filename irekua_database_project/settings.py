@@ -49,3 +49,5 @@ INSTALLED_APPS = list(
 )
 
 ROOT_URLCONF = "irekua_database_project.urls"
+
+# WSGI_APPLICATION = "irekua_database_project.wsgi"

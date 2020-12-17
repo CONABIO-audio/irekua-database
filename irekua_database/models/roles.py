@@ -10,39 +10,42 @@ class Role(IrekuaModelBase):
     name = models.CharField(
         max_length=64,
         unique=True,
-        db_column='name',
-        verbose_name=_('name'),
-        help_text=_('Name of role'),
+        db_column="name",
+        verbose_name=_("name"),
+        help_text=_("Name of role"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     description = models.TextField(
-        db_column='description',
-        verbose_name=_('description'),
-        help_text=_('Description of role'),
-        blank=True)
+        db_column="description",
+        verbose_name=_("description"),
+        help_text=_("Description of role"),
+        blank=True,
+    )
 
     icon = models.ImageField(
-        db_column='icon',
-        verbose_name=_('icon'),
-        help_text=_('Role type icon'),
-        upload_to='images/role_types/',
+        db_column="icon",
+        verbose_name=_("icon"),
+        help_text=_("Role type icon"),
+        upload_to="images/role_types/",
         blank=True,
-        null=True)
+        null=True,
+    )
 
     permissions = models.ManyToManyField(
         Permission,
-        verbose_name=_('permissions'),
-        help_text=_('Permissions associated to role'),
-        limit_choices_to=models.Q(content_type__model='collection'),
-        blank=True)
+        verbose_name=_("permissions"),
+        help_text=_("Permissions associated to role"),
+        blank=True,
+    )
 
     class Meta:
-        verbose_name = _('Role')
+        verbose_name = _("Role")
 
-        verbose_name_plural = _('Roles')
+        verbose_name_plural = _("Roles")
 
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return str(self.name)

@@ -28,9 +28,9 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         thus creation of collections of this types must not be free. A flag
         (anyone_can_create) has been included to indicate whether any user can
         create a collection of this type. If creation is restricted, then
-        administrators must be specified. Administrators will have all permissions
-        on children collections, and they alone have the permissions to create
-        collections of this type.
+        administrators must be specified. Administrators will have all
+        permissions on children collections, and they alone have the
+        permissions to create collections of this type.
 
         # TODO
     """

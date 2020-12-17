@@ -36,7 +36,9 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
         "SiteDescriptorType",
         blank=True,
         verbose_name=_("site descriptor types"),
-        help_text=_("Descriptor types to be used when describing sites of this type"),
+        help_text=_(
+            "Descriptor types to be used when describing sites of this type"
+        ),
     )
 
     point_site = models.BooleanField(
@@ -138,7 +140,10 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
         if site.geometry_type == "LineString" and self.linestring_site:
             return
 
-        if site.geometry_type == "MultiLineString" and self.multilinestring_site:
+        if (
+            site.geometry_type == "MultiLineString"
+            and self.multilinestring_site
+        ):
             return
 
         if site.geometry_type == "MultiPoint" and self.multipoint_site:
@@ -164,7 +169,9 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
         raise ValidationError(msg % params)
 
     def validate_descriptor_type(self, descriptor_type):
-        if not self.site_descriptor_types.filter(pk=descriptor_type.pk).exists():
+        if not self.site_descriptor_types.filter(
+            pk=descriptor_type.pk
+        ).exists():
             msg = _(
                 "Site descriptor type %(descriptor_type)s is not admitted "
                 "for site of types %(site_type)s."

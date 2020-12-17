@@ -41,17 +41,14 @@ class Collection(IrekuaModelBaseUser):
         verbose_name=_("metadata"),
         help_text=_("Metadata associated to collection"),
         blank=True,
-        null=False,
+        null=True,
     )
 
-    institution = models.ForeignKey(
+    institutions = models.ManyToManyField(
         Institution,
-        on_delete=models.PROTECT,
-        db_column="institution_id",
-        verbose_name=_("institution"),
-        help_text=_("Institution to which the collection belogs"),
+        verbose_name=_("institutions"),
+        help_text=_("Institutions to which the collection belogs"),
         blank=True,
-        null=True,
     )
 
     logo = models.ImageField(
@@ -97,7 +94,8 @@ class Collection(IrekuaModelBaseUser):
         db_column="is_open",
         verbose_name=_("is open"),
         help_text=_(
-            "Boolean flag indicating whether contents of the collection are public."
+            "Boolean flag indicating whether contents of the collection "
+            "are public."
         ),
         blank=True,
         null=False,
@@ -118,7 +116,10 @@ class Collection(IrekuaModelBaseUser):
             ),
             ("add_collection_user", _("Can add user to collection")),
             ("add_collection_licence", _("Can add licence to collection")),
-            ("add_collection_annotation", _("Can annotate items in collection")),
+            (
+                "add_collection_annotation",
+                _("Can annotate items in collection"),
+            ),
             (
                 "add_collection_annotation_vote",
                 _("Can vote on annotations of items in collection"),
@@ -135,9 +136,15 @@ class Collection(IrekuaModelBaseUser):
                 _("Can view annotations of items in collection"),
             ),
             ("change_collection_sites", _("Can change sites in collection")),
-            ("change_collection_users", _("Can change user info in collection")),
+            (
+                "change_collection_users",
+                _("Can change user info in collection"),
+            ),
             ("change_collection_items", _("Can change items in collection")),
-            ("change_collection_devices", _("Can change devices in collection")),
+            (
+                "change_collection_devices",
+                _("Can change devices in collection"),
+            ),
             (
                 "change_collection_annotations",
                 _("Can change annotations of items in collection"),
@@ -177,7 +184,9 @@ class Collection(IrekuaModelBaseUser):
 
     def has_permission(self, user, codename):
         try:
-            collectionuser = self.users.through.objects.get(collection=self, user=user)
+            collectionuser = self.users.through.objects.get(
+                collection=self, user=user
+            )
             role = collectionuser.role
 
         except self.users.through.DoesNotExist:
@@ -187,7 +196,9 @@ class Collection(IrekuaModelBaseUser):
 
     def get_user_role(self, user):
         try:
-            collection_user = self.users.through.objects.get(collection=self, user=user)
+            collection_user = self.users.through.objects.get(
+                collection=self, user=user
+            )
             return collection_user.role
 
         except self.users.through.DoesNotExist:

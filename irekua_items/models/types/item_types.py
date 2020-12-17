@@ -13,47 +13,52 @@ mimetypes.init()
 class ItemType(IrekuaModelBase, MetadataSchemaMixin):
     name = models.CharField(
         max_length=64,
-        db_column='name',
-        verbose_name=_('name'),
+        db_column="name",
+        verbose_name=_("name"),
         unique=True,
-        help_text=_('Name of item type'),
-        blank=False)
+        help_text=_("Name of item type"),
+        blank=False,
+    )
 
     description = models.TextField(
-        db_column='description',
-        verbose_name=_('description'),
-        help_text=_('Description of item type'),
-        blank=False)
+        db_column="description",
+        verbose_name=_("description"),
+        help_text=_("Description of item type"),
+        blank=False,
+    )
 
     icon = models.ImageField(
-        db_column='icon',
-        verbose_name=_('icon'),
-        help_text=_('Item type icon'),
-        upload_to='images/item_types/',
+        db_column="icon",
+        verbose_name=_("icon"),
+        help_text=_("Item type icon"),
+        upload_to="images/item_types/",
         blank=True,
-        null=True)
+        null=True,
+    )
 
     mime_types = models.ManyToManyField(
-        'MimeType',
-        db_column='mime_types',
-        verbose_name=_('mime types'),
-        help_text=_('Mime types of files for this item type'),
-        blank=True)
+        "MimeType",
+        db_column="mime_types",
+        verbose_name=_("mime types"),
+        help_text=_("Mime types of files for this item type"),
+        blank=True,
+    )
 
     media_info_type = models.ForeignKey(
-        'MediaInfoType',
+        "MediaInfoType",
         models.PROTECT,
-        db_column='media_info_type_id',
-        verbose_name=_('media info type'),
-        help_text=_('Type of media info associated to items of this type'),
+        db_column="media_info_type_id",
+        verbose_name=_("media info type"),
+        help_text=_("Type of media info associated to items of this type"),
         blank=True,
-        null=True)
+        null=True,
+    )
 
     class Meta:
-        verbose_name = _('Item Type')
-        verbose_name_plural = _('Item Types')
+        verbose_name = _("Item Type")
+        verbose_name_plural = _("Item Types")
 
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return self.name
@@ -61,11 +66,10 @@ class ItemType(IrekuaModelBase, MetadataSchemaMixin):
     def validate_mime_type(self, mime_type):
         if not self.mime_types.filter(pk=mime_type.pk).exists():
             msg = _(
-                'The MIME type %(mime_type)s is not accepted for items '
-                'of type %(item_type)s')
-            params = dict(
-                mime_type=mime_type,
-                item_type=self)
+                "The MIME type %(mime_type)s is not accepted for items "
+                "of type %(item_type)s"
+            )
+            params = dict(mime_type=mime_type, item_type=self)
             raise ValidationError(msg % params)
 
     def validate_media_info(self, media_info):
@@ -78,9 +82,8 @@ class ItemType(IrekuaModelBase, MetadataSchemaMixin):
 
         except ValidationError as error:
             msg = _(
-                'Media info is invalid for item of type %(item_type)s. '
-                'Error: %(error)s')
-            params = dict(
-                item_type=self,
-                error=error)
-            raise  ValidationError(msg % params) from error
+                "Media info is invalid for item of type %(item_type)s. "
+                "Error: %(error)s"
+            )
+            params = dict(item_type=self, error=error)
+            raise ValidationError(msg % params) from error

@@ -106,7 +106,9 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
     deployment_distance = models.FloatField(
         db_column="deployment_distance",
         verbose_name=_("deployment distance"),
-        help_text=_("Maximum distance to site at which a device can be deployed"),
+        help_text=_(
+            "Maximum distance to site at which a device can be deployed"
+        ),
         blank=True,
         null=False,
         default=0,
@@ -116,7 +118,8 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
         db_column="can_have_subsampling_events",
         verbose_name=_("can have subsampling events"),
         help_text=_(
-            "Determines if sampling events of this type can have sub-sampling events"
+            "Determines if sampling events of this type can have "
+            "sub-sampling events"
         ),
         blank=True,
         null=False,
@@ -127,8 +130,8 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
         db_column="restrict_subsampling_event_types",
         verbose_name=_("restrict subsampling event types"),
         help_text=_(
-            "If false a sampling event of any type can be declared as a subsampling event "
-            "for sampling events of this type."
+            "If false a sampling event of any type can be declared as"
+            " a subsampling event for sampling events of this type."
         ),
         blank=True,
         null=False,
@@ -140,8 +143,8 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
         blank=True,
         verbose_name=_("subsampling event types"),
         help_text=_(
-            "List of sampling event types that can be registered as subsampling "
-            "events of sampling events of this type."
+            "List of sampling event types that can be registered as "
+            "subsampling events of sampling events of this type."
         ),
     )
 
@@ -201,17 +204,23 @@ class SamplingEventType(IrekuaModelBase, MetadataSchemaMixin):
             return
 
         if not self.can_have_subsampling_events:
-            msg = _("Sampling events of type %(self)s cannot have subsampling events")
+            msg = _(
+                "Sampling events of type %(self)s cannot have "
+                "subsampling events"
+            )
             params = dict(self=self)
             raise ValidationError(msg % params)
 
         if not self.restrict_subsampling_event_types:
             return
 
-        if not self.subsampling_event_types.filter(pk=sampling_event_type.pk).exists():
+        if not self.subsampling_event_types.filter(
+            pk=sampling_event_type.pk
+        ).exists():
             msg = _(
-                "Sampling events of type %(self)s do not admit sampling events "
-                "of type %(sampling_event_type)s as subsampling events"
+                "Sampling events of type %(self)s do not admit sampling "
+                "events of type %(sampling_event_type)s as subsampling "
+                "events"
             )
             params = dict(sampling_event_type=sampling_event_type, self=self)
             raise ValidationError(msg % params)

@@ -75,7 +75,6 @@ class CollectionSite(IrekuaModelBaseUser):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        default=None,
         verbose_name=_("parent site"),
         help_text=_("Site to which this site belongs if any"),
     )

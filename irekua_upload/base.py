@@ -90,15 +90,17 @@ class IrekuaOperation(ABC):
 
     def get_form_kwargs(self, request):
         kwargs = {
-            'initial': self.get_initial(),
-            'prefix': self.get_prefix(),
+            "initial": self.get_initial(),
+            "prefix": self.get_prefix(),
         }
 
-        if request.method in ('POST', 'PUT'):
-            kwargs.update({
-                'data': request.POST,
-                'files': request.FILES,
-            })
+        if request.method in ("POST", "PUT"):
+            kwargs.update(
+                {
+                    "data": request.POST,
+                    "files": request.FILES,
+                }
+            )
 
         return kwargs
 
@@ -113,8 +115,8 @@ class IrekuaOperation(ABC):
         errors = {}
 
         for parameter in self.required_parameters:
-            if not parameter in request.GET:
-                msg = _('The parameter %(parameter)s is required')
+            if parameter not in request.GET:
+                msg = _("The parameter %(parameter)s is required")
                 params = dict(parameter=parameter)
                 errors[parameter] = msg % params
 
@@ -129,8 +131,9 @@ class IrekuaOperation(ABC):
     def validate_permissions(self, request):
         if not self.has_run_permission(request):
             msg = _(
-                'You do not have permission to execute the operation'
-                ' %(operation)s')
+                "You do not have permission to execute the operation"
+                " %(operation)s"
+            )
             params = dict(operation=self)
             raise PermissionDenied(msg % params)
 
@@ -141,10 +144,10 @@ class IrekuaOperation(ABC):
 
             except Exception as error:
                 traceback.print_exc()
-                results = f'ERROR: {repr(error)}'
+                results = f"ERROR: {repr(error)}"
 
         return {
-            'result': results,
-            'stdout': stdout.getvalue(),
-            'stderr': stderr.getvalue(),
+            "result": results,
+            "stdout": stdout.getvalue(),
+            "stderr": stderr.getvalue(),
         }

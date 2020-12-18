@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.base import IrekuaModelBase
-from irekua_schemas.models import Schema
 
 
 mimetypes.init()
@@ -26,21 +25,20 @@ class MimeType(IrekuaModelBase):
         blank=False,
     )
 
-    media_info_schema = models.ForeignKey(
-        Schema,
+    media_info_type = models.ForeignKey(
+        "MediaInfoType",
         models.PROTECT,
-        related_name="media_info_schema",
-        db_column="media_info_schema_id",
-        verbose_name=_("media info schema"),
-        help_text=_(
-            "JSON Schema for basic media info of files of this mime type"
-        ),
+        related_name="media_info_type",
+        db_column="media_info_type_id",
+        verbose_name=_("media info type"),
+        help_text=_("Media info type for files of this mime type"),
         null=True,
         blank=True,
     )
 
     class Meta:
         verbose_name = _("Mime Type")
+
         verbose_name_plural = _("Mime Types")
 
         ordering = ["mime_type"]
@@ -49,11 +47,11 @@ class MimeType(IrekuaModelBase):
         return self.mime_type
 
     def validate_media_info(self, media_info):
-        if self.media_info_schema is None:
+        if self.media_info_type is None:
             return
 
         try:
-            self.media_info_schema.validate(media_info)
+            self.media_info_type.validate_media_info(media_info)
         except ValidationError as error:
             msg = _(
                 "Invalid media info for item of mime type %(type)s. "

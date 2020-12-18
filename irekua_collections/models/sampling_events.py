@@ -220,7 +220,7 @@ class SamplingEvent(IrekuaModelBaseUser):
         except ValidationError as error:
             raise ValidationError({"parent_sampling_event": error}) from error
 
-        #  Check that the parent sampling event occurred in
+        # Check that the parent sampling event occurred in
         # a super site of the site of this sampling event
         self.clean_parent_sampling_event_site()
 
@@ -235,7 +235,7 @@ class SamplingEvent(IrekuaModelBaseUser):
             return
 
         msg = _(
-            "A subsampling event can only be registered at a the same site or "
+            "A subsampling event can only be registered at the same site or "
             "a subsite of the parent sampling event's site."
         )
         raise ValidationError({"collection_site": msg})
@@ -332,14 +332,26 @@ class SamplingEvent(IrekuaModelBaseUser):
         if self.started_on is not None:
             if date_info < self.started_on:
                 msg = _(
-                    "Date provided is earlier that the sampling event start"
+                    "Date provided (%(date)s) is earlier that the sampling "
+                    "event start (%(start)s)"
                 )
-                raise ValidationError(msg)
+                params = dict(
+                    date=date_info.isoformat(),
+                    start=self.started_on.isoformat(),
+                )
+                raise ValidationError(msg % params)
 
         if self.ended_on is not None:
             if date_info > self.ended_on:
-                msg = _("Date provided is later that the sampling event end")
-                raise ValidationError(msg)
+                msg = _(
+                    "Date provided (%(date)s) is later that the sampling "
+                    "event end (%(end)s)"
+                )
+                params = dict(
+                    date=date_info.isoformat(),
+                    end=self.ended_on.isoformat(),
+                )
+                raise ValidationError(msg % params)
 
     @property
     def items(self):

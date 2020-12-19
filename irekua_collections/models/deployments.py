@@ -412,7 +412,7 @@ class Deployment(IrekuaModelBaseUser):
         return pytz_timezone(time_zone)
 
     def validate_date(self, dt):
-        if dt < self.deployed_on or self.recovered_on > dt:
+        if dt < self.deployed_on or self.recovered_on < dt:
             msg = _(
                 "Date is not within the ranges in which the device was"
                 " deployed: \n Deployment: %(deployed_on)s \t Recovery: "

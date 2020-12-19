@@ -19,5 +19,10 @@ def thumbnail_creator(item_file):
     buffer.seek(0)
 
     return InMemoryUploadedFile(
-        buffer, None, "thumbnail.jpg", "image/jpeg", buffer.getbuffer().nbytes, None
+        buffer,
+        None,
+        "thumbnail.jpg",
+        "image/jpeg",
+        buffer.getbuffer().nbytes,
+        None,
     )

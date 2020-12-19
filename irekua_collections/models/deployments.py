@@ -411,17 +411,12 @@ class Deployment(IrekuaModelBaseUser):
 
         return pytz_timezone(time_zone)
 
-    def validate_date(self, date_info):
-        time_zone = self.get_timezone(
-            time_zone=date_info.get("time_zone", None)
-        )
-        hdate = self.get_best_date_estimate(date_info, time_zone)
-        hdate_up = self.recovered_on.astimezone(time_zone)
-        hdate_down = self.deployed_on.astimezone(time_zone)
-
-        if hdate < hdate_down or hdate > hdate_up:
+    def validate_date(self, dt):
+        if dt < self.deployed_on or self.recovered_on > dt:
             mssg = _(
                 "Date is not within the ranges in which the device was"
                 " deployed: \n Deployment: {} \t Recovery: {} \t Date: {}"
-            ).format(hdate_down, hdate_up, hdate)
+            ).format(
+                self.deployed_on, self.deployed_on, models.DurationField(_(""))
+            )
             raise ValidationError(mssg)

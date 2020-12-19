@@ -413,10 +413,14 @@ class Deployment(IrekuaModelBaseUser):
 
     def validate_date(self, dt):
         if dt < self.deployed_on or self.recovered_on > dt:
-            mssg = _(
+            msg = _(
                 "Date is not within the ranges in which the device was"
-                " deployed: \n Deployment: {} \t Recovery: {} \t Date: {}"
-            ).format(
-                self.deployed_on, self.deployed_on, models.DurationField(_(""))
+                " deployed: \n Deployment: %(deployed_on)s \t Recovery: "
+                "%(recovered_on)s \t Date: %(date)s"
             )
-            raise ValidationError(mssg)
+            params = dict(
+                deployed_on=self.deployed_on,
+                recovered_on=self.recovered_on,
+                date=dt,
+            )
+            raise ValidationError(msg % params)

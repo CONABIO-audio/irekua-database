@@ -32,7 +32,9 @@ class ThumbnailCreator(IrekuaModelBase):
         through="ThumbnailCreatorItemType",
         through_fields=("thumbnail_creator", "item_type"),
         verbose_name=_("item types"),
-        help_text=_("Item types that can be processed by this thumbnail creator"),
+        help_text=_(
+            "Item types that can be processed by this thumbnail creator"
+        ),
     )
 
     class Meta:
@@ -46,19 +48,20 @@ class ThumbnailCreator(IrekuaModelBase):
         return self.name
 
     @staticmethod
+    def load_creator_from_text(text):
+        # pylint: disable=exec-used
+        exec(text, locals())
+        return locals()["thumbnail_creator"]
+
+    def get_creator(self):
+        with self.python_file.open() as py_file:
+            text = py_file.read()
+
+        return self.load_creator_from_text(text)
+
+    @staticmethod
     def get_thumbnail_creator(item_type):
         Model = ThumbnailCreator.item_types.through
-        return Model.objects.get(item_type=item_type, is_active=True).thumbnail_creator
-
-    def load_creator(self):
-        name = self.python_file.name
-        basename = os.path.basename(name)
-        module_name = os.path.splitext(basename)[0]
-
-        spec = importlib.util.spec_from_file_location(
-            module_name, self.python_file.path
-        )
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-
-        return module.thumbnail_creator
+        return Model.objects.get(
+            item_type=item_type, is_active=True
+        ).thumbnail_creator

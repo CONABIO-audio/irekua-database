@@ -9,7 +9,7 @@ SIZE = (500, 500)
 
 
 def thumbnail_creator(item_file):
-    image = Image.open(item_file)
+    image = Image.open(item_file.open())
 
     thumbnail = image.convert("RGB")
     thumbnail.thumbnail(SIZE, Image.ANTIALIAS)
@@ -21,7 +21,7 @@ def thumbnail_creator(item_file):
     return InMemoryUploadedFile(
         buffer,
         None,
-        "thumbnail.jpg",
+        None,
         "image/jpeg",
         buffer.getbuffer().nbytes,
         None,

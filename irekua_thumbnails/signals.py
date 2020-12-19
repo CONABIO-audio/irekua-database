@@ -45,9 +45,8 @@ def create_thumbnail(sender, instance, **kwargs):
         # registered
         return
 
-    creator_function = creator.load_creator()
-
-    thumbnail_file = creator_function(instance.item_file.file)
+    creator_function = creator.get_creator()
+    thumbnail_file = creator_function(instance.item_file.file.open)
 
     form = ThumbnailForm(
         data={

@@ -7,6 +7,7 @@ from irekua_items.models import ItemType
 from irekua_items.models import LicenceType
 from irekua_items.models import Tag
 from irekua_items.models import Item
+from irekua_items.models import Licence
 from irekua_database.autocomplete import register_autocomplete
 
 
@@ -80,6 +81,20 @@ class ItemAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(
                 Q(id__istartswith=self.q) | Q(item_type__name__istartswith=self.q)
+            )
+
+        return qs
+
+
+@register_autocomplete(Licence, urlpatterns)
+class LicenceAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Licence.objects.all()
+
+        if self.q:
+            qs = qs.filter(
+                Q(created_by__username__istartswith=self.q)
+                | Q(licence_type__name__istartswith=self.q)
             )
 
         return qs

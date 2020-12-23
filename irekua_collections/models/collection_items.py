@@ -110,8 +110,12 @@ class CollectionItem(Item):
         self.clean_collection_item()
 
     def clean_collection_item(self):
-        # pylint: disable=no-member
-        collection_type = self.collection.collection_type
+        try:
+            # pylint: disable=no-member
+            collection_type = self.collection.collection_type
+        except (ObjectDoesNotExist, AttributeError):
+            msg = _("A collection must be provided")
+            raise ValidationError({"collection": msg})
 
         # If collection type does not restrict item types no further
         # validation is required
@@ -311,10 +315,7 @@ class CollectionItem(Item):
         if (level is self.SITE) and item_type_config.site_item:
             return
 
-        if (
-            level is self.SAMPLING_EVENT
-            and item_type_config.sampling_event_item
-        ):
+        if level is self.SAMPLING_EVENT and item_type_config.sampling_event_item:
             return
 
         if (level is self.DEPLOYMENT) and item_type_config.deployment_item:
@@ -360,9 +361,7 @@ class CollectionItem(Item):
             item_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError(
-                {"collection_metadata": str(error)}
-            ) from error
+            raise ValidationError({"collection_metadata": str(error)}) from error
 
     def clean_compatible_sampling_event_and_item_type(self):
         # pylint: disable=no-member

@@ -94,8 +94,7 @@ class Collection(IrekuaModelBaseUser):
         db_column="is_open",
         verbose_name=_("is open"),
         help_text=_(
-            "Boolean flag indicating whether contents of the collection "
-            "are public."
+            "Boolean flag indicating whether contents of the collection " "are public."
         ),
         blank=True,
         null=False,
@@ -182,11 +181,12 @@ class Collection(IrekuaModelBaseUser):
     def has_user(self, user):
         return self.users.filter(pk=user.pk).exists()
 
+    def is_user(self, user):
+        return self.users.filter(pk=user.pk).exists()
+
     def has_permission(self, user, codename):
         try:
-            collectionuser = self.users.through.objects.get(
-                collection=self, user=user
-            )
+            collectionuser = self.users.through.objects.get(collection=self, user=user)
             role = collectionuser.role
 
         except self.users.through.DoesNotExist:
@@ -196,9 +196,7 @@ class Collection(IrekuaModelBaseUser):
 
     def get_user_role(self, user):
         try:
-            collection_user = self.users.through.objects.get(
-                collection=self, user=user
-            )
+            collection_user = self.users.through.objects.get(collection=self, user=user)
             return collection_user.role
 
         except self.users.through.DoesNotExist:
@@ -211,3 +209,26 @@ class Collection(IrekuaModelBaseUser):
 
         self.is_open = not restrictive_licences.exits()
         self.save()
+
+    def can_add_items(self, user):
+        """Returns True if user can upload items to this collection"""
+        if user.is_superuser:
+            return True
+
+        if user.is_curator:
+            return True
+
+        if self.collection_type.is_admin(user):
+            return True
+
+        if self.collection.is_admin(user):
+            return True
+
+        try:
+            role = self.get_user_role(user)
+        except self.users.through.DoesNotExist:
+            # If user is not part of the collection no upload
+            # permissions are given
+            return False
+
+        return role.has_permission("add_collection_item")

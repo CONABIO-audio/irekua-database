@@ -317,6 +317,12 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
             deployment_type=deployment_type,
         )
 
+    def get_licence_type(self, licence_type):
+        return self.licence_types.through.objects.get(
+            collection_type=self,
+            licence_type=licence_type,
+        )
+
     def is_admin(self, user):
         return self.administrators.filter(id=user.id).exists()
 

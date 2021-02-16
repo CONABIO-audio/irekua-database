@@ -185,13 +185,30 @@ class Collection(IrekuaModelBaseUser):
         return self.users.filter(pk=user.pk).exists()
 
     def has_permission(self, user, codename):
-        try:
-            collectionuser = self.users.through.objects.get(collection=self, user=user)
-            role = collectionuser.role
+        if user.is_superuser:
+            return True
 
+        # Curators have full permissions within collections,
+        if user.is_curator:
+            return True
+
+        # So do collection type managers,
+        if self.collection_type.is_admin(user):
+            return True
+
+        # And the collection managers.
+        if self.collection.is_admin(user):
+            return True
+
+        try:
+            role = self.get_user_role(user)
         except self.users.through.DoesNotExist:
+            # If user is not part of the collection no
+            # permissions are given
             return False
 
+        # Otherwise the role of the user decides if permission is
+        # granted
         return role.has_permission(codename)
 
     def get_user_role(self, user):

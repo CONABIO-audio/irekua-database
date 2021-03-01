@@ -452,33 +452,6 @@ class CollectionItem(Item):
             "collection": self.collection.id,
         }
 
-    def can_view(self, user):
-        if user.is_special:
-            return True
-
-        # pylint: disable=no-member
-        if not self.licence.is_active:
-            return True
-
-        # pylint: disable=no-member
-        if self.licence.licence_type.can_view:
-            return True
-
-        if not user.is_authenticated:
-            return False
-
-        if self.created_by == user:
-            return True
-
-        if self.collection.collection_type.is_admin(user):
-            return True
-
-        if self.collection.is_admin(user):
-            return True
-
-        role = self.collection.get_user_role(user)
-
-        if role is None:
-            return False
-
-        return role.has_permission("view_collectionitem")
+    from irekua_collections.permissions.collection_items import can_view
+    from irekua_collections.permissions.collection_items import can_change
+    from irekua_collections.permissions.collection_items import can_delete

@@ -1,8 +1,8 @@
 import pytest
 
 # pylint: disable=unused-wildcard-import,wildcard-import
-from irekua_database.tests.fixtures import *
-from irekua_collections.tests.fixtures import *
+from irekua_database.tests.fixtures.users import *
+from irekua_collections.tests.fixtures.collection_types import *
 
 
 @pytest.mark.django_db

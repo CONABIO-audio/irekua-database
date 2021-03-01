@@ -1,4 +1,4 @@
-import pytes
+import pytest
 import random
 
 from irekua_collections.models import CollectionItem
@@ -281,3 +281,119 @@ def test_objects_manager(
     assert CollectionItem.objects.can_view(restricted_user_A).count() == 7
     assert CollectionItem.objects.can_view(restricted_user_B).count() == 6
     assert CollectionItem.objects.can_view(external_user_A).count() == 6
+
+
+@pytest.mark.django_db
+def test_can_change(
+    collection_item_factory,
+    superuser,
+    developer,
+    curator,
+    manager_A,
+    manager_B,
+    administrator_A,
+    administrator_B,
+    closed_collection_A,
+    closed_collection_B,
+    collection_user_A,
+    collection_user_B,
+    restricted_user_A,
+    restricted_user_B,
+    external_user_A,
+    restrictive_licence,
+):
+    item1 = collection_item_factory(
+        collection=closed_collection_A,
+        created_by=collection_user_A,
+        licence=restrictive_licence,
+    )
+
+    assert item1.can_change(superuser)
+    assert not item1.can_change(developer)
+    assert item1.can_change(curator)
+    assert item1.can_change(manager_A)
+    assert not item1.can_change(manager_B)
+    assert item1.can_change(administrator_A)
+    assert not item1.can_change(administrator_B)
+    assert item1.can_change(collection_user_A)
+    assert not item1.can_change(collection_user_B)
+    assert not item1.can_change(restricted_user_A)
+    assert not item1.can_change(restricted_user_B)
+    assert not item1.can_change(external_user_A)
+
+    item2 = collection_item_factory(
+        collection=closed_collection_A,
+        created_by=restricted_user_A,
+        licence=restrictive_licence,
+    )
+
+    assert item2.can_change(superuser)
+    assert not item2.can_change(developer)
+    assert item2.can_change(curator)
+    assert item2.can_change(manager_A)
+    assert not item2.can_change(manager_B)
+    assert item2.can_change(administrator_A)
+    assert not item2.can_change(administrator_B)
+    assert item2.can_change(collection_user_A)
+    assert not item2.can_change(collection_user_B)
+    assert item2.can_change(restricted_user_A)
+    assert not item2.can_change(restricted_user_B)
+    assert not item2.can_change(external_user_A)
+
+
+@pytest.mark.django_db
+def test_can_delete(
+    collection_item_factory,
+    superuser,
+    developer,
+    curator,
+    manager_A,
+    manager_B,
+    administrator_A,
+    administrator_B,
+    closed_collection_A,
+    closed_collection_B,
+    collection_user_A,
+    collection_user_B,
+    restricted_user_A,
+    restricted_user_B,
+    external_user_A,
+    restrictive_licence,
+):
+    item1 = collection_item_factory(
+        collection=closed_collection_A,
+        created_by=collection_user_A,
+        licence=restrictive_licence,
+    )
+
+    assert item1.can_delete(superuser)
+    assert not item1.can_delete(developer)
+    assert not item1.can_delete(curator)
+    assert item1.can_delete(manager_A)
+    assert not item1.can_delete(manager_B)
+    assert item1.can_delete(administrator_A)
+    assert not item1.can_delete(administrator_B)
+    assert item1.can_delete(collection_user_A)
+    assert not item1.can_delete(collection_user_B)
+    assert not item1.can_delete(restricted_user_A)
+    assert not item1.can_delete(restricted_user_B)
+    assert not item1.can_delete(external_user_A)
+
+    item2 = collection_item_factory(
+        collection=closed_collection_A,
+        created_by=restricted_user_A,
+        licence=restrictive_licence,
+    )
+
+    assert item2.can_delete(superuser)
+    assert not item2.can_delete(developer)
+    assert not item2.can_delete(curator)
+    assert item2.can_delete(manager_A)
+    assert not item2.can_delete(manager_B)
+    assert item2.can_delete(administrator_A)
+    assert not item2.can_delete(administrator_B)
+    assert item2.can_delete(collection_user_A)
+    assert not item2.can_delete(collection_user_B)
+    assert item2.can_delete(restricted_user_A)
+    assert not item2.can_delete(restricted_user_B)
+    assert not item2.can_delete(external_user_A)

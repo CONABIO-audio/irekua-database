@@ -7,6 +7,8 @@ IREKUA_DATABASE_APPS = [
     "irekua_database",
     "django.contrib.postgres",
     "django.contrib.gis",
+    "dal",
+    "dal_select2",
 ]
 
 

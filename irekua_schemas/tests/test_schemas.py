@@ -10,20 +10,19 @@ from .strategies import valid_string
 from .strategies import random_schema
 
 
-
 class SchemaTestCase(TestCase):
-    fixtures = ['irekua_schemas/schemas.json']
+    fixtures = ["irekua_schemas/schemas.json"]
 
     def setUp(self):
-        self.null = Schema.objects.get(name='null')
-        self.object = Schema.objects.get(name='object')
-        self.empty = Schema.objects.get(name='empty object')
-        self.string = Schema.objects.get(name='string')
-        self.integer = Schema.objects.get(name='integer')
-        self.number = Schema.objects.get(name='number')
-        self.boolean = Schema.objects.get(name='boolean')
-        self.array = Schema.objects.get(name='array')
-        self.example = Schema.objects.get(name='example')
+        self.null = Schema.objects.get(name="null")
+        self.object = Schema.objects.get(name="object")
+        self.empty = Schema.objects.get(name="empty object")
+        self.string = Schema.objects.get(name="string")
+        self.integer = Schema.objects.get(name="integer")
+        self.number = Schema.objects.get(name="number")
+        self.boolean = Schema.objects.get(name="boolean")
+        self.array = Schema.objects.get(name="array")
+        self.example = Schema.objects.get(name="example")
 
     def test_null_validate(self):
         self.assertTrue(self.null.is_valid(None))
@@ -127,17 +126,23 @@ class SchemaTestCase(TestCase):
         else:
             self.assertTrue(self.empty.is_valid(t))
 
-    @given(strategies.fixed_dictionaries({
-        'checked': strategies.booleans(),
-        'dimensions': strategies.fixed_dictionaries({
-            'width': strategies.integers(),
-            'height': strategies.integers(),
-        }),
-        'id': strategies.integers(),
-        'name': strategies.text(),
-        'price': strategies.floats(),
-        'tags': strategies.lists(strategies.text()),
-    }))
+    @given(
+        strategies.fixed_dictionaries(
+            {
+                "checked": strategies.booleans(),
+                "dimensions": strategies.fixed_dictionaries(
+                    {
+                        "width": strategies.integers(),
+                        "height": strategies.integers(),
+                    }
+                ),
+                "id": strategies.integers(),
+                "name": strategies.text(),
+                "price": strategies.floats(),
+                "tags": strategies.lists(strategies.text()),
+            }
+        )
+    )
     def test_example_validate(self, t):
         self.assertFalse(self.null.is_valid(t))
         self.assertTrue(self.object.is_valid(t))
@@ -158,10 +163,7 @@ class SchemaTestCase(TestCase):
         assume(len(schema) != 0)
 
         with self.assertRaises(ValidationError):
-            schema = Schema(
-                name=name,
-                description=description,
-                schema=schema)
+            schema = Schema(name=name, description=description, schema=schema)
 
             schema.clean()
             schema.save()
@@ -172,10 +174,7 @@ class SchemaTestCase(TestCase):
         schema=random_schema(),
     )
     def test_validate_json_schema_valid_schema(self, name, description, schema):
-        schema = Schema(
-            name=name,
-            description=description,
-            schema=schema)
+        schema = Schema(name=name, description=description, schema=schema)
 
         schema.clean()
         schema.save()

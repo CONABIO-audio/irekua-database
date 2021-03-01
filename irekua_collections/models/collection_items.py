@@ -6,6 +6,56 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_items.models import Item
+from irekua_items.models import ItemType
+
+
+class CollectionItemsManager(models.Manager):
+    def open(self):
+        """Returns a query set with all items that are open access."""
+        return self.filter(
+            models.Q(licence__is_active=False)
+            | models.Q(licence__licence_type__can_view=True)
+        )
+
+    def user(self, user):
+        """Returns a queryset of all the collection items a user owns"""
+        return self.filter(created_by=user)
+
+    def managed(self, user):
+        """Returns a queryset of all items that belong to a collection of a
+        type managed by the user."""
+        managed_collection_types = user.collectiontype_set.all()
+        return self.filter(collection__collection_type__in=managed_collection_types)
+
+    def administered(self, user):
+        """Returns a queryset of all items that belong to a collection
+        administered by the user."""
+        administered_collections = user.collection_administrators.all()
+        return self.filter(collection__in=administered_collections)
+
+    def shared(self, user):
+        """Returns a queryset of all items stored in collections to which the
+        user has access."""
+        collections_with_view_permission = user.collection_users.filter(
+            collectionuser__role__permissions__codename="view_collectionitem"
+        )
+        return self.filter(collection__in=collections_with_view_permission)
+
+    def can_view(self, user):
+        if user.is_special:
+            return self.all()
+
+        open_items = self.open()
+
+        if not user.is_authenticated:
+            return open_items
+
+        return open_items.union(
+            self.user(user),
+            self.managed(user),
+            self.administered(user),
+            self.shared(user),
+        )
 
 
 class CollectionItem(Item):
@@ -21,6 +71,8 @@ class CollectionItem(Item):
         DEVICE,
         SAMPLING_EVENT,
     ]
+
+    objects = CollectionItemsManager()
 
     upload_to_format = os.path.join(
         "items",
@@ -178,9 +230,11 @@ class CollectionItem(Item):
 
     def clean_sampling_event_site(self):
         if self.collection_site is None:
+            # pylint: disable=no-member
             self.collection_site = self.sampling_event.collection_site
             self.clean_site_collection()
 
+        # pylint: disable=no-member
         if self.collection_site == self.sampling_event.collection_site:
             return
 
@@ -253,8 +307,10 @@ class CollectionItem(Item):
 
     def clean_device_collection(self):
         if self.collection is None:
+            # pylint: disable=no-member
             self.collection = self.collection_device.collection
 
+        # pylint: disable=no-member
         if self.collection == self.collection_device.collection:
             return
 
@@ -270,6 +326,7 @@ class CollectionItem(Item):
         raise ValidationError({"collection_device": msg % params})
 
     def clean_compatible_device_and_item_type(self):
+        # pylint: disable=no-member
         device_type = self.collection_device.physical_device.device.device_type
 
         try:
@@ -394,3 +451,34 @@ class CollectionItem(Item):
             # pylint: disable=no-member
             "collection": self.collection.id,
         }
+
+    def can_view(self, user):
+        if user.is_special:
+            return True
+
+        # pylint: disable=no-member
+        if not self.licence.is_active:
+            return True
+
+        # pylint: disable=no-member
+        if self.licence.licence_type.can_view:
+            return True
+
+        if not user.is_authenticated:
+            return False
+
+        if self.created_by == user:
+            return True
+
+        if self.collection.collection_type.is_admin(user):
+            return True
+
+        if self.collection.is_admin(user):
+            return True
+
+        role = self.collection.get_user_role(user)
+
+        if role is None:
+            return False
+
+        return role.has_permission("view_collectionitem")

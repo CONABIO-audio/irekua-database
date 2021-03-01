@@ -9,13 +9,6 @@ from irekua_thumbnails.models import ItemThumbnail
 @require_GET
 def generate_thumbnail(request):
     item = ItemThumbnail.objects.get(item__pk=request.GET["pk"])
-
-    print(
-        {
-            "item": item,
-        }
-    )
-
     geometry = "100x100"
 
     if "size" in request.GET:
@@ -53,7 +46,6 @@ def generate_thumbnail(request):
         )
 
     except Exception as error:
-        print(error)
         return HttpResponse(status=500)
 
     return redirect(image.url)

@@ -42,15 +42,13 @@ class CollectionItemsManager(models.Manager):
         return self.filter(collection__in=collections_with_view_permission)
 
     def can_view(self, user):
+        if not user.is_authenticated:
+            return self.open()
+
         if user.is_special:
             return self.all()
 
-        open_items = self.open()
-
-        if not user.is_authenticated:
-            return open_items
-
-        return open_items.union(
+        return self.open().union(
             self.user(user),
             self.managed(user),
             self.administered(user),

@@ -2,6 +2,9 @@ import pytest
 
 from irekua_items.models import ItemType
 
+# pytest: disable=unused-wildcard-import,wildcard-import
+from irekua_items.tests.fixtures.mime_types import *
+
 
 @pytest.fixture
 @pytest.mark.django_db
@@ -27,11 +30,11 @@ def item_type_factory():
 
 @pytest.fixture
 @pytest.mark.django_db
-def item_type_A(item_type_factory):
-    return item_type_factory("item_type_A")
+def item_type_A(item_type_factory, audio_wav):
+    return item_type_factory("item_type_A", mime_types=[audio_wav])
 
 
 @pytest.fixture
 @pytest.mark.django_db
 def item_type_B(item_type_factory):
-    return item_type_factory("item_type_A")
+    return item_type_factory("item_type_B")

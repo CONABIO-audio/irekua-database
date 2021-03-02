@@ -2,18 +2,20 @@ import pytest
 import random
 
 from irekua_collections.models import CollectionItem
+from irekua_database.utils import hash_file
 
 # pylint: disable=unused-wildcard-import,wildcard-import
 from irekua_database.tests.fixtures.users import *
 from irekua_items.tests.fixtures.item_types import *
 from irekua_items.tests.fixtures.mime_types import *
 from irekua_items.tests.fixtures.licences import *
+from irekua_items.tests.fixtures.items import *
 from irekua_collections.tests.fixtures.data_collections import *
 
 
 @pytest.fixture
 @pytest.mark.django_db
-def collection_item_factory(item_type_A, audio_wav):
+def collection_item_factory(item_type_A, audio_wav, generate_random_wav):
     def create_collection_item(
         collection,
         created_by,
@@ -54,6 +56,10 @@ def collection_item_factory(item_type_A, audio_wav):
 
         if hash is None:
             hash = str(random.getrandbits(128))
+
+        if item_file is None and mime_type is audio_wav:
+            item_file = generate_random_wav()
+            hash = hash_file(item_file)
 
         item = CollectionItem.objects.create(
             captured_on=captured_on,

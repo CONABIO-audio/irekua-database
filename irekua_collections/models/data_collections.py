@@ -229,23 +229,24 @@ class Collection(IrekuaModelBaseUser):
 
     def can_add_items(self, user):
         """Returns True if user can upload items to this collection"""
+        if not user.is_authenticated:
+            return False
+
         if user.is_superuser:
             return True
 
-        if user.is_curator:
-            return True
-
+        # pylint: disable=no-member
         if self.collection_type.is_admin(user):
             return True
 
-        if self.collection.is_admin(user):
+        if self.is_admin(user):
             return True
 
-        try:
-            role = self.get_user_role(user)
-        except self.users.through.DoesNotExist:
+        role = self.get_user_role(user)
+
+        if role is None:
             # If user is not part of the collection no upload
             # permissions are given
             return False
 
-        return role.has_permission("add_collection_item")
+        return role.has_permission("add_collectionitem")

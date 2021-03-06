@@ -22,14 +22,19 @@ class UserInstitutionInline(admin.TabularInline):
 
 
 class UserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
+    password1 = forms.CharField(
+        label=_("Password"),
+        widget=forms.PasswordInput,
+    )
 
     password2 = forms.CharField(
-        label=_("Password confirmation"), widget=forms.PasswordInput
+        label=_("Password confirmation"),
+        widget=forms.PasswordInput,
     )
 
     class Meta:
         model = models.User
+
         fields = (
             "username",
             "email",
@@ -54,33 +59,15 @@ class UserCreationForm(forms.ModelForm):
         return user
 
 
-class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
-
-    class Meta:
-        model = models.User
-        fields = (
-            "email",
-            "password",
-            "is_active",
-            "is_superuser",
-            "is_curator",
-            "is_model",
-            "is_developer",
-        )
-
-    def clean_password(self):
-        return self.initial["password"]
-
-
 class UserAdmin(BaseUserAdmin):
-    form = UserChangeForm
+    model = models.User
     add_form = UserCreationForm
 
     list_display = (
         "username",
         "first_name",
         "last_name",
+        "email",
         "is_superuser",
         "is_curator",
         "is_model",
@@ -103,9 +90,11 @@ class UserAdmin(BaseUserAdmin):
             _("Personal info"),
             {
                 "fields": (
-                    "first_name",
-                    "last_name",
-                    "email",
+                    (
+                        "first_name",
+                        "last_name",
+                    ),
+                    ("email",),
                 )
             },
         ),
@@ -113,11 +102,15 @@ class UserAdmin(BaseUserAdmin):
             _("Permissions"),
             {
                 "fields": (
-                    "is_superuser",
-                    "is_curator",
-                    "is_model",
-                    "is_developer",
-                    "is_staff",
+                    (
+                        "is_superuser",
+                        "is_staff",
+                    ),
+                    (
+                        "is_curator",
+                        "is_model",
+                        "is_developer",
+                    ),
                 )
             },
         ),

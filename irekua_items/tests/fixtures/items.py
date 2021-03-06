@@ -39,3 +39,19 @@ def generate_random_wav():
         )
 
     return create_random_wav
+
+
+@pytest.fixture
+def generate_random_python_file():
+    def create_random_python_file():
+        fp = BytesIO()
+        fp.write('print("hello world")'.encode("utf-8"))
+        fp.seek(0)
+
+        return UploadedFile(
+            file=fp,
+            name=f"{uuid.uuid1()}.py",
+            content_type="text/x-python",
+        )
+
+    return create_random_python_file

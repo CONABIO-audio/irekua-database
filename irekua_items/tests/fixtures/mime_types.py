@@ -20,16 +20,19 @@ def audio_wav(mime_type_factory):
     return mime_type_factory("audio/x-wav")
 
 
+@pytest.fixture
 @pytest.mark.django_db
 def image_png(mime_type_factory):
     return mime_type_factory("image/png")
 
 
+@pytest.fixture
 @pytest.mark.django_db
 def image_jpeg(mime_type_factory):
     return mime_type_factory("image/jpeg")
 
 
+@pytest.fixture
 @pytest.mark.django_db
 def video_avi(mime_type_factory):
     return mime_type_factory("video/x-msvideo")

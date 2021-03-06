@@ -148,3 +148,16 @@ def closed_collection_B(
     )
 
     return collection
+
+
+@pytest.fixture
+@pytest.mark.django_db
+def open_collection_A(
+    collection_factory,
+    collection_type_A,
+):
+    return collection_factory(
+        name="open_collection_A",
+        collection_type=collection_type_A,
+        is_open=True,
+    )

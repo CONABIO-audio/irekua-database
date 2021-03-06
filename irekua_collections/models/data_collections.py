@@ -9,7 +9,42 @@ from irekua_devices.models import PhysicalDevice
 from irekua_geo.models import Site
 
 
+class CollectionManager(models.Manager):
+    def open(self):
+        """Returns a queryset of all collections that are open to the public"""
+        return self.filter(is_open=True)
+
+    def managed(self, user):
+        """Returns a queryset of all collections of a type managed by the
+        user."""
+        return self.filter(collection_type__administrators=user)
+
+    def administered(self, user):
+        """Returns a queryset of all collections administered by the user."""
+        return self.filter(administrators=user)
+
+    def user(self, user):
+        """Returns all collections in which the user participates"""
+        return self.filter(users=user)
+
+    def can_view(self, user):
+        """Returns all collections a user can view."""
+        if not user.is_authenticated:
+            return self.open()
+
+        if user.is_special:
+            return self.all()
+
+        return self.open().union(
+            self.user(user),
+            self.managed(user),
+            self.administered(user),
+        )
+
+
 class Collection(IrekuaModelBaseUser):
+    objects = CollectionManager()
+
     collection_type = models.ForeignKey(
         "CollectionType",
         on_delete=models.PROTECT,
@@ -226,6 +261,26 @@ class Collection(IrekuaModelBaseUser):
 
         self.is_open = not restrictive_licences.exits()
         self.save()
+
+    def can_view(self, user):
+        """Returns True if user can view collection details."""
+        if self.is_open:
+            return True
+
+        if not user.is_authenticated:
+            return False
+
+        if user.is_special:
+            return True
+
+        # pylint: disable=no-member
+        if self.collection_type.is_admin(user):
+            return True
+
+        if self.is_admin(user):
+            return True
+
+        return self.users.filter(pk=user.pk).exists()
 
     def can_add_items(self, user):
         """Returns True if user can upload items to this collection"""

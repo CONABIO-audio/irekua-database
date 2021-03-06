@@ -282,6 +282,31 @@ class Collection(IrekuaModelBaseUser):
 
         return self.users.filter(pk=user.pk).exists()
 
+    def can_change(self, user):
+        """Returns True if user can view collection details."""
+        if not user.is_authenticated:
+            return False
+
+        if user.is_superuser or user.is_curator:
+            return True
+
+        # pylint: disable=no-member
+        if self.collection_type.is_admin(user):
+            return True
+
+        return self.is_admin(user)
+
+    def can_delete(self, user):
+        """Returns True if user can view collection details."""
+        if not user.is_authenticated:
+            return False
+
+        if user.is_superuser:
+            return True
+
+        # pylint: disable=no-member
+        return self.collection_type.is_admin(user)
+
     def can_add_items(self, user):
         """Returns True if user can upload items to this collection"""
         if not user.is_authenticated:

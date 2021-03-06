@@ -137,3 +137,64 @@ def test_collection_can_view(
     assert open_collection_A.can_view(restricted_user_A)
     assert open_collection_A.can_view(restricted_user_B)
     assert open_collection_A.can_view(external_user_A)
+
+
+@pytest.mark.django_db
+def test_collection_can_change(
+    superuser,
+    curator,
+    developer,
+    manager_A,
+    manager_B,
+    administrator_A,
+    administrator_B,
+    collection_user_A,
+    collection_user_B,
+    restricted_user_A,
+    restricted_user_B,
+    external_user_A,
+    closed_collection_A,
+):
+
+    assert closed_collection_A.can_change(superuser)
+    assert closed_collection_A.can_change(curator)
+    assert not closed_collection_A.can_change(developer)
+    assert closed_collection_A.can_change(manager_A)
+    assert not closed_collection_A.can_change(manager_B)
+    assert closed_collection_A.can_change(administrator_A)
+    assert not closed_collection_A.can_change(administrator_B)
+    assert not closed_collection_A.can_change(collection_user_A)
+    assert not closed_collection_A.can_change(collection_user_B)
+    assert not closed_collection_A.can_change(restricted_user_A)
+    assert not closed_collection_A.can_change(restricted_user_B)
+    assert not closed_collection_A.can_change(external_user_A)
+
+
+@pytest.mark.django_db
+def test_collection_can_delete(
+    superuser,
+    curator,
+    developer,
+    manager_A,
+    manager_B,
+    administrator_A,
+    administrator_B,
+    collection_user_A,
+    collection_user_B,
+    restricted_user_A,
+    restricted_user_B,
+    external_user_A,
+    closed_collection_A,
+):
+    assert closed_collection_A.can_delete(superuser)
+    assert not closed_collection_A.can_delete(curator)
+    assert not closed_collection_A.can_delete(developer)
+    assert closed_collection_A.can_delete(manager_A)
+    assert not closed_collection_A.can_delete(manager_B)
+    assert not closed_collection_A.can_delete(administrator_A)
+    assert not closed_collection_A.can_delete(administrator_B)
+    assert not closed_collection_A.can_delete(collection_user_A)
+    assert not closed_collection_A.can_delete(collection_user_B)
+    assert not closed_collection_A.can_delete(restricted_user_A)
+    assert not closed_collection_A.can_delete(restricted_user_B)
+    assert not closed_collection_A.can_delete(external_user_A)

@@ -324,7 +324,16 @@ class CollectionType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         )
 
     def is_admin(self, user):
+        """Return True if user is an administrator/manager for collections of
+        this type."""
         return self.administrators.filter(id=user.id).exists()
+
+    def can_create_collection(self, user):
+        """Return True if user can create a collection of this type."""
+        if user.is_superuser:
+            return True
+
+        return self.is_admin(user)
 
     @property
     def users(self):

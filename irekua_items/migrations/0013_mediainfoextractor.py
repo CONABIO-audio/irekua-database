@@ -7,23 +7,64 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_items', '0012_add_media_info_type'),
+        ("irekua_items", "0012_add_media_info_type"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MediaInfoExtractor',
+            name="MediaInfoExtractor",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('python_file', models.FileField(db_column='python_file', help_text='Python file containing the media info extractor function', upload_to='media_info_extractors/', verbose_name='python file')),
-                ('media_info_type', models.OneToOneField(db_column='media_info_type_id', help_text='Media info type that can be extracted by this extractor', on_delete=django.db.models.deletion.CASCADE, to='irekua_items.mediainfotype', verbose_name='media info type')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "python_file",
+                    models.FileField(
+                        db_column="python_file",
+                        help_text="Python file containing the media info extractor function",
+                        upload_to="media_info_extractors/",
+                        verbose_name="python file",
+                    ),
+                ),
+                (
+                    "media_info_type",
+                    models.OneToOneField(
+                        db_column="media_info_type_id",
+                        help_text="Media info type that can be extracted by this extractor",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_items.mediainfotype",
+                        verbose_name="media info type",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Media Info Extractor',
-                'verbose_name_plural': 'Media Info Extractors',
-                'ordering': ['-created_on'],
+                "verbose_name": "Media Info Extractor",
+                "verbose_name_plural": "Media Info Extractors",
+                "ordering": ["-created_on"],
             },
         ),
     ]

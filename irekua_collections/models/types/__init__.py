@@ -5,7 +5,9 @@ from .collection_type_event_types import CollectionTypeEventType
 from .collection_type_item_types import CollectionTypeItemType
 from .collection_type_licence_types import CollectionTypeLicenceType
 from .collection_type_roles import CollectionTypeRole
-from .collection_type_sampling_event_types import CollectionTypeSamplingEventType
+from .collection_type_sampling_event_types import (
+    CollectionTypeSamplingEventType,
+)
 from .collection_type_site_types import CollectionTypeSiteType
 from .deployment_types import DeploymentType
 from .sampling_event_types import SamplingEventType

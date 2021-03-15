@@ -66,7 +66,8 @@ class Schema(IrekuaModelBase):
             validate_JSON_instance(schema=self.schema, instance=instance)
         except ValidationError as error:
             msg = _(
-                "JSON does not comply with the schema %(schema)s. " "Error: %(error)s"
+                "JSON does not comply with the schema %(schema)s. "
+                "Error: %(error)s"
             )
             params = dict(schema=self, error=", ".join(error.messages))
             raise ValidationError(msg, params=params)

@@ -6,18 +6,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_devices', '0004_include_device_type_models'),
-        ('irekua_items', '0004_include_item_types_models'),
-        ('irekua_types', '0007_relocate_item_type_models'),
+        ("irekua_devices", "0004_include_device_type_models"),
+        ("irekua_items", "0004_include_item_types_models"),
+        ("irekua_types", "0007_relocate_item_type_models"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AlterField(
-                    model_name='itemtype',
-                    name='mime_types',
-                    field=models.ManyToManyField(blank=True, db_column='mime_types', help_text='Mime types of files for this item type', to='irekua_devices.MimeType', verbose_name='mime types'),
+                    model_name="itemtype",
+                    name="mime_types",
+                    field=models.ManyToManyField(
+                        blank=True,
+                        db_column="mime_types",
+                        help_text="Mime types of files for this item type",
+                        to="irekua_devices.MimeType",
+                        verbose_name="mime types",
+                    ),
                 ),
             ],
             database_operations=[],

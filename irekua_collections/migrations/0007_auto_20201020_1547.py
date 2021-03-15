@@ -5,138 +5,245 @@ import django.db.models.deletion
 
 
 def resolve_duplicate_names(apps, schema_editor):
-    CollectionDevice = apps.get_model('irekua_collections', 'CollectionDevice')
+    CollectionDevice = apps.get_model("irekua_collections", "CollectionDevice")
 
     repeated_names = (
-        CollectionDevice.objects
-        .values('collection', 'collection_name')
-        .annotate(models.Count('id'))
+        CollectionDevice.objects.values("collection", "collection_name")
+        .annotate(models.Count("id"))
         .order_by()
         .filter(id__count__gt=1)
     )
 
     for repeated_name in repeated_names:
-        collection = repeated_name['collection']
-        device_name = repeated_name['collection_name']
+        collection = repeated_name["collection"]
+        device_name = repeated_name["collection_name"]
 
         repeated_devices = CollectionDevice.objects.filter(
-            collection__pk=collection,
-            collection_name=device_name)
+            collection__pk=collection, collection_name=device_name
+        )
 
         for index, collection_device in enumerate(repeated_devices):
-            collection_device.collection_name += f'_{index}'
+            collection_device.collection_name += f"_{index}"
             collection_device.save()
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_devices', '0003_auto_20201020_1157'),
-        ('irekua_collections', '0006_rename_internal_id_to_collection_name'),
+        ("irekua_devices", "0003_auto_20201020_1157"),
+        ("irekua_collections", "0006_rename_internal_id_to_collection_name"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='deploymentitem',
-            options={'ordering': ['-created_on'], 'verbose_name': 'Deployment Item', 'verbose_name_plural': 'Deployment Items'},
+            name="deploymentitem",
+            options={
+                "ordering": ["-created_on"],
+                "verbose_name": "Deployment Item",
+                "verbose_name_plural": "Deployment Items",
+            },
         ),
         migrations.AlterModelOptions(
-            name='samplingeventitem',
-            options={'ordering': ['-created_on'], 'verbose_name': 'Sampling Event Item', 'verbose_name_plural': 'Sampling Event Items'},
+            name="samplingeventitem",
+            options={
+                "ordering": ["-created_on"],
+                "verbose_name": "Sampling Event Item",
+                "verbose_name_plural": "Sampling Event Items",
+            },
         ),
         migrations.RemoveField(
-            model_name='deployment',
-            name='licence',
+            model_name="deployment",
+            name="licence",
         ),
         migrations.RemoveField(
-            model_name='samplingevent',
-            name='licence',
+            model_name="samplingevent",
+            name="licence",
         ),
         migrations.AddField(
-            model_name='collectionitem',
-            name='collection_metadata',
-            field=models.JSONField(blank=True, db_column='collection_metadata', help_text='Additional metadata associated to site in collection', null=True, verbose_name='collection metadata'),
+            model_name="collectionitem",
+            name="collection_metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="collection_metadata",
+                help_text="Additional metadata associated to site in collection",
+                null=True,
+                verbose_name="collection metadata",
+            ),
         ),
         migrations.AddField(
-            model_name='collectionlicence',
-            name='collection_metadata',
-            field=models.JSONField(blank=True, db_column='collection_metadata', help_text='Metadata associated with licence within collection', null=True, verbose_name='collection metadata'),
+            model_name="collectionlicence",
+            name="collection_metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="collection_metadata",
+                help_text="Metadata associated with licence within collection",
+                null=True,
+                verbose_name="collection metadata",
+            ),
         ),
         migrations.AddField(
-            model_name='collectionsite',
-            name='collection_metadata',
-            field=models.JSONField(blank=True, db_column='collection_metadata', help_text='Additional metadata associated to site in collection', null=True, verbose_name='collection metadata'),
+            model_name="collectionsite",
+            name="collection_metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="collection_metadata",
+                help_text="Additional metadata associated to site in collection",
+                null=True,
+                verbose_name="collection metadata",
+            ),
         ),
         migrations.AddField(
-            model_name='collectiontypeitemtype',
-            name='collection_item',
-            field=models.BooleanField(blank=True, db_column='collection_item', default=True, help_text='Boolean flag indicating items of this type can be registered at the collection level.', verbose_name='collection item'),
+            model_name="collectiontypeitemtype",
+            name="collection_item",
+            field=models.BooleanField(
+                blank=True,
+                db_column="collection_item",
+                default=True,
+                help_text="Boolean flag indicating items of this type can be registered at the collection level.",
+                verbose_name="collection item",
+            ),
         ),
         migrations.AddField(
-            model_name='collectiontypeitemtype',
-            name='deployment_item',
-            field=models.BooleanField(blank=True, db_column='deployment_item', default=True, help_text='Boolean flag indicating items of this type can be registered at the deployment level.', verbose_name='deployment item'),
+            model_name="collectiontypeitemtype",
+            name="deployment_item",
+            field=models.BooleanField(
+                blank=True,
+                db_column="deployment_item",
+                default=True,
+                help_text="Boolean flag indicating items of this type can be registered at the deployment level.",
+                verbose_name="deployment item",
+            ),
         ),
         migrations.AddField(
-            model_name='collectiontypeitemtype',
-            name='sampling_event_item',
-            field=models.BooleanField(blank=True, db_column='sampling_event_item', default=True, help_text='Boolean flag indicating items of this type can be registered at the sampling event level.', verbose_name='sampling event item'),
+            model_name="collectiontypeitemtype",
+            name="sampling_event_item",
+            field=models.BooleanField(
+                blank=True,
+                db_column="sampling_event_item",
+                default=True,
+                help_text="Boolean flag indicating items of this type can be registered at the sampling event level.",
+                verbose_name="sampling event item",
+            ),
         ),
         migrations.AddField(
-            model_name='deployment',
-            name='collection_metadata',
-            field=models.JSONField(blank=True, db_column='collection_metadata', help_text='Additional metadata associated to deployment in collection', null=True, verbose_name='collection metadata'),
+            model_name="deployment",
+            name="collection_metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="collection_metadata",
+                help_text="Additional metadata associated to deployment in collection",
+                null=True,
+                verbose_name="collection metadata",
+            ),
         ),
         migrations.AddField(
-            model_name='samplingevent',
-            name='collection_metadata',
-            field=models.JSONField(blank=True, db_column='collection_metadata', help_text='Additional metadata associated to sampling event in collection', null=True, verbose_name='collection metadata'),
+            model_name="samplingevent",
+            name="collection_metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="collection_metadata",
+                help_text="Additional metadata associated to sampling event in collection",
+                null=True,
+                verbose_name="collection metadata",
+            ),
         ),
         migrations.AlterField(
-            model_name='collection',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated to collection', verbose_name='metadata'),
+            model_name="collection",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Metadata associated to collection",
+                verbose_name="metadata",
+            ),
         ),
         migrations.AlterField(
-            model_name='collectiondevice',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated with device within collection', null=True, verbose_name='metadata'),
+            model_name="collectiondevice",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Metadata associated with device within collection",
+                null=True,
+                verbose_name="metadata",
+            ),
         ),
         migrations.AlterField(
-            model_name='collectionsite',
-            name='collection_name',
-            field=models.CharField(blank=True, db_column='collection_name', help_text='Name of site within the collection (visible to all collection users)', max_length=64, verbose_name='collection name'),
+            model_name="collectionsite",
+            name="collection_name",
+            field=models.CharField(
+                blank=True,
+                db_column="collection_name",
+                help_text="Name of site within the collection (visible to all collection users)",
+                max_length=64,
+                verbose_name="collection name",
+            ),
         ),
         migrations.AlterField(
-            model_name='collectionsite',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated to site', null=True, verbose_name='metadata'),
+            model_name="collectionsite",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Metadata associated to site",
+                null=True,
+                verbose_name="metadata",
+            ),
         ),
         migrations.AlterField(
-            model_name='deployment',
-            name='collection_device',
-            field=models.ForeignKey(blank=True, db_column='collection_device_id', help_text='Device being deployed', null=True, on_delete=django.db.models.deletion.PROTECT, to='irekua_collections.collectiondevice', verbose_name='collection device'),
+            model_name="deployment",
+            name="collection_device",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="collection_device_id",
+                help_text="Device being deployed",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_collections.collectiondevice",
+                verbose_name="collection device",
+            ),
         ),
         migrations.AlterField(
-            model_name='deployment',
-            name='configuration',
-            field=models.JSONField(blank=True, db_column='configuration', help_text='Configuration on device when deployed', null=True, verbose_name='configuration'),
+            model_name="deployment",
+            name="configuration",
+            field=models.JSONField(
+                blank=True,
+                db_column="configuration",
+                help_text="Configuration on device when deployed",
+                null=True,
+                verbose_name="configuration",
+            ),
         ),
         migrations.AlterField(
-            model_name='deployment',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Additional metadata associated to deployment', null=True, verbose_name='metadata'),
+            model_name="deployment",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Additional metadata associated to deployment",
+                null=True,
+                verbose_name="metadata",
+            ),
         ),
         migrations.AlterField(
-            model_name='samplingevent',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated to sampling event', null=True, verbose_name='metadata'),
+            model_name="samplingevent",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Metadata associated to sampling event",
+                null=True,
+                verbose_name="metadata",
+            ),
         ),
         migrations.RunPython(
             resolve_duplicate_names,
         ),
         migrations.AlterUniqueTogether(
-            name='collectiondevice',
-            unique_together={('collection', 'collection_name'), ('physical_device', 'collection')},
+            name="collectiondevice",
+            unique_together={
+                ("collection", "collection_name"),
+                ("physical_device", "collection"),
+            },
         ),
     ]

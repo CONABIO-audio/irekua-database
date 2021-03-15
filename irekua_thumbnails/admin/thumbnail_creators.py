@@ -11,38 +11,29 @@ class ItemTypeInline(admin.TabularInline):
     model = ThumbnailCreator.item_types.through
 
     autocomplete_fields = [
-        'item_type',
+        "item_type",
     ]
 
-    verbose_name = _('Item Type')
+    verbose_name = _("Item Type")
 
-    verbose_name_plural = _('Item Types')
+    verbose_name_plural = _("Item Types")
 
 
 class ThumbnailCreatorAdmin(IrekuaAdmin):
     search_fields = [
-        'name',
-        'item_types__name',
+        "name",
+        "item_types__name",
     ]
 
     list_display = [
-        'id',
-        '__str__',
-        'created_on',
+        "id",
+        "__str__",
+        "created_on",
     ]
 
-    list_display_links = [
-        'id',
-        '__str__'
-    ]
+    list_display_links = ["id", "__str__"]
 
-    fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'python_file'),
-            )
-        }),
-    )
+    fieldsets = ((None, {"fields": (("name", "python_file"),)}),)
 
     inlines = [
         ItemTypeInline,

@@ -3,14 +3,14 @@ from irekua_database.filters import IrekuaFilter
 
 
 search_fields = (
-    'name',
-    'description',
+    "name",
+    "description",
 )
 
 
 ordering_fields = (
-    'created_on',
-    'name',
+    "created_on",
+    "name",
 )
 
 
@@ -19,9 +19,9 @@ class Filter(IrekuaFilter):
         model = TermType
 
         fields = {
-            'name': ['exact', 'icontains'],
-            'is_categorical': ['exact'],
-            'is_numerical': ['exact'],
-            'is_boolean': ['exact'],
-            'is_integer': ['exact'],
+            "name": ["exact", "icontains"],
+            "is_categorical": ["exact"],
+            "is_numerical": ["exact"],
+            "is_boolean": ["exact"],
+            "is_integer": ["exact"],
         }

@@ -79,7 +79,11 @@ class SiteTypeAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     ("point_site", "linestring_site", "polygon_site"),
-                    ("multipoint_site", "multilinestring_site", "multipolygon_site"),
+                    (
+                        "multipoint_site",
+                        "multilinestring_site",
+                        "multipolygon_site",
+                    ),
                 )
             },
         ),

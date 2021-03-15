@@ -159,7 +159,9 @@ class SchemaTestCase(TestCase):
         description=valid_string(20),
         schema=strategies.dictionaries(valid_string(1), valid_string(2)),
     )
-    def test_validate_json_schema_invalid_schema(self, name, description, schema):
+    def test_validate_json_schema_invalid_schema(
+        self, name, description, schema
+    ):
         assume(len(schema) != 0)
 
         with self.assertRaises(ValidationError):
@@ -173,7 +175,9 @@ class SchemaTestCase(TestCase):
         description=valid_string(20),
         schema=random_schema(),
     )
-    def test_validate_json_schema_valid_schema(self, name, description, schema):
+    def test_validate_json_schema_valid_schema(
+        self, name, description, schema
+    ):
         schema = Schema(name=name, description=description, schema=schema)
 
         schema.clean()

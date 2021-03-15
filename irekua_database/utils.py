@@ -4,9 +4,9 @@ import jsonschema
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
-GENERIC_SAMPLING_EVENT = _('generic sampling event')
-GENERIC_SITE = _('generic site')
-GENERIC_COLLECTION = _('generic collection')
+GENERIC_SAMPLING_EVENT = _("generic sampling event")
+GENERIC_SITE = _("generic site")
+GENERIC_COLLECTION = _("generic collection")
 
 SIMPLE_JSON_SCHEMA = {}
 
@@ -16,7 +16,7 @@ def validate_JSON_schema(schema):
         jsonschema.validate(schema=schema, instance={})
 
     except jsonschema.exceptions.SchemaError as error:
-        msg = _('JSON Schema is not valid. Error: %(error)s')
+        msg = _("JSON Schema is not valid. Error: %(error)s")
         params = dict(error=error)
         raise ValidationError(msg, params=params) from error
 

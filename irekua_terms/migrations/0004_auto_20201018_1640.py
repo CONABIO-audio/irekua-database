@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_terms', '0003_auto_20201018_1154'),
+        ("irekua_terms", "0003_auto_20201018_1154"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='entailment',
-            unique_together={('source', 'target')},
+            name="entailment",
+            unique_together={("source", "target")},
         ),
     ]

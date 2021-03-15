@@ -31,7 +31,8 @@ class Filter(IrekuaUserFilter):
     )
 
     labels__term_type = filters.ModelChoiceFilter(
-        queryset=TermType.objects.all(), widget=get_autocomplete_widget(model=TermType)
+        queryset=TermType.objects.all(),
+        widget=get_autocomplete_widget(model=TermType),
     )
 
     class Meta:

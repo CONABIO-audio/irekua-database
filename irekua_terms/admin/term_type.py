@@ -8,57 +8,58 @@ from irekua_terms.models import EntailmentType
 class EntailmentTypeInline(admin.TabularInline):
     extra = 0
     model = EntailmentType
-    fk_name = 'source_type'
-    autocomplete_fields = ('target_type', )
-    verbose_name = _('Entailment')
-    verbose_name_plural = _('Entailments')
-    classes = ('collapse', )
+    fk_name = "source_type"
+    autocomplete_fields = ("target_type",)
+    verbose_name = _("Entailment")
+    verbose_name_plural = _("Entailments")
+    classes = ("collapse",)
 
 
 class TermTypeAdmin(IrekuaAdmin):
-    search_fields = [
-        'name'
-    ]
+    search_fields = ["name"]
 
     list_display = (
-        'id',
-        'name',
-        'is_categorical',
-        'is_integer',
-        'is_numerical',
-        'is_boolean',
-        'created_on',
+        "id",
+        "name",
+        "is_categorical",
+        "is_integer",
+        "is_numerical",
+        "is_boolean",
+        "created_on",
     )
 
     list_filter = [
-        'is_categorical',
-        'is_integer',
-        'is_numerical',
-        'is_boolean',
+        "is_categorical",
+        "is_integer",
+        "is_numerical",
+        "is_boolean",
     ]
 
-    list_display_links = (
-        'id',
-        'name'
-    )
+    list_display_links = ("id", "name")
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'icon'),
-                'description',
-                (
-                    'is_categorical',
-                    'is_integer',
-                    'is_numerical',
-                    'is_boolean',
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "icon"),
+                    "description",
+                    (
+                        "is_categorical",
+                        "is_integer",
+                        "is_numerical",
+                        "is_boolean",
+                    ),
                 ),
-            ),
-        }),
-        ('Additional metadata', {
-            'classes': ('collapse', ),
-            'fields': (('metadata_schema', 'synonym_metadata_schema'), )
-        }),
+            },
+        ),
+        (
+            "Additional metadata",
+            {
+                "classes": ("collapse",),
+                "fields": (("metadata_schema", "synonym_metadata_schema"),),
+            },
+        ),
     )
 
     inlines = [

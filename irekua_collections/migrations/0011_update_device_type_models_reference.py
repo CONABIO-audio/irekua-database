@@ -7,27 +7,48 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_devices', '0004_include_device_type_models'),
-        ('irekua_collections', '0010_update_item_type_reference_to_irekua_items'),
+        ("irekua_devices", "0004_include_device_type_models"),
+        (
+            "irekua_collections",
+            "0010_update_item_type_reference_to_irekua_items",
+        ),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AlterField(
-                    model_name='collectiontype',
-                    name='device_types',
-                    field=models.ManyToManyField(blank=True, help_text='Types of devices valid for collections of type', through='irekua_collections.CollectionTypeDeviceType', to='irekua_devices.DeviceType', verbose_name='device types'),
+                    model_name="collectiontype",
+                    name="device_types",
+                    field=models.ManyToManyField(
+                        blank=True,
+                        help_text="Types of devices valid for collections of type",
+                        through="irekua_collections.CollectionTypeDeviceType",
+                        to="irekua_devices.DeviceType",
+                        verbose_name="device types",
+                    ),
                 ),
                 migrations.AlterField(
-                    model_name='collectiontypedevicetype',
-                    name='device_type',
-                    field=models.ForeignKey(db_column='device_type_id', help_text='Device to be part of collection', on_delete=django.db.models.deletion.PROTECT, to='irekua_devices.devicetype', verbose_name='device type'),
+                    model_name="collectiontypedevicetype",
+                    name="device_type",
+                    field=models.ForeignKey(
+                        db_column="device_type_id",
+                        help_text="Device to be part of collection",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_devices.devicetype",
+                        verbose_name="device type",
+                    ),
                 ),
                 migrations.AlterField(
-                    model_name='deploymenttype',
-                    name='device_type',
-                    field=models.ForeignKey(db_column='device_type_id', help_text='Type of device that can be used in the deployment of the given type', on_delete=django.db.models.deletion.PROTECT, to='irekua_devices.devicetype', verbose_name='device type'),
+                    model_name="deploymenttype",
+                    name="device_type",
+                    field=models.ForeignKey(
+                        db_column="device_type_id",
+                        help_text="Type of device that can be used in the deployment of the given type",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_devices.devicetype",
+                        verbose_name="device type",
+                    ),
                 ),
             ],
             database_operations=[],

@@ -7,18 +7,30 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_collections', '0016_cleanup_item_references'),
+        ("irekua_collections", "0016_cleanup_item_references"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='collectiontypeitemtype',
-            name='device_item',
-            field=models.BooleanField(blank=True, db_column='device_item', default=True, help_text='Boolean flag indicating items of this type can be registered at the device level.', verbose_name='device item'),
+            model_name="collectiontypeitemtype",
+            name="device_item",
+            field=models.BooleanField(
+                blank=True,
+                db_column="device_item",
+                default=True,
+                help_text="Boolean flag indicating items of this type can be registered at the device level.",
+                verbose_name="device item",
+            ),
         ),
         migrations.AddField(
-            model_name='collectiontypeitemtype',
-            name='site_item',
-            field=models.BooleanField(blank=True, db_column='site_item', default=True, help_text='Boolean flag indicating items of this type can be registered at the site level.', verbose_name='site item'),
+            model_name="collectiontypeitemtype",
+            name="site_item",
+            field=models.BooleanField(
+                blank=True,
+                db_column="site_item",
+                default=True,
+                help_text="Boolean flag indicating items of this type can be registered at the site level.",
+                verbose_name="site item",
+            ),
         ),
     ]

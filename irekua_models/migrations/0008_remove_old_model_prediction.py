@@ -7,17 +7,14 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotations', '0003_annotation_userannotation'),
+        ("irekua_annotations", "0003_annotation_userannotation"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('irekua_models', '0007_create_temporary_model_prediction_model'),
+        ("irekua_models", "0007_create_temporary_model_prediction_model"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            'ModelPrediction',
+            "ModelPrediction",
         ),
-        migrations.RenameModel(
-            'ModelPredictionTmp',
-            'ModelPrediction'
-        )
+        migrations.RenameModel("ModelPredictionTmp", "ModelPrediction"),
     ]

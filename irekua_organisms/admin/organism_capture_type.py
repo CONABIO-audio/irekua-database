@@ -10,13 +10,11 @@ class TermTypeInline(admin.TabularInline):
 
     model = OrganismCaptureType.term_types.through
 
-    autocomplete_fields = (
-        'termtype',
-    )
+    autocomplete_fields = ("termtype",)
 
-    verbose_name = _('Term Type')
+    verbose_name = _("Term Type")
 
-    verbose_name_plural = _('Term Types')
+    verbose_name_plural = _("Term Types")
 
 
 class ItemTypeInline(admin.TabularInline):
@@ -24,50 +22,47 @@ class ItemTypeInline(admin.TabularInline):
 
     model = OrganismCaptureType.item_types.through
 
-    autocomplete_fields = (
-        'itemtype',
-    )
+    autocomplete_fields = ("itemtype",)
 
-    verbose_name = _('Item Type')
+    verbose_name = _("Item Type")
 
-    verbose_name_plural = _('Item Types')
+    verbose_name_plural = _("Item Types")
 
 
 class OrganismCaptureTypeAdmin(IrekuaAdmin):
-    search_fields = ['name']
+    search_fields = ["name"]
 
     list_display = (
-        'id',
-        '__str__',
-        'organism_type',
-        'device_type',
-        'restrict_item_types',
-        'created_on',
+        "id",
+        "__str__",
+        "organism_type",
+        "device_type",
+        "restrict_item_types",
+        "created_on",
     )
 
     list_display_links = (
-        'id',
-        '__str__',
+        "id",
+        "__str__",
     )
 
     autocomplete_fields = (
-        'device_type',
-        'organism_type',
+        "device_type",
+        "organism_type",
     )
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'icon'),
-                'description',
-                ('device_type', 'organism_type'),
-            )
-        }),
-        (_('Restrictions'), {
-            'fields': (
-                'restrict_item_types',
-            )
-        })
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "icon"),
+                    "description",
+                    ("device_type", "organism_type"),
+                )
+            },
+        ),
+        (_("Restrictions"), {"fields": ("restrict_item_types",)}),
     )
 
     inlines = [

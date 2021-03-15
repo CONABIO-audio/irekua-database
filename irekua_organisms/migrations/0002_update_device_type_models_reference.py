@@ -7,17 +7,23 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_devices', '0004_include_device_type_models'),
-        ('irekua_organisms', '0001_initial'),
+        ("irekua_devices", "0004_include_device_type_models"),
+        ("irekua_organisms", "0001_initial"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AlterField(
-                    model_name='organismcapturetype',
-                    name='device_type',
-                    field=models.ForeignKey(db_column='device_type_id', help_text='Device type used for capture', on_delete=django.db.models.deletion.PROTECT, to='irekua_devices.devicetype', verbose_name='device type'),
+                    model_name="organismcapturetype",
+                    name="device_type",
+                    field=models.ForeignKey(
+                        db_column="device_type_id",
+                        help_text="Device type used for capture",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_devices.devicetype",
+                        verbose_name="device type",
+                    ),
                 ),
             ],
         ),

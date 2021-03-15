@@ -6,13 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_devices', '0004_include_device_type_models'),
+        ("irekua_devices", "0004_include_device_type_models"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='physicaldevice',
-            name='metadata',
-            field=models.JSONField(blank=True, db_column='metadata', help_text='Metadata associated to device', null=True, verbose_name='metadata'),
+            model_name="physicaldevice",
+            name="metadata",
+            field=models.JSONField(
+                blank=True,
+                db_column="metadata",
+                help_text="Metadata associated to device",
+                null=True,
+                verbose_name="metadata",
+            ),
         ),
     ]

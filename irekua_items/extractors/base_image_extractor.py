@@ -9,10 +9,10 @@ def extract(fileobj):
         return None
 
     return {
-        'Format': im.format,
-        'Width': im.width,
-        'Height': im.height,
-        'BitDepth': im.bits,
-        'Layers': im.layers,
-        'Mode': im.mode,
+        "Format": im.format,
+        "Width": im.width,
+        "Height": im.height,
+        "BitDepth": im.bits,
+        "Layers": im.layers,
+        "Mode": im.mode,
     }

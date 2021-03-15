@@ -36,5 +36,7 @@ class CollectionTypeSiteType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     def __str__(self):
         msg = _("Collection %(collection)s: Site Type %(site)s")
-        params = dict(site=str(self.site_type), collection=str(self.collection_type))
+        params = dict(
+            site=str(self.site_type), collection=str(self.collection_type)
+        )
         return msg % params

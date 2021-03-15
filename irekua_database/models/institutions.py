@@ -12,68 +12,76 @@ class Institution(IrekuaModelBaseUser):
 
     institution_name = models.CharField(
         max_length=256,
-        db_column='institution_name',
-        verbose_name=_('institution name'),
-        help_text=_('Name of institution'),
+        db_column="institution_name",
+        verbose_name=_("institution name"),
+        help_text=_("Name of institution"),
         unique=True,
-        blank=False)
+        blank=False,
+    )
 
     institution_code = models.CharField(
         max_length=64,
-        db_column='institution_code',
-        verbose_name=_('institution code'),
-        help_text=_('Code of institution'),
-        blank=True)
+        db_column="institution_code",
+        verbose_name=_("institution code"),
+        help_text=_("Code of institution"),
+        blank=True,
+    )
 
     country = models.CharField(
         max_length=2,
         choices=COUNTRIES,
-        db_column='country',
-        verbose_name=_('country'),
-        help_text=_('Country home of institution'),
-        blank=True)
+        db_column="country",
+        verbose_name=_("country"),
+        help_text=_("Country home of institution"),
+        blank=True,
+    )
 
     postal_code = models.CharField(
         max_length=8,
-        db_column='postal_code',
-        verbose_name=_('postal code'),
-        help_text=_('Postal code'),
-        blank=True)
+        db_column="postal_code",
+        verbose_name=_("postal code"),
+        help_text=_("Postal code"),
+        blank=True,
+    )
 
     address = models.TextField(
         blank=True,
-        db_column='address',
-        verbose_name=_('address'),
-        help_text=_('Address of institution'))
+        db_column="address",
+        verbose_name=_("address"),
+        help_text=_("Address of institution"),
+    )
 
     website = models.URLField(
         blank=True,
-        db_column='website',
-        verbose_name=_('website'),
-        help_text=_('Website of institution'))
+        db_column="website",
+        verbose_name=_("website"),
+        help_text=_("Website of institution"),
+    )
 
     logo = models.ImageField(
-        db_column='logo',
-        verbose_name=_('logo'),
-        help_text=_('Institution logo'),
-        upload_to='images/institutions/',
+        db_column="logo",
+        verbose_name=_("logo"),
+        help_text=_("Institution logo"),
+        upload_to="images/institutions/",
         blank=True,
-        null=True)
+        null=True,
+    )
 
     users = models.ManyToManyField(
-        'User',
-        through='UserInstitution',
-        through_fields=('institution', 'user'),
+        "User",
+        through="UserInstitution",
+        through_fields=("institution", "user"),
         verbose_name=_("Institution's user"),
-        help_text=_('Users belonging to this institution'))
+        help_text=_("Users belonging to this institution"),
+    )
 
     class Meta:
-        verbose_name = _('Institution')
+        verbose_name = _("Institution")
 
-        verbose_name_plural = _('Institutions')
+        verbose_name_plural = _("Institutions")
 
         ordering = [
-            'institution_name',
+            "institution_name",
         ]
 
     def __str__(self):

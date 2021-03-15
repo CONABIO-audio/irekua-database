@@ -20,7 +20,8 @@ ordering_fields = (
 
 class Filter(IrekuaFilter):
     mime_types = filters.ModelChoiceFilter(
-        queryset=MimeType.objects.all(), widget=get_autocomplete_widget(model=MimeType)
+        queryset=MimeType.objects.all(),
+        widget=get_autocomplete_widget(model=MimeType),
     )
 
     class Meta:

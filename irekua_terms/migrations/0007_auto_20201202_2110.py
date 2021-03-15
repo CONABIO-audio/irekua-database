@@ -6,12 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_terms', '0006_auto_20201021_2015'),
+        ("irekua_terms", "0006_auto_20201021_2015"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='synonymsuggestion',
-            options={'ordering': ['-created_on'], 'verbose_name': 'Synonym Suggestion', 'verbose_name_plural': 'Synonym Suggestions'},
+            name="synonymsuggestion",
+            options={
+                "ordering": ["-created_on"],
+                "verbose_name": "Synonym Suggestion",
+                "verbose_name_plural": "Synonym Suggestions",
+            },
         ),
     ]

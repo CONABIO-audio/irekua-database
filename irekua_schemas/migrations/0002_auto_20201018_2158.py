@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0001_initial'),
+        ("irekua_schemas", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='schema',
-            name='schema',
-            field=models.JSONField(db_column='schema', help_text='JSON Schema', verbose_name='schema'),
+            model_name="schema",
+            name="schema",
+            field=models.JSONField(
+                db_column="schema",
+                help_text="JSON Schema",
+                verbose_name="schema",
+            ),
         ),
     ]

@@ -10,48 +10,42 @@ class LabelsInline(admin.TabularInline):
 
     model = AnnotationVote.labels.through
 
-    verbose_name = _('Label')
+    verbose_name = _("Label")
 
-    verbose_name_plural = _('Labels')
+    verbose_name_plural = _("Labels")
 
     autocomplete_fields = [
-        'term',
+        "term",
     ]
 
 
 class AnnotationVoteAdmin(IrekuaUserAdmin):
     search_fields = [
-        'id',
-        'annotation__id',
-        'annotation__annotation_type__name',
-        'annotation__event_type__name',
-        'labels__value',
-        'labels__term_type__name',
+        "id",
+        "annotation__id",
+        "annotation__annotation_type__name",
+        "annotation__event_type__name",
+        "labels__value",
+        "labels__term_type__name",
     ]
 
     list_display = [
-        'id',
-        'annotation',
-        'incorrect_geometry',
-        'created_by',
-        'created_on',
+        "id",
+        "annotation",
+        "incorrect_geometry",
+        "created_by",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
+        "id",
     ]
 
     autocomplete_fields = [
-        'annotation',
+        "annotation",
     ]
 
-    fieldsets = (
-        (None, {
-            'fields': (
-                ('annotation','incorrect_geometry'),
-            )
-        }),
-    )
+    fieldsets = ((None, {"fields": (("annotation", "incorrect_geometry"),)}),)
 
     inlines = [
         LabelsInline,

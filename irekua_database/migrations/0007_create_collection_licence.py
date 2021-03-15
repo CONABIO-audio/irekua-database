@@ -5,8 +5,8 @@ import django.db.models.deletion
 
 
 def move_collection_to_collectionlicence(apps, schema_editor):
-    Licence = apps.get_model('irekua_database', 'Licence')
-    CollectionLicence = apps.get_model('irekua_database', 'CollectionLicence')
+    Licence = apps.get_model("irekua_database", "Licence")
+    CollectionLicence = apps.get_model("irekua_database", "CollectionLicence")
 
     for licence in Licence.objects.all():
         collection_licence = CollectionLicence(
@@ -22,33 +22,55 @@ def move_collection_to_collectionlicence(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0006_migrate_sampling_event_device_into_deployment'),
+        (
+            "irekua_database",
+            "0006_migrate_sampling_event_device_into_deployment",
+        ),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CollectionLicence',
+            name="CollectionLicence",
             fields=[
-                ('licence_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='irekua_database.licence')),
-                ('collection_tmp', models.ForeignKey(db_column='collection_id', help_text='Collection to which this licence belongs', on_delete=django.db.models.deletion.CASCADE, to='irekua_database.collection', verbose_name='collection')),
+                (
+                    "licence_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="irekua_database.licence",
+                    ),
+                ),
+                (
+                    "collection_tmp",
+                    models.ForeignKey(
+                        db_column="collection_id",
+                        help_text="Collection to which this licence belongs",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_database.collection",
+                        verbose_name="collection",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Collection Licence',
-                'verbose_name_plural': 'Collection Licences',
-                'ordering': ['-created_on'],
+                "verbose_name": "Collection Licence",
+                "verbose_name_plural": "Collection Licences",
+                "ordering": ["-created_on"],
             },
-            bases=('irekua_database.licence',),
+            bases=("irekua_database.licence",),
         ),
         migrations.RunPython(
             move_collection_to_collectionlicence,
         ),
         migrations.RemoveField(
-            model_name='licence',
-            name='collection',
+            model_name="licence",
+            name="collection",
         ),
         migrations.RenameField(
-            model_name='collectionlicence',
-            old_name='collection_tmp',
-            new_name='collection',
+            model_name="collectionlicence",
+            old_name="collection_tmp",
+            new_name="collection",
         ),
     ]

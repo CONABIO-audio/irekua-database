@@ -11,14 +11,13 @@ class LabelsInline(admin.TabularInline):
 
     model = Annotation.labels.through
 
-    verbose_name = _('Label')
+    verbose_name = _("Label")
 
-    verbose_name_plural = _('Labels')
+    verbose_name_plural = _("Labels")
 
     autocomplete_fields = [
-        'term',
+        "term",
     ]
-
 
 
 class AnnotationVoteInline(admin.TabularInline):
@@ -26,77 +25,79 @@ class AnnotationVoteInline(admin.TabularInline):
 
     model = AnnotationVote
 
-    fk_name = 'annotation'
+    fk_name = "annotation"
 
-    verbose_name = _('Annotation Vote')
+    verbose_name = _("Annotation Vote")
 
-    verbose_name_plural = _('Annotation Votes')
+    verbose_name_plural = _("Annotation Votes")
 
     autocomplete_fields = [
-        'labels',
+        "labels",
     ]
 
     readonly_fields = [
-        'created_by',
-        'created_on',
+        "created_by",
+        "created_on",
     ]
 
     fields = [
-        'labels',
-        'incorrect_geometry',
-        'created_by',
-        'created_on',
+        "labels",
+        "incorrect_geometry",
+        "created_by",
+        "created_on",
     ]
 
 
 class AnnotationAdmin(IrekuaUserAdmin):
     search_fields = [
-        'id',
-        'item__id',
-        'event_type__name',
-        'annotation_type__name',
-        'labels__value',
-        'labels__term_type__name',
+        "id",
+        "item__id",
+        "event_type__name",
+        "annotation_type__name",
+        "labels__value",
+        "labels__term_type__name",
     ]
 
     list_display = [
-        'id',
-        'item',
-        'event_type',
-        'annotation_type',
-        'created_by',
-        'created_on',
+        "id",
+        "item",
+        "event_type",
+        "annotation_type",
+        "created_by",
+        "created_on",
     ]
 
     list_filter = [
-        'item__item_type',
-        'event_type',
-        'annotation_type',
+        "item__item_type",
+        "event_type",
+        "annotation_type",
     ]
 
     list_display_links = [
-        'id',
+        "id",
     ]
 
     autocomplete_fields = [
-        'item',
-        'event_type',
-        'annotation_type',
+        "item",
+        "event_type",
+        "annotation_type",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                'item',
-                ('event_type','annotation_type'),
-                'annotation',
-            )
-        }),
-        (_('Additional Metadata'), {
-            'fields': (
-                ('annotation_metadata', 'event_metadata'),
-            )
-        }),
+        (
+            None,
+            {
+                "fields": (
+                    "item",
+                    ("event_type", "annotation_type"),
+                    "annotation",
+                )
+            },
+        ),
+        (
+            _("Additional Metadata"),
+            {"fields": (("annotation_metadata", "event_metadata"),)},
+        ),
     )
 
     inlines = [

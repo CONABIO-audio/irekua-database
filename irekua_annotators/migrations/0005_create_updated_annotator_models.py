@@ -6,12 +6,13 @@ import irekua_annotators.models.annotator_module
 
 
 def copy_annotators_into_new_models(apps, schema_editor):
-    AnnotationTool = apps.get_model('irekua_annotators', 'AnnotationTool')
-    Annotator = apps.get_model('irekua_annotators', 'Annotator')
-    AnnotatorVersion = apps.get_model('irekua_annotators', 'AnnotatorVersion')
-    AnnotatorModule = apps.get_model('irekua_annotators', 'AnnotatorModule')
+    AnnotationTool = apps.get_model("irekua_annotators", "AnnotationTool")
+    Annotator = apps.get_model("irekua_annotators", "Annotator")
+    AnnotatorVersion = apps.get_model("irekua_annotators", "AnnotatorVersion")
+    AnnotatorModule = apps.get_model("irekua_annotators", "AnnotatorModule")
 
     annotators = {}
+
     def get_annotator(annotation_tool):
         name = annotation_tool.name
 
@@ -24,7 +25,8 @@ def copy_annotators_into_new_models(apps, schema_editor):
                 annotation_type=annotation_tool.annotation_type,
                 logo=annotation_tool.logo,
                 website=annotation_tool.website,
-            ))
+            ),
+        )
 
         annotators[name] = annotator
         return annotator
@@ -42,9 +44,10 @@ def copy_annotators_into_new_models(apps, schema_editor):
             AnnotatorModule.objects.get_or_create(
                 annotator_version=version,
                 defaults={
-                    'javascript_file': component.javascript_file,
-                    'is_active': component.is_active,
-                })
+                    "javascript_file": component.javascript_file,
+                    "is_active": component.is_active,
+                },
+            )
 
         except ObjectDoesNotExist:
             pass
@@ -53,60 +56,210 @@ def copy_annotators_into_new_models(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotations', '0003_annotation_userannotation'),
-        ('irekua_annotators', '0004_update_annotation_type_reference'),
+        ("irekua_annotations", "0003_annotation_userannotation"),
+        ("irekua_annotators", "0004_update_annotation_type_reference"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Annotator',
+            name="Annotator",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('name', models.CharField(db_column='name', help_text='Name of annotation tool', max_length=64, verbose_name='name')),
-                ('logo', models.ImageField(blank=True, db_column='logo', help_text='Annotation tool logo', null=True, upload_to='images/annotation_tools/', verbose_name='logo')),
-                ('website', models.URLField(blank=True, db_column='website', help_text='Annotation tool website', null=True, verbose_name='website')),
-                ('annotation_type', models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation this tool produces', on_delete=django.db.models.deletion.CASCADE, to='irekua_annotations.annotationtype', verbose_name='annotation type')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        db_column="name",
+                        help_text="Name of annotation tool",
+                        max_length=64,
+                        verbose_name="name",
+                    ),
+                ),
+                (
+                    "logo",
+                    models.ImageField(
+                        blank=True,
+                        db_column="logo",
+                        help_text="Annotation tool logo",
+                        null=True,
+                        upload_to="images/annotation_tools/",
+                        verbose_name="logo",
+                    ),
+                ),
+                (
+                    "website",
+                    models.URLField(
+                        blank=True,
+                        db_column="website",
+                        help_text="Annotation tool website",
+                        null=True,
+                        verbose_name="website",
+                    ),
+                ),
+                (
+                    "annotation_type",
+                    models.ForeignKey(
+                        db_column="annotation_type_id",
+                        help_text="Type of annotation this tool produces",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_annotations.annotationtype",
+                        verbose_name="annotation type",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Annotator',
-                'verbose_name_plural': 'Annotators',
-                'ordering': ['-created_on'],
+                "verbose_name": "Annotator",
+                "verbose_name_plural": "Annotators",
+                "ordering": ["-created_on"],
             },
         ),
         migrations.CreateModel(
-            name='AnnotatorVersion',
+            name="AnnotatorVersion",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('version', models.CharField(db_column='version', help_text='Annotator version', max_length=16, verbose_name='version')),
-                ('annotator', models.ForeignKey(db_column='annotation_tool_id', help_text='Annotation tool', on_delete=django.db.models.deletion.CASCADE, to='irekua_annotators.annotator', verbose_name='annotation tool')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "version",
+                    models.CharField(
+                        db_column="version",
+                        help_text="Annotator version",
+                        max_length=16,
+                        verbose_name="version",
+                    ),
+                ),
+                (
+                    "annotator",
+                    models.ForeignKey(
+                        db_column="annotation_tool_id",
+                        help_text="Annotation tool",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_annotators.annotator",
+                        verbose_name="annotation tool",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Annotator Version',
-                'verbose_name_plural': 'Annotator Versions',
-                'ordering': ['-created_on'],
+                "verbose_name": "Annotator Version",
+                "verbose_name_plural": "Annotator Versions",
+                "ordering": ["-created_on"],
             },
         ),
         migrations.CreateModel(
-            name='AnnotatorModule',
+            name="AnnotatorModule",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('javascript_file', models.FileField(db_column='javascript_file', help_text='Javascript file containing annotator module', upload_to=irekua_annotators.models.annotator_module.annotator_path, verbose_name='javascript file')),
-                ('is_active', models.BooleanField(db_column='is_active', default=True, help_text='Is this module to be used as default annotator for the associated annotation type?', verbose_name='is active')),
-                ('annotator_version', models.OneToOneField(db_column='annotator_version_id', help_text='annotator version to which this module belongs', on_delete=django.db.models.deletion.CASCADE, to='irekua_annotators.annotatorversion', verbose_name='annotator version')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "javascript_file",
+                    models.FileField(
+                        db_column="javascript_file",
+                        help_text="Javascript file containing annotator module",
+                        upload_to=irekua_annotators.models.annotator_module.annotator_path,
+                        verbose_name="javascript file",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        db_column="is_active",
+                        default=True,
+                        help_text="Is this module to be used as default annotator for the associated annotation type?",
+                        verbose_name="is active",
+                    ),
+                ),
+                (
+                    "annotator_version",
+                    models.OneToOneField(
+                        db_column="annotator_version_id",
+                        help_text="annotator version to which this module belongs",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_annotators.annotatorversion",
+                        verbose_name="annotator version",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Annotator Module',
-                'verbose_name_plural': 'Annotator Modules',
-                'ordering': ['-created_on'],
+                "verbose_name": "Annotator Module",
+                "verbose_name_plural": "Annotator Modules",
+                "ordering": ["-created_on"],
             },
         ),
         migrations.RunPython(
             copy_annotators_into_new_models,
-        )
+        ),
     ]

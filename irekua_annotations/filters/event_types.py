@@ -37,7 +37,8 @@ class Filter(IrekuaFilter):
     )
 
     item_types = filters.ModelChoiceFilter(
-        queryset=ItemType.objects.all(), widget=get_autocomplete_widget(model=ItemType)
+        queryset=ItemType.objects.all(),
+        widget=get_autocomplete_widget(model=ItemType),
     )
 
     class Meta:

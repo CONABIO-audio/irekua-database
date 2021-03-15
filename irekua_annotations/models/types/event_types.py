@@ -39,7 +39,9 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
         TermType,
         db_column="term_types",
         verbose_name=_("term types"),
-        help_text=_("Valid term types with which to label this type " "of events"),
+        help_text=_(
+            "Valid term types with which to label this type " "of events"
+        ),
         blank=True,
     )
 
@@ -93,7 +95,8 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
     def validate_term_type(self, term_type):
         if not self.term_types.filter(pk=term_type.pk).exists():
             msg = _(
-                "Term type %(term_type)s is invalid for event " "type %(event_type)s"
+                "Term type %(term_type)s is invalid for event "
+                "type %(event_type)s"
             )
             params = dict(term_type=str(term_type), event_type=str(self))
             raise ValidationError(msg, params=params)
@@ -120,7 +123,9 @@ class EventType(IrekuaModelBase, MetadataSchemaMixin):
                 "Annotation type %(annotation_type)s not valid for event "
                 "of type %(event_type)s"
             )
-            params = dict(annotation_type=str(annotation_type), event_type=str(self))
+            params = dict(
+                annotation_type=str(annotation_type), event_type=str(self)
+            )
             raise ValidationError(msg % params)
 
     def validate_item_type(self, item_type):

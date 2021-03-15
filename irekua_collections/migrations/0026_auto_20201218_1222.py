@@ -7,13 +7,23 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_collections', '0025_change_collection_institution_to_institutions'),
+        (
+            "irekua_collections",
+            "0025_change_collection_institution_to_institutions",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='collectionsite',
-            name='parent_site',
-            field=models.ForeignKey(blank=True, help_text='Site to which this site belongs if any', null=True, on_delete=django.db.models.deletion.SET_NULL, to='irekua_collections.collectionsite', verbose_name='parent site'),
+            model_name="collectionsite",
+            name="parent_site",
+            field=models.ForeignKey(
+                blank=True,
+                help_text="Site to which this site belongs if any",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="irekua_collections.collectionsite",
+                verbose_name="parent site",
+            ),
         ),
     ]

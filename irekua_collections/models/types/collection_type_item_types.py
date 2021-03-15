@@ -96,5 +96,7 @@ class CollectionTypeItemType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     def __str__(self):
         msg = _("Collection %(collection)s: Item Type %(item)s")
-        params = dict(item=str(self.item_type), collection=str(self.collection_type))
+        params = dict(
+            item=str(self.item_type), collection=str(self.collection_type)
+        )
         return msg % params

@@ -14,7 +14,12 @@ from irekua_devices.models import DeviceType
 from irekua_devices.models import Device
 
 
-def _select_by_priority(options, item_type=None, device=None, device_type=None):
+def _select_by_priority(
+    options,
+    item_type=None,
+    device=None,
+    device_type=None,
+):
     extractors = []
 
     for extractor in options:
@@ -26,8 +31,8 @@ def _select_by_priority(options, item_type=None, device=None, device_type=None):
 
         device_type_specific = device_type in extractor.device_types.all()
         if extractor.device_types.count() and not device_type_specific:
-            # If the extractor has listed some device_types but does not contain
-            # the selected device_type then do not use this extractor
+            # If the extractor has listed some device_types but does not
+            # contain the selected device_type then do not use this extractor
             continue
 
         device_specific = device in extractor.devices.all()
@@ -136,7 +141,9 @@ class MediaInfoExtractor(IrekuaModelBase):
         upload_to="media_info_extractors/",
         db_column="python_file",
         verbose_name=_("python file"),
-        help_text=_("Python file containing the media info extractor function"),
+        help_text=_(
+            "Python file containing the media info extractor function"
+        ),
         blank=True,
         null=True,
     )
@@ -145,7 +152,9 @@ class MediaInfoExtractor(IrekuaModelBase):
         upload_to="media_info_extractors/",
         db_column="javascript_file",
         verbose_name=_("javascript file"),
-        help_text=_("Javascript file containing the media info extractor function"),
+        help_text=_(
+            "Javascript file containing the media info extractor function"
+        ),
         blank=True,
         null=True,
     )

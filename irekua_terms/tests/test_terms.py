@@ -13,7 +13,7 @@ from irekua_terms.models import Entailment
 
 valid_string = lambda: strategies.text(
     alphabet=strategies.characters(
-        blacklist_categories=('Cs', 'Cc'),
+        blacklist_categories=("Cs", "Cc"),
     ),
     min_size=5,
 )
@@ -21,79 +21,59 @@ valid_string = lambda: strategies.text(
 
 class TermTestCase(TestCase):
     fixtures = [
-        'irekua_terms/categorical.json',
-        'irekua_terms/numeric.json',
-        'irekua_terms/integer.json',
-        'irekua_terms/boolean.json',
+        "irekua_terms/categorical.json",
+        "irekua_terms/numeric.json",
+        "irekua_terms/integer.json",
+        "irekua_terms/boolean.json",
     ]
 
     def setUp(self):
-        self.categorical = TermType.objects.get(name='categorical1')
-        self.numerical = TermType.objects.get(name='numeric')
-        self.integer = TermType.objects.get(name='integer')
-        self.boolean = TermType.objects.get(name='boolean')
+        self.categorical = TermType.objects.get(name="categorical1")
+        self.numerical = TermType.objects.get(name="numeric")
+        self.integer = TermType.objects.get(name="integer")
+        self.boolean = TermType.objects.get(name="boolean")
 
     @given(valid_string())
     def test_repr(self, value):
-        term = Term(
-            term_type=self.categorical,
-            value=value)
-        self.assertEqual(str(term), f'categorical1: {value}')
+        term = Term(term_type=self.categorical, value=value)
+        self.assertEqual(str(term), f"categorical1: {value}")
 
     @given(valid_string())
     def test_unique_value(self, value):
-        Term.objects.create(
-            term_type=self.categorical,
-            value=value)
+        Term.objects.create(term_type=self.categorical, value=value)
 
         with self.assertRaises(IntegrityError):
-            Term.objects.create(
-                term_type=self.categorical,
-                value=value)
+            Term.objects.create(term_type=self.categorical, value=value)
 
-    @given(
-        value=valid_string(),
-        scope=valid_string())
+    @given(value=valid_string(), scope=valid_string())
     def test_unique_value_with_scope(self, value, scope):
         Term.objects.create(
-            term_type=self.categorical,
-            value=value,
-            scope=scope)
+            term_type=self.categorical, value=value, scope=scope
+        )
 
-        Term.objects.create(
-            term_type=self.categorical,
-            value=value)
+        Term.objects.create(term_type=self.categorical, value=value)
 
         with self.assertRaises(IntegrityError):
             Term.objects.create(
-                term_type=self.categorical,
-                value=value,
-                scope=scope)
+                term_type=self.categorical, value=value, scope=scope
+            )
 
     @given(
         value=valid_string(),
-        metadata=strategies.fixed_dictionaries({
-            'prop1': strategies.text()
-        })
+        metadata=strategies.fixed_dictionaries({"prop1": strategies.text()}),
     )
     def test_categorical_clean_valid(self, value, metadata):
-        term = Term(
-            term_type=self.categorical,
-            value=value,
-            metadata=metadata)
+        term = Term(term_type=self.categorical, value=value, metadata=metadata)
         term.clean()
 
     @given(
         value=valid_string(),
-        metadata=strategies.dictionaries(strategies.text(), strategies.text())
+        metadata=strategies.dictionaries(strategies.text(), strategies.text()),
     )
     def test_categorical_clean_invalid(self, value, metadata):
-        assume('prop1' not in metadata)
+        assume("prop1" not in metadata)
 
-        term = Term(
-            term_type=self.categorical,
-            value=value,
-            metadata=metadata)
+        term = Term(term_type=self.categorical, value=value, metadata=metadata)
 
         with self.assertRaises(ValidationError):
             term.clean()
@@ -140,11 +120,11 @@ class TermTestCase(TestCase):
     )
     def test_entails(self, value1, value2):
         term1, _ = Term.objects.get_or_create(
-            term_type=self.categorical,
-            value=value1)
+            term_type=self.categorical, value=value1
+        )
         term2, _ = Term.objects.get_or_create(
-            term_type=self.categorical,
-            value=value2)
+            term_type=self.categorical, value=value2
+        )
 
         self.assertFalse(term1.entails(term2))
 

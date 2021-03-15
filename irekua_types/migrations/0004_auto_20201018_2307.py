@@ -6,38 +6,68 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_types', '0003_change_schema_to_foreing_key'),
+        ("irekua_types", "0003_change_schema_to_foreing_key"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='deploymenttype',
-            name='item_types',
-            field=models.ManyToManyField(blank=True, help_text='Valid item types for this deployment type', to='irekua_types.ItemType', verbose_name='item types'),
+            model_name="deploymenttype",
+            name="item_types",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="Valid item types for this deployment type",
+                to="irekua_types.ItemType",
+                verbose_name="item types",
+            ),
         ),
         migrations.AddField(
-            model_name='deploymenttype',
-            name='restrict_item_types',
-            field=models.BooleanField(db_column='restrict_item_types', default=False, help_text='Flag indicating whether to restrict item types apt for this deployment type', verbose_name='restrict item types'),
+            model_name="deploymenttype",
+            name="restrict_item_types",
+            field=models.BooleanField(
+                db_column="restrict_item_types",
+                default=False,
+                help_text="Flag indicating whether to restrict item types apt for this deployment type",
+                verbose_name="restrict item types",
+            ),
         ),
         migrations.AddField(
-            model_name='eventtype',
-            name='annotation_types',
-            field=models.ManyToManyField(blank=True, help_text='Valid annotation types for this event type', to='irekua_types.AnnotationType', verbose_name='annotation types'),
+            model_name="eventtype",
+            name="annotation_types",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="Valid annotation types for this event type",
+                to="irekua_types.AnnotationType",
+                verbose_name="annotation types",
+            ),
         ),
         migrations.AddField(
-            model_name='eventtype',
-            name='restrict_annotation_types',
-            field=models.BooleanField(db_column='restrict_annotation_types', default=False, help_text='Flag indicating whether to restrict annotation types apt for this event type', verbose_name='restrict annotation types'),
+            model_name="eventtype",
+            name="restrict_annotation_types",
+            field=models.BooleanField(
+                db_column="restrict_annotation_types",
+                default=False,
+                help_text="Flag indicating whether to restrict annotation types apt for this event type",
+                verbose_name="restrict annotation types",
+            ),
         ),
         migrations.AddField(
-            model_name='samplingeventtype',
-            name='item_types',
-            field=models.ManyToManyField(blank=True, help_text='Valid item types for this sampling event type', to='irekua_types.ItemType', verbose_name='item types'),
+            model_name="samplingeventtype",
+            name="item_types",
+            field=models.ManyToManyField(
+                blank=True,
+                help_text="Valid item types for this sampling event type",
+                to="irekua_types.ItemType",
+                verbose_name="item types",
+            ),
         ),
         migrations.AddField(
-            model_name='samplingeventtype',
-            name='restrict_item_types',
-            field=models.BooleanField(db_column='restrict_item_types', default=False, help_text='Flag indicating whether to restrict item types apt for this sampling event type', verbose_name='restrict item types'),
+            model_name="samplingeventtype",
+            name="restrict_item_types",
+            field=models.BooleanField(
+                db_column="restrict_item_types",
+                default=False,
+                help_text="Flag indicating whether to restrict item types apt for this sampling event type",
+                verbose_name="restrict item types",
+            ),
         ),
     ]

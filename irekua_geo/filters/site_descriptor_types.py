@@ -3,14 +3,14 @@ from irekua_database.filters import IrekuaFilter
 
 
 search_fields = (
-    'name',
-    'description',
+    "name",
+    "description",
 )
 
 
 ordering_fields = (
-    'created_on',
-    'name',
+    "created_on",
+    "name",
 )
 
 
@@ -19,6 +19,6 @@ class Filter(IrekuaFilter):
         model = SiteDescriptorType
 
         fields = {
-            'name': ['exact', 'icontains'],
-            'source': ['exact', 'icontains'],
+            "name": ["exact", "icontains"],
+            "source": ["exact", "icontains"],
         }

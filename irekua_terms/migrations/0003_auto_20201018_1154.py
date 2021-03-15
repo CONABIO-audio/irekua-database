@@ -6,28 +6,48 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_terms', '0002_migrate_to_separate_schemas'),
+        ("irekua_terms", "0002_migrate_to_separate_schemas"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='termtype',
-            name='is_boolean',
-            field=models.BooleanField(db_column='is_boolean', default=False, help_text='Flag indicating whether the term type represents a categorical variable', verbose_name='is boolean'),
+            model_name="termtype",
+            name="is_boolean",
+            field=models.BooleanField(
+                db_column="is_boolean",
+                default=False,
+                help_text="Flag indicating whether the term type represents a categorical variable",
+                verbose_name="is boolean",
+            ),
         ),
         migrations.AddField(
-            model_name='termtype',
-            name='is_integer',
-            field=models.BooleanField(db_column='is_integer', default=False, help_text='Flag indicating whether the term type represents a integral (int) variable', verbose_name='is integer'),
+            model_name="termtype",
+            name="is_integer",
+            field=models.BooleanField(
+                db_column="is_integer",
+                default=False,
+                help_text="Flag indicating whether the term type represents a integral (int) variable",
+                verbose_name="is integer",
+            ),
         ),
         migrations.AddField(
-            model_name='termtype',
-            name='is_numerical',
-            field=models.BooleanField(db_column='is_numerical', default=False, help_text='Flag indicating whether the term type represents a numerical (float) variable', verbose_name='is numerical'),
+            model_name="termtype",
+            name="is_numerical",
+            field=models.BooleanField(
+                db_column="is_numerical",
+                default=False,
+                help_text="Flag indicating whether the term type represents a numerical (float) variable",
+                verbose_name="is numerical",
+            ),
         ),
         migrations.AlterField(
-            model_name='termtype',
-            name='is_categorical',
-            field=models.BooleanField(db_column='is_categorical', default=True, help_text='Flag indicating whether the term type represents a categorical variable', verbose_name='is categorical'),
+            model_name="termtype",
+            name="is_categorical",
+            field=models.BooleanField(
+                db_column="is_categorical",
+                default=True,
+                help_text="Flag indicating whether the term type represents a categorical variable",
+                verbose_name="is categorical",
+            ),
         ),
     ]

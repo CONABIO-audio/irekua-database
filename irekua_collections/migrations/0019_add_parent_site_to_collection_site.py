@@ -7,7 +7,10 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("irekua_collections", "0018_add_deployment_config_to_sampling_event_type"),
+        (
+            "irekua_collections",
+            "0018_add_deployment_config_to_sampling_event_type",
+        ),
     ]
 
     operations = [

@@ -5,8 +5,8 @@ from .media_info_types import MediaInfoType
 
 
 __all__ = [
-    'ItemType',
-    'LicenceType',
-    'MimeType',
-    'MediaInfoType',
+    "ItemType",
+    "LicenceType",
+    "MimeType",
+    "MediaInfoType",
 ]

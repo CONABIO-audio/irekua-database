@@ -12,11 +12,11 @@ class ItemTypeInline(admin.TabularInline):
 
     model = Visualizer.item_types.through
 
-    autocomplete_fields = ('item_type',)
+    autocomplete_fields = ("item_type",)
 
-    verbose_name = _('Item type')
+    verbose_name = _("Item type")
 
-    verbose_name_plural = _('Item types')
+    verbose_name_plural = _("Item types")
 
 
 class VersionInline(admin.TabularInline):
@@ -24,40 +24,38 @@ class VersionInline(admin.TabularInline):
 
     model = VisualizerVersion
 
-    verbose_name = _('Version')
+    verbose_name = _("Version")
 
-    verbose_name_plural = _('Versions')
+    verbose_name_plural = _("Versions")
 
 
 class VisualizerAdmin(IrekuaAdmin):
-    search_fields = [
-        'name',
-        'description'
-    ]
+    search_fields = ["name", "description"]
 
     list_display = (
-        'id',
-        '__str__',
-        'website',
-        'created_on',
+        "id",
+        "__str__",
+        "website",
+        "created_on",
     )
 
     list_display_links = (
-        'id',
-        '__str__',
+        "id",
+        "__str__",
     )
 
-    list_filter = (
-        'item_types',
-    )
+    list_filter = ("item_types",)
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'website'),
-                ('description',),
-            )
-        }),
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "website"),
+                    ("description",),
+                )
+            },
+        ),
     )
 
     inlines = [

@@ -8,15 +8,16 @@ import django.db.models.deletion
 
 
 def add_deployment_type_to_deployments(apps, schema_editor):
-    Deployment = apps.get_model('irekua_database', 'Deployment')
-    DeploymentType = apps.get_model('irekua_database', 'DeploymentType')
+    Deployment = apps.get_model("irekua_database", "Deployment")
+    DeploymentType = apps.get_model("irekua_database", "DeploymentType")
 
     for deployment in Deployment.objects.all():
         sampling_event_type = deployment.sampling_event.sampling_event_type
-        device_type = deployment.collection_device.physical_device.device.device_type
+        device_type = (
+            deployment.collection_device.physical_device.device.device_type
+        )
         deployment_type = DeploymentType.objects.get(
-            samplingeventtype=sampling_event_type,
-            device_type=device_type
+            samplingeventtype=sampling_event_type, device_type=device_type
         )
 
         deployment.deployment_type = deployment_type
@@ -26,56 +27,106 @@ def add_deployment_type_to_deployments(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0005_change_deployment_name'),
+        ("irekua_database", "0005_change_deployment_name"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='SamplingEventDevice',
-            new_name='Deployment',
+            old_name="SamplingEventDevice",
+            new_name="Deployment",
         ),
         migrations.AlterModelOptions(
-            name='deployment',
-            options={'ordering': ['-created_on'], 'verbose_name': 'Deployment', 'verbose_name_plural': 'Deployments'},
+            name="deployment",
+            options={
+                "ordering": ["-created_on"],
+                "verbose_name": "Deployment",
+                "verbose_name_plural": "Deployments",
+            },
         ),
         migrations.AlterField(
-            model_name='deployment',
-            name='created_by',
-            field=models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='deployment_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator'),
+            model_name="deployment",
+            name="created_by",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="creator_id",
+                help_text="Creator of object",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="deployment_created_by",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="creator",
+            ),
         ),
         migrations.AlterField(
-            model_name='deployment',
-            name='modified_by',
-            field=models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='deployment_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by'),
+            model_name="deployment",
+            name="modified_by",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="modified_by",
+                editable=False,
+                help_text="User who made modifications last",
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                related_name="deployment_modified_by",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="modified by",
+            ),
         ),
         migrations.AlterField(
-            model_name='deploymenttype',
-            name='device_type',
-            field=models.ForeignKey(db_column='device_type_id', help_text='Type of device that can be used in the deployment of the given type', on_delete=django.db.models.deletion.PROTECT, to='irekua_database.devicetype', verbose_name='device type'),
+            model_name="deploymenttype",
+            name="device_type",
+            field=models.ForeignKey(
+                db_column="device_type_id",
+                help_text="Type of device that can be used in the deployment of the given type",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_database.devicetype",
+                verbose_name="device type",
+            ),
         ),
         # Add a deployment type to all deployments
         migrations.AddField(
-            model_name='deployment',
-            name='deployment_type',
-            field=models.ForeignKey(db_column='deployment_type_id', default=None, help_text='Type of deployment', on_delete=django.db.models.deletion.PROTECT, to='irekua_database.deploymenttype', verbose_name='deployment type', null=True),
+            model_name="deployment",
+            name="deployment_type",
+            field=models.ForeignKey(
+                db_column="deployment_type_id",
+                default=None,
+                help_text="Type of deployment",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_database.deploymenttype",
+                verbose_name="deployment type",
+                null=True,
+            ),
         ),
         migrations.RunPython(
             add_deployment_type_to_deployments,
         ),
         migrations.AlterField(
-            model_name='deployment',
-            name='deployment_type',
-            field=models.ForeignKey(db_column='deployment_type_id', help_text='Type of deployment', on_delete=django.db.models.deletion.PROTECT, to='irekua_database.deploymenttype', verbose_name='deployment type', null=False),
+            model_name="deployment",
+            name="deployment_type",
+            field=models.ForeignKey(
+                db_column="deployment_type_id",
+                help_text="Type of deployment",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_database.deploymenttype",
+                verbose_name="deployment type",
+                null=False,
+            ),
         ),
-        # Change field name
+        #  Change field name
         migrations.RenameField(
-            model_name='item',
-            old_name='sampling_event_device',
-            new_name='deployment',
+            model_name="item",
+            old_name="sampling_event_device",
+            new_name="deployment",
         ),
         migrations.AlterField(
-            model_name='item',
-            name='deployment',
-            field=models.ForeignKey(db_column='deployment_id', help_text='Deployment of device in which this item was captured', on_delete=django.db.models.deletion.PROTECT, to='irekua_database.deployment', verbose_name='deployment'),
+            model_name="item",
+            name="deployment",
+            field=models.ForeignKey(
+                db_column="deployment_id",
+                help_text="Deployment of device in which this item was captured",
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_database.deployment",
+                verbose_name="deployment",
+            ),
         ),
     ]

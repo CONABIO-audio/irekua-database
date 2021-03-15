@@ -8,12 +8,12 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('irekua_geo', '0009_change_locality_to_localities'),
+        ("irekua_geo", "0009_change_locality_to_localities"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='site',
-            unique_together={('name', 'created_by')},
+            name="site",
+            unique_together={("name", "created_by")},
         ),
     ]

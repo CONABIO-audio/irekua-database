@@ -6,13 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_visualizers', '0008_update_schema_reference'),
+        ("irekua_visualizers", "0008_update_schema_reference"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='visualizer',
-            name='name',
-            field=models.CharField(db_column='name', help_text='Name of visualizer app', max_length=64, unique=True, verbose_name='name'),
+            model_name="visualizer",
+            name="name",
+            field=models.CharField(
+                db_column="name",
+                help_text="Name of visualizer app",
+                max_length=64,
+                unique=True,
+                verbose_name="name",
+            ),
         ),
     ]

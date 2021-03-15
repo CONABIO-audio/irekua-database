@@ -25,7 +25,9 @@ class CollectionItemsManager(models.Manager):
         """Returns a queryset of all items that belong to a collection of a
         type managed by the user."""
         managed_collection_types = user.collectiontype_set.all()
-        return self.filter(collection__collection_type__in=managed_collection_types)
+        return self.filter(
+            collection__collection_type__in=managed_collection_types
+        )
 
     def administered(self, user):
         """Returns a queryset of all items that belong to a collection
@@ -370,7 +372,10 @@ class CollectionItem(Item):
         if (level is self.SITE) and item_type_config.site_item:
             return
 
-        if level is self.SAMPLING_EVENT and item_type_config.sampling_event_item:
+        if (
+            level is self.SAMPLING_EVENT
+            and item_type_config.sampling_event_item
+        ):
             return
 
         if (level is self.DEPLOYMENT) and item_type_config.deployment_item:
@@ -416,7 +421,9 @@ class CollectionItem(Item):
             item_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({"collection_metadata": str(error)}) from error
+            raise ValidationError(
+                {"collection_metadata": str(error)}
+            ) from error
 
     def clean_compatible_sampling_event_and_item_type(self):
         # pylint: disable=no-member

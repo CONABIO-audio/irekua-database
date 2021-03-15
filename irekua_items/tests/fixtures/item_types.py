@@ -9,7 +9,9 @@ from irekua_items.tests.fixtures.mime_types import *
 @pytest.fixture
 @pytest.mark.django_db
 def item_type_factory():
-    def create_item_type(name, description=None, mime_types=None, media_info_type=None):
+    def create_item_type(
+        name, description=None, mime_types=None, media_info_type=None
+    ):
         if description is None:
             description = f"Item type {name}"
 

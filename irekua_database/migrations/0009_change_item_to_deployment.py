@@ -6,21 +6,21 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0008_add_item_subclasses'),
+        ("irekua_database", "0008_add_item_subclasses"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='item',
-            name='deployment',
+            model_name="item",
+            name="deployment",
         ),
         migrations.RemoveField(
-            model_name='item',
-            name='item_thumbnail',
+            model_name="item",
+            name="item_thumbnail",
         ),
         migrations.RenameField(
-            model_name='deploymentitem',
-            old_name='deployment_tmp',
-            new_name='deployment',
+            model_name="deploymentitem",
+            old_name="deployment_tmp",
+            new_name="deployment",
         ),
     ]

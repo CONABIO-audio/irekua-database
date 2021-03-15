@@ -48,7 +48,9 @@ class OrganismObservationType(IrekuaModelBase, MetadataSchemaMixin):
     sampling_event_types = models.ManyToManyField(
         SamplingEventType,
         verbose_name=_("sampling event types"),
-        help_text=_("Sampling event types on which this types of observation are made"),
+        help_text=_(
+            "Sampling event types on which this types of observation are made"
+        ),
         blank=False,
     )
 
@@ -92,7 +94,9 @@ class OrganismObservationType(IrekuaModelBase, MetadataSchemaMixin):
         return str(self.name)
 
     def validate_sampling_event_type(self, sampling_event_type):
-        if not self.sampling_event_types.filter(pk=sampling_event_type.pk).exists():
+        if not self.sampling_event_types.filter(
+            pk=sampling_event_type.pk
+        ).exists():
             msg = _(
                 "Organisms observations of type %(observation_type)s cannot be "
                 "registered in sampling events of type %(sampling_event_type)s"

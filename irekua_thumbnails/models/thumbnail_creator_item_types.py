@@ -11,7 +11,9 @@ class ThumbnailCreatorItemType(IrekuaModelBase):
         models.CASCADE,
         db_column="thumbnail_creator_id",
         verbose_name=_("thumbnail creator"),
-        help_text=_("The thumbnail creator that can process items of this type"),
+        help_text=_(
+            "The thumbnail creator that can process items of this type"
+        ),
         null=False,
         blank=False,
     )
@@ -21,7 +23,9 @@ class ThumbnailCreatorItemType(IrekuaModelBase):
         models.CASCADE,
         db_column="item_type_id",
         verbose_name=_("item type"),
-        help_text=_("Item type that can be processed by this thumbnail creator"),
+        help_text=_(
+            "Item type that can be processed by this thumbnail creator"
+        ),
         null=False,
         blank=False,
     )

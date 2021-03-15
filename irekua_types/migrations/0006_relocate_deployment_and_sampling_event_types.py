@@ -6,44 +6,47 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_collections', '0009_relocate_deployment_and_sampling_event_types'),
-        ('irekua_types', '0005_auto_20201019_1402'),
+        (
+            "irekua_collections",
+            "0009_relocate_deployment_and_sampling_event_types",
+        ),
+        ("irekua_types", "0005_auto_20201019_1402"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.RemoveField(
-                    model_name='samplingeventtype',
-                    name='deployment_types',
+                    model_name="samplingeventtype",
+                    name="deployment_types",
                 ),
                 migrations.RemoveField(
-                    model_name='samplingeventtype',
-                    name='item_types',
+                    model_name="samplingeventtype",
+                    name="item_types",
                 ),
                 migrations.RemoveField(
-                    model_name='samplingeventtype',
-                    name='metadata_schema',
+                    model_name="samplingeventtype",
+                    name="metadata_schema",
                 ),
                 migrations.RemoveField(
-                    model_name='samplingeventtype',
-                    name='site_types',
+                    model_name="samplingeventtype",
+                    name="site_types",
                 ),
                 migrations.DeleteModel(
-                    name='DeploymentType',
+                    name="DeploymentType",
                 ),
                 migrations.DeleteModel(
-                    name='SamplingEventType',
+                    name="SamplingEventType",
                 ),
             ],
             database_operations=[
                 migrations.AlterModelTable(
-                    name='DeploymentType',
-                    table='irekua_collections_deploymenttype',
+                    name="DeploymentType",
+                    table="irekua_collections_deploymenttype",
                 ),
                 migrations.AlterModelTable(
-                    name='SamplingEventType',
-                    table='irekua_collections_samplingeventtype',
+                    name="SamplingEventType",
+                    table="irekua_collections_samplingeventtype",
                 ),
             ],
         ),

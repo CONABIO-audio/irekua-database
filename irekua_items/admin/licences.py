@@ -5,45 +5,44 @@ from irekua_database.admin.base import IrekuaUserAdmin
 
 class LicenceAdmin(IrekuaUserAdmin):
     search_fields = [
-        'licence_type__name',
-        'created_by__username',
+        "licence_type__name",
+        "created_by__username",
     ]
 
     list_display = [
-        'id',
-        'licence_type',
-        'is_active',
-        'created_by',
-        'created_on',
+        "id",
+        "licence_type",
+        "is_active",
+        "created_by",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
+        "id",
     ]
 
     autocomplete_fields = [
-        'licence_type',
+        "licence_type",
     ]
 
     list_filter = [
-        'is_active',
+        "is_active",
     ]
 
     readonly_fields = [
         *IrekuaUserAdmin.readonly_fields,
-        'is_active',
+        "is_active",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('licence_type', 'document'),
-                'metadata',
-            )
-        }),
-        (_('Active'), {
-            'fields': (
-                'is_active',
-            )
-        })
+        (
+            None,
+            {
+                "fields": (
+                    ("licence_type", "document"),
+                    "metadata",
+                )
+            },
+        ),
+        (_("Active"), {"fields": ("is_active",)}),
     )

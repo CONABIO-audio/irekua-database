@@ -7,23 +7,51 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotations', '0003_annotation_userannotation'),
-        ('irekua_collections', '0013_update_annotation_type_reference'),
+        ("irekua_annotations", "0003_annotation_userannotation"),
+        ("irekua_collections", "0013_update_annotation_type_reference"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CollectionAnnotation',
+            name="CollectionAnnotation",
             fields=[
-                ('userannotation_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='irekua_annotations.userannotation')),
-                ('collection_metadata', models.JSONField(blank=True, db_column='collection_metadata', help_text='Additional metadata associated to annotation in collection', null=True, verbose_name='collection metadata')),
-                ('collection', models.ForeignKey(db_column='collection_id', help_text='Collection to which this annotation belongs', on_delete=django.db.models.deletion.PROTECT, to='irekua_collections.collection', verbose_name='collection')),
+                (
+                    "userannotation_ptr",
+                    models.OneToOneField(
+                        auto_created=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        parent_link=True,
+                        primary_key=True,
+                        serialize=False,
+                        to="irekua_annotations.userannotation",
+                    ),
+                ),
+                (
+                    "collection_metadata",
+                    models.JSONField(
+                        blank=True,
+                        db_column="collection_metadata",
+                        help_text="Additional metadata associated to annotation in collection",
+                        null=True,
+                        verbose_name="collection metadata",
+                    ),
+                ),
+                (
+                    "collection",
+                    models.ForeignKey(
+                        db_column="collection_id",
+                        help_text="Collection to which this annotation belongs",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_collections.collection",
+                        verbose_name="collection",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Collection Annotation',
-                'verbose_name_plural': 'Collection Annotations',
-                'ordering': ['-created_on'],
+                "verbose_name": "Collection Annotation",
+                "verbose_name_plural": "Collection Annotations",
+                "ordering": ["-created_on"],
             },
-            bases=('irekua_annotations.userannotation',),
+            bases=("irekua_annotations.userannotation",),
         ),
     ]

@@ -6,57 +6,55 @@ from irekua_database.admin.base import IrekuaUserAdmin
 
 class CollectionLicenceAdmin(IrekuaUserAdmin):
     search_fields = [
-        'collection__name',
-        'collection__collection_type__name',
-        'licence_type__name',
-        'created_by__username',
+        "collection__name",
+        "collection__collection_type__name",
+        "licence_type__name",
+        "created_by__username",
     ]
 
     list_display = [
-        'id',
-        'collection',
-        'licence_type',
-        'is_active',
-        'created_by',
-        'created_on',
+        "id",
+        "collection",
+        "licence_type",
+        "is_active",
+        "created_by",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
+        "id",
     ]
 
     list_filter = [
-        'is_active',
-        'collection',
-        'licence_type',
-        'collection__collection_type',
+        "is_active",
+        "collection",
+        "licence_type",
+        "collection__collection_type",
     ]
 
     autocomplete_fields = [
-        'collection',
-        'licence_type',
+        "collection",
+        "licence_type",
     ]
 
     readonly_fields = [
         *IrekuaUserAdmin.readonly_fields,
-        'is_active',
+        "is_active",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('collection', 'licence_type'),
-                'document',
-            )
-        }),
-        (_('Additional Metadata'), {
-            'fields': (
-                ('metadata', 'collection_metadata'),
-            )
-        }),
-        (_('Active'), {
-            'fields': (
-                'is_active',
-            )
-        })
+        (
+            None,
+            {
+                "fields": (
+                    ("collection", "licence_type"),
+                    "document",
+                )
+            },
+        ),
+        (
+            _("Additional Metadata"),
+            {"fields": (("metadata", "collection_metadata"),)},
+        ),
+        (_("Active"), {"fields": ("is_active",)}),
     )

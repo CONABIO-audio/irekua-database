@@ -11,10 +11,8 @@ import sorl.thumbnail.fields
 
 
 def get_thumbnail_path(instance, filename):
-    path_fmt = os.path.join(
-        'thumbnails',
-        '{hash}{ext}')
-    extension = 'jpg'
+    path_fmt = os.path.join("thumbnails", "{hash}{ext}")
+    extension = "jpg"
     hash_string = instance.hash
     return path_fmt.format(hash=hash_string, ext=extension)
 
@@ -25,210 +23,1009 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('irekua_types', '0001_initial'),
-        ('irekua_terms', '0001_initial'),
-        ('irekua_annotators', '0002_add_annotator'),
-        ('irekua_visualizers', '0002_add_visualizer'),
+        ("irekua_types", "0001_initial"),
+        ("irekua_terms", "0001_initial"),
+        ("irekua_annotators", "0002_add_annotator"),
+        ("irekua_visualizers", "0002_add_visualizer"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.CreateModel(
-                    name='Item',
+                    name="Item",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('filesize', models.IntegerField(blank=True, db_column='filesize', help_text='Size of resource in Bytes', null=True, verbose_name='file size')),
-                        ('hash', models.CharField(blank=True, db_column='hash', help_text='Hash of resource file', max_length=64, unique=True, verbose_name='hash')),
-                        ('item_file', models.FileField(blank=True, db_column='item_file', help_text='Upload file associated to file', null=True, upload_to=irekua_items.models.items.get_item_path, verbose_name='item file')),
-                        ('media_info', models.JSONField(blank=True, db_column='media_info', default=irekua_database.utils.empty_JSON, help_text='Information of resource file', verbose_name='media info')),
-                        ('source_foreign_key', models.CharField(blank=True, db_column='source_foreign_key', help_text='Foreign key of file in source database', max_length=64, verbose_name='source foreign key')),
-                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_database.utils.empty_JSON, help_text='Metadata associated to item', null=True, verbose_name='metadata')),
-                        ('captured_on', models.DateTimeField(blank=True, db_column='captured_on', help_text='Date on which item was produced', null=True, verbose_name='captured on')),
-                        ('captured_on_year', models.IntegerField(blank=True, db_column='captured_on_year', help_text='Year in which the item was captured (YYYY)', null=True, validators=[django.core.validators.MinValueValidator(1800), django.core.validators.MaxValueValidator(3000)], verbose_name='year')),
-                        ('captured_on_month', models.IntegerField(blank=True, db_column='captured_on_month', help_text='Month in which the item was captured (1-12)', null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(12)], verbose_name='month')),
-                        ('captured_on_day', models.IntegerField(blank=True, db_column='captured_on_day', help_text='Day in which the item was captured', null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(32)], verbose_name='day')),
-                        ('captured_on_hour', models.IntegerField(blank=True, db_column='captured_on_hour', help_text='Hour of the day in which the item was captured (0 - 23)', null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(23)], verbose_name='hour')),
-                        ('captured_on_minute', models.IntegerField(blank=True, db_column='captured_on_minute', help_text='Minute in which the item was captured (0-59)', null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(59)], verbose_name='minute')),
-                        ('captured_on_second', models.IntegerField(blank=True, db_column='captured_on_second', help_text='Second in which the item was captured (0-59)', null=True, validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(59)], verbose_name='second')),
-                        ('captured_on_timezone', models.CharField(blank=True, db_column='captured_on_timezone', help_text='Timezone corresponding to date fields', max_length=256, null=True, verbose_name='timezone')),
-                        ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='item_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
-                        ('item_type', models.ForeignKey(db_column='item_type_id', help_text='Type of resource', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.itemtype', verbose_name='item type')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "filesize",
+                            models.IntegerField(
+                                blank=True,
+                                db_column="filesize",
+                                help_text="Size of resource in Bytes",
+                                null=True,
+                                verbose_name="file size",
+                            ),
+                        ),
+                        (
+                            "hash",
+                            models.CharField(
+                                blank=True,
+                                db_column="hash",
+                                help_text="Hash of resource file",
+                                max_length=64,
+                                unique=True,
+                                verbose_name="hash",
+                            ),
+                        ),
+                        (
+                            "item_file",
+                            models.FileField(
+                                blank=True,
+                                db_column="item_file",
+                                help_text="Upload file associated to file",
+                                null=True,
+                                upload_to=irekua_items.models.items.get_item_path,
+                                verbose_name="item file",
+                            ),
+                        ),
+                        (
+                            "media_info",
+                            models.JSONField(
+                                blank=True,
+                                db_column="media_info",
+                                default=irekua_database.utils.empty_JSON,
+                                help_text="Information of resource file",
+                                verbose_name="media info",
+                            ),
+                        ),
+                        (
+                            "source_foreign_key",
+                            models.CharField(
+                                blank=True,
+                                db_column="source_foreign_key",
+                                help_text="Foreign key of file in source database",
+                                max_length=64,
+                                verbose_name="source foreign key",
+                            ),
+                        ),
+                        (
+                            "metadata",
+                            models.JSONField(
+                                blank=True,
+                                db_column="metadata",
+                                default=irekua_database.utils.empty_JSON,
+                                help_text="Metadata associated to item",
+                                null=True,
+                                verbose_name="metadata",
+                            ),
+                        ),
+                        (
+                            "captured_on",
+                            models.DateTimeField(
+                                blank=True,
+                                db_column="captured_on",
+                                help_text="Date on which item was produced",
+                                null=True,
+                                verbose_name="captured on",
+                            ),
+                        ),
+                        (
+                            "captured_on_year",
+                            models.IntegerField(
+                                blank=True,
+                                db_column="captured_on_year",
+                                help_text="Year in which the item was captured (YYYY)",
+                                null=True,
+                                validators=[
+                                    django.core.validators.MinValueValidator(
+                                        1800
+                                    ),
+                                    django.core.validators.MaxValueValidator(
+                                        3000
+                                    ),
+                                ],
+                                verbose_name="year",
+                            ),
+                        ),
+                        (
+                            "captured_on_month",
+                            models.IntegerField(
+                                blank=True,
+                                db_column="captured_on_month",
+                                help_text="Month in which the item was captured (1-12)",
+                                null=True,
+                                validators=[
+                                    django.core.validators.MinValueValidator(
+                                        0
+                                    ),
+                                    django.core.validators.MaxValueValidator(
+                                        12
+                                    ),
+                                ],
+                                verbose_name="month",
+                            ),
+                        ),
+                        (
+                            "captured_on_day",
+                            models.IntegerField(
+                                blank=True,
+                                db_column="captured_on_day",
+                                help_text="Day in which the item was captured",
+                                null=True,
+                                validators=[
+                                    django.core.validators.MinValueValidator(
+                                        0
+                                    ),
+                                    django.core.validators.MaxValueValidator(
+                                        32
+                                    ),
+                                ],
+                                verbose_name="day",
+                            ),
+                        ),
+                        (
+                            "captured_on_hour",
+                            models.IntegerField(
+                                blank=True,
+                                db_column="captured_on_hour",
+                                help_text="Hour of the day in which the item was captured (0 - 23)",
+                                null=True,
+                                validators=[
+                                    django.core.validators.MinValueValidator(
+                                        0
+                                    ),
+                                    django.core.validators.MaxValueValidator(
+                                        23
+                                    ),
+                                ],
+                                verbose_name="hour",
+                            ),
+                        ),
+                        (
+                            "captured_on_minute",
+                            models.IntegerField(
+                                blank=True,
+                                db_column="captured_on_minute",
+                                help_text="Minute in which the item was captured (0-59)",
+                                null=True,
+                                validators=[
+                                    django.core.validators.MinValueValidator(
+                                        0
+                                    ),
+                                    django.core.validators.MaxValueValidator(
+                                        59
+                                    ),
+                                ],
+                                verbose_name="minute",
+                            ),
+                        ),
+                        (
+                            "captured_on_second",
+                            models.IntegerField(
+                                blank=True,
+                                db_column="captured_on_second",
+                                help_text="Second in which the item was captured (0-59)",
+                                null=True,
+                                validators=[
+                                    django.core.validators.MinValueValidator(
+                                        0
+                                    ),
+                                    django.core.validators.MaxValueValidator(
+                                        59
+                                    ),
+                                ],
+                                verbose_name="second",
+                            ),
+                        ),
+                        (
+                            "captured_on_timezone",
+                            models.CharField(
+                                blank=True,
+                                db_column="captured_on_timezone",
+                                help_text="Timezone corresponding to date fields",
+                                max_length=256,
+                                null=True,
+                                verbose_name="timezone",
+                            ),
+                        ),
+                        (
+                            "created_by",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="creator_id",
+                                help_text="Creator of object",
+                                null=True,
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="item_created_by",
+                                to=settings.AUTH_USER_MODEL,
+                                verbose_name="creator",
+                            ),
+                        ),
+                        (
+                            "item_type",
+                            models.ForeignKey(
+                                db_column="item_type_id",
+                                help_text="Type of resource",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_types.itemtype",
+                                verbose_name="item type",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Item',
-                        'verbose_name_plural': 'Items',
-                        'ordering': ['created_on'],
-                        'permissions': (('download_item', 'Can download item'), ('annotate_item', 'Can annotate item')),
+                        "verbose_name": "Item",
+                        "verbose_name_plural": "Items",
+                        "ordering": ["created_on"],
+                        "permissions": (
+                            ("download_item", "Can download item"),
+                            ("annotate_item", "Can annotate item"),
+                        ),
                     },
                 ),
                 migrations.CreateModel(
-                    name='Annotation',
+                    name="Annotation",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('annotation', models.JSONField(blank=True, db_column='annotation', default=irekua_database.utils.empty_JSON, help_text='Information of annotation location within item', verbose_name='annotation')),
-                        ('annotation_type', models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.annotationtype', verbose_name='annotation type')),
-                        ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='annotation_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
-                        ('event_type', models.ForeignKey(db_column='event_type_id', help_text='Type of event being annotated', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.eventtype', verbose_name='event type')),
-                        ('annotation_tool', models.ForeignKey(db_column='annotation_tool_id', help_text='Annotation tool used when annotating', on_delete=django.db.models.deletion.PROTECT, to='irekua_annotators.AnnotationTool', verbose_name='annotation tool')),
-                        ('item', models.ForeignKey(db_column='item_id', help_text='Annotated item', on_delete=django.db.models.deletion.PROTECT, to='irekua_items.Item', verbose_name='item')),
-                        ('labels', models.ManyToManyField(blank=True, db_column='labels', help_text='Labels associated with annotation', to='irekua_terms.Term', verbose_name='labels')),
-                        ('visualizer', models.ForeignKey(db_column='visualizers_id', help_text='Visualizer used when annotating', on_delete=django.db.models.deletion.PROTECT, to='irekua_visualizers.Visualizer', verbose_name='visualizer')),
-                        ('visualizer_configuration', django.contrib.postgres.fields.jsonb.JSONField(blank=True, db_column='visualizer_configuration', default=irekua_database.utils.empty_JSON, help_text='Configuration of visualizer at annotation creation', verbose_name='visualizer configuration')),
-                        ('certainty', models.CharField(blank=True, choices=[('L', 'uncertain'), ('M', 'somewhat certain'), ('H', 'certain')], db_column='certainty', help_text='Level of certainty of location or labelling of annotation', max_length=16, null=True, verbose_name='certainty')),
-                        ('quality', models.CharField(blank=True, choices=[('L', 'low'), ('M', 'medium'), ('H', 'high')], db_column='quality', help_text='Quality of item content inside annotation', max_length=16, verbose_name='quality')),
-                        ('commentaries', models.TextField(blank=True, db_column='commentaries', help_text='Commentaries of annotator', verbose_name='commentaries')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "annotation",
+                            models.JSONField(
+                                blank=True,
+                                db_column="annotation",
+                                default=irekua_database.utils.empty_JSON,
+                                help_text="Information of annotation location within item",
+                                verbose_name="annotation",
+                            ),
+                        ),
+                        (
+                            "annotation_type",
+                            models.ForeignKey(
+                                db_column="annotation_type_id",
+                                help_text="Type of annotation",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_types.annotationtype",
+                                verbose_name="annotation type",
+                            ),
+                        ),
+                        (
+                            "created_by",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="creator_id",
+                                help_text="Creator of object",
+                                null=True,
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="annotation_created_by",
+                                to=settings.AUTH_USER_MODEL,
+                                verbose_name="creator",
+                            ),
+                        ),
+                        (
+                            "event_type",
+                            models.ForeignKey(
+                                db_column="event_type_id",
+                                help_text="Type of event being annotated",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_types.eventtype",
+                                verbose_name="event type",
+                            ),
+                        ),
+                        (
+                            "annotation_tool",
+                            models.ForeignKey(
+                                db_column="annotation_tool_id",
+                                help_text="Annotation tool used when annotating",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_annotators.AnnotationTool",
+                                verbose_name="annotation tool",
+                            ),
+                        ),
+                        (
+                            "item",
+                            models.ForeignKey(
+                                db_column="item_id",
+                                help_text="Annotated item",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_items.Item",
+                                verbose_name="item",
+                            ),
+                        ),
+                        (
+                            "labels",
+                            models.ManyToManyField(
+                                blank=True,
+                                db_column="labels",
+                                help_text="Labels associated with annotation",
+                                to="irekua_terms.Term",
+                                verbose_name="labels",
+                            ),
+                        ),
+                        (
+                            "visualizer",
+                            models.ForeignKey(
+                                db_column="visualizers_id",
+                                help_text="Visualizer used when annotating",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_visualizers.Visualizer",
+                                verbose_name="visualizer",
+                            ),
+                        ),
+                        (
+                            "visualizer_configuration",
+                            django.contrib.postgres.fields.jsonb.JSONField(
+                                blank=True,
+                                db_column="visualizer_configuration",
+                                default=irekua_database.utils.empty_JSON,
+                                help_text="Configuration of visualizer at annotation creation",
+                                verbose_name="visualizer configuration",
+                            ),
+                        ),
+                        (
+                            "certainty",
+                            models.CharField(
+                                blank=True,
+                                choices=[
+                                    ("L", "uncertain"),
+                                    ("M", "somewhat certain"),
+                                    ("H", "certain"),
+                                ],
+                                db_column="certainty",
+                                help_text="Level of certainty of location or labelling of annotation",
+                                max_length=16,
+                                null=True,
+                                verbose_name="certainty",
+                            ),
+                        ),
+                        (
+                            "quality",
+                            models.CharField(
+                                blank=True,
+                                choices=[
+                                    ("L", "low"),
+                                    ("M", "medium"),
+                                    ("H", "high"),
+                                ],
+                                db_column="quality",
+                                help_text="Quality of item content inside annotation",
+                                max_length=16,
+                                verbose_name="quality",
+                            ),
+                        ),
+                        (
+                            "commentaries",
+                            models.TextField(
+                                blank=True,
+                                db_column="commentaries",
+                                help_text="Commentaries of annotator",
+                                verbose_name="commentaries",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Annotation',
-                        'verbose_name_plural': 'Annotations',
-                        'ordering': ['-modified_on'],
-                        'permissions': (('vote', 'Can vote annotation'),),
+                        "verbose_name": "Annotation",
+                        "verbose_name_plural": "Annotations",
+                        "ordering": ["-modified_on"],
+                        "permissions": (("vote", "Can vote annotation"),),
                     },
                 ),
                 migrations.CreateModel(
-                    name='Tag',
+                    name="Tag",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('name', models.CharField(db_column='name', help_text='Name of tag', max_length=128, unique=True, verbose_name='name')),
-                        ('description', models.TextField(blank=True, db_column='description', help_text='Tag description', verbose_name='description')),
-                        ('icon', models.ImageField(blank=True, db_column='icon', help_text='Icon for tag', null=True, upload_to='images/tags/', verbose_name='icon')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "name",
+                            models.CharField(
+                                db_column="name",
+                                help_text="Name of tag",
+                                max_length=128,
+                                unique=True,
+                                verbose_name="name",
+                            ),
+                        ),
+                        (
+                            "description",
+                            models.TextField(
+                                blank=True,
+                                db_column="description",
+                                help_text="Tag description",
+                                verbose_name="description",
+                            ),
+                        ),
+                        (
+                            "icon",
+                            models.ImageField(
+                                blank=True,
+                                db_column="icon",
+                                help_text="Icon for tag",
+                                null=True,
+                                upload_to="images/tags/",
+                                verbose_name="icon",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Tag',
-                        'verbose_name_plural': 'Tags',
-                        'ordering': ['name'],
+                        "verbose_name": "Tag",
+                        "verbose_name_plural": "Tags",
+                        "ordering": ["name"],
                     },
                 ),
                 migrations.CreateModel(
-                    name='ItemThumbnail',
+                    name="ItemThumbnail",
                     fields=[
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('item', models.OneToOneField(db_column='item_id', help_text='Item whose thumbnail is this.', on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to='irekua_items.item', verbose_name='item')),
-                        ('thumbnail', sorl.thumbnail.fields.ImageField(db_column='thumbnail', help_text='Thumbnail associated to item', upload_to=get_thumbnail_path, verbose_name='thumbnail')),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "item",
+                            models.OneToOneField(
+                                db_column="item_id",
+                                help_text="Item whose thumbnail is this.",
+                                on_delete=django.db.models.deletion.CASCADE,
+                                primary_key=True,
+                                serialize=False,
+                                to="irekua_items.item",
+                                verbose_name="item",
+                            ),
+                        ),
+                        (
+                            "thumbnail",
+                            sorl.thumbnail.fields.ImageField(
+                                db_column="thumbnail",
+                                help_text="Thumbnail associated to item",
+                                upload_to=get_thumbnail_path,
+                                verbose_name="thumbnail",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Item Thumbnail',
-                        'verbose_name_plural': 'Items Thumbnails',
-                        'ordering': ['created_on'],
+                        "verbose_name": "Item Thumbnail",
+                        "verbose_name_plural": "Items Thumbnails",
+                        "ordering": ["created_on"],
                     },
                 ),
                 migrations.CreateModel(
-                    name='Source',
+                    name="Source",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('directory', models.CharField(db_column='directory', help_text='Directory containing all files in source', max_length=64, unique=True, verbose_name='directory')),
-                        ('source_file', models.CharField(db_column='source_file', help_text='File containing metadata for files in source directory', max_length=64, verbose_name='source file')),
-                        ('parse_function', models.CharField(db_column='parse_function', help_text='Parse function used to insert files and metadata to database', max_length=64, verbose_name='parse function')),
-                        ('uploader', models.ForeignKey(db_column='uploader_id', help_text='Reference to user who uploaded files in source', on_delete=django.db.models.deletion.PROTECT, related_name='source_uploader', to=settings.AUTH_USER_MODEL, verbose_name='uploader id')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "directory",
+                            models.CharField(
+                                db_column="directory",
+                                help_text="Directory containing all files in source",
+                                max_length=64,
+                                unique=True,
+                                verbose_name="directory",
+                            ),
+                        ),
+                        (
+                            "source_file",
+                            models.CharField(
+                                db_column="source_file",
+                                help_text="File containing metadata for files in source directory",
+                                max_length=64,
+                                verbose_name="source file",
+                            ),
+                        ),
+                        (
+                            "parse_function",
+                            models.CharField(
+                                db_column="parse_function",
+                                help_text="Parse function used to insert files and metadata to database",
+                                max_length=64,
+                                verbose_name="parse function",
+                            ),
+                        ),
+                        (
+                            "uploader",
+                            models.ForeignKey(
+                                db_column="uploader_id",
+                                help_text="Reference to user who uploaded files in source",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="source_uploader",
+                                to=settings.AUTH_USER_MODEL,
+                                verbose_name="uploader id",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Source',
-                        'verbose_name_plural': 'Sources',
+                        "verbose_name": "Source",
+                        "verbose_name_plural": "Sources",
                     },
                 ),
                 migrations.CreateModel(
-                    name='SecondaryItem',
+                    name="SecondaryItem",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('hash', models.CharField(db_column='hash', help_text='Hash of secondary resource file', max_length=64, unique=True, verbose_name='hash')),
-                        ('item_file', models.FileField(blank=True, db_column='item_file', help_text='Upload file associated to file', null=True, upload_to=irekua_items.models.secondary_items.get_item_path, verbose_name='item file')),
-                        ('media_info', models.JSONField(blank=True, db_column='media_info', default=irekua_database.utils.empty_JSON, help_text='Media information of secondary item file', null=True, verbose_name='media info')),
-                        ('item', models.ForeignKey(db_column='item_id', help_text='Reference to primary item associated to secondary item', on_delete=django.db.models.deletion.CASCADE, to='irekua_items.item', verbose_name='item id')),
-                        ('item_type', models.ForeignKey(db_column='item_type', help_text='Type of file of secondary item', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.itemtype', verbose_name='item type')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "hash",
+                            models.CharField(
+                                db_column="hash",
+                                help_text="Hash of secondary resource file",
+                                max_length=64,
+                                unique=True,
+                                verbose_name="hash",
+                            ),
+                        ),
+                        (
+                            "item_file",
+                            models.FileField(
+                                blank=True,
+                                db_column="item_file",
+                                help_text="Upload file associated to file",
+                                null=True,
+                                upload_to=irekua_items.models.secondary_items.get_item_path,
+                                verbose_name="item file",
+                            ),
+                        ),
+                        (
+                            "media_info",
+                            models.JSONField(
+                                blank=True,
+                                db_column="media_info",
+                                default=irekua_database.utils.empty_JSON,
+                                help_text="Media information of secondary item file",
+                                null=True,
+                                verbose_name="media info",
+                            ),
+                        ),
+                        (
+                            "item",
+                            models.ForeignKey(
+                                db_column="item_id",
+                                help_text="Reference to primary item associated to secondary item",
+                                on_delete=django.db.models.deletion.CASCADE,
+                                to="irekua_items.item",
+                                verbose_name="item id",
+                            ),
+                        ),
+                        (
+                            "item_type",
+                            models.ForeignKey(
+                                db_column="item_type",
+                                help_text="Type of file of secondary item",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_types.itemtype",
+                                verbose_name="item type",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Secondary Item',
-                        'verbose_name_plural': 'Secondary Items',
-                        'ordering': ['created_on'],
+                        "verbose_name": "Secondary Item",
+                        "verbose_name_plural": "Secondary Items",
+                        "ordering": ["created_on"],
                     },
                 ),
                 migrations.CreateModel(
-                    name='Licence',
+                    name="Licence",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('document', models.FileField(blank=True, db_column='document', help_text='Legal document of licence agreement', upload_to='documents/licences/', verbose_name='document')),
-                        ('metadata', models.JSONField(blank=True, db_column='metadata', default=irekua_database.utils.empty_JSON, help_text='Metadata associated with licence', null=True, verbose_name='metadata')),
-                        ('is_active', models.BooleanField(blank=True, db_column='is_active', default=False, editable=False, help_text='Licence is still active', verbose_name='is active')),
-                        ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='licence_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
-                        ('licence_type', models.ForeignKey(db_column='licence_type_id', help_text='Type of licence used', on_delete=django.db.models.deletion.PROTECT, to='irekua_types.licencetype', verbose_name='licence type')),
-                        ('modified_by', models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='licence_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "document",
+                            models.FileField(
+                                blank=True,
+                                db_column="document",
+                                help_text="Legal document of licence agreement",
+                                upload_to="documents/licences/",
+                                verbose_name="document",
+                            ),
+                        ),
+                        (
+                            "metadata",
+                            models.JSONField(
+                                blank=True,
+                                db_column="metadata",
+                                default=irekua_database.utils.empty_JSON,
+                                help_text="Metadata associated with licence",
+                                null=True,
+                                verbose_name="metadata",
+                            ),
+                        ),
+                        (
+                            "is_active",
+                            models.BooleanField(
+                                blank=True,
+                                db_column="is_active",
+                                default=False,
+                                editable=False,
+                                help_text="Licence is still active",
+                                verbose_name="is active",
+                            ),
+                        ),
+                        (
+                            "created_by",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="creator_id",
+                                help_text="Creator of object",
+                                null=True,
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="licence_created_by",
+                                to=settings.AUTH_USER_MODEL,
+                                verbose_name="creator",
+                            ),
+                        ),
+                        (
+                            "licence_type",
+                            models.ForeignKey(
+                                db_column="licence_type_id",
+                                help_text="Type of licence used",
+                                on_delete=django.db.models.deletion.PROTECT,
+                                to="irekua_types.licencetype",
+                                verbose_name="licence type",
+                            ),
+                        ),
+                        (
+                            "modified_by",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="modified_by",
+                                editable=False,
+                                help_text="User who made modifications last",
+                                null=True,
+                                on_delete=django.db.models.deletion.SET_NULL,
+                                related_name="licence_modified_by",
+                                to=settings.AUTH_USER_MODEL,
+                                verbose_name="modified by",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Licence',
-                        'verbose_name_plural': 'Licences',
-                        'ordering': ['-created_on'],
+                        "verbose_name": "Licence",
+                        "verbose_name_plural": "Licences",
+                        "ordering": ["-created_on"],
                     },
                 ),
                 migrations.AddField(
-                    model_name='item',
-                    name='licence',
-                    field=models.ForeignKey(blank=True, db_column='licence_id', help_text='Licence of item', null=True, on_delete=django.db.models.deletion.PROTECT, to='irekua_items.licence', verbose_name='licence'),
+                    model_name="item",
+                    name="licence",
+                    field=models.ForeignKey(
+                        blank=True,
+                        db_column="licence_id",
+                        help_text="Licence of item",
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_items.licence",
+                        verbose_name="licence",
+                    ),
                 ),
                 migrations.AddField(
-                    model_name='item',
-                    name='modified_by',
-                    field=models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='item_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by'),
+                    model_name="item",
+                    name="modified_by",
+                    field=models.ForeignKey(
+                        blank=True,
+                        db_column="modified_by",
+                        editable=False,
+                        help_text="User who made modifications last",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="item_modified_by",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="modified by",
+                    ),
                 ),
                 migrations.AddField(
-                    model_name='item',
-                    name='ready_event_types',
-                    field=models.ManyToManyField(blank=True, help_text='Types of event for which item has been fully annotated', to='irekua_types.EventType', verbose_name='ready event types'),
+                    model_name="item",
+                    name="ready_event_types",
+                    field=models.ManyToManyField(
+                        blank=True,
+                        help_text="Types of event for which item has been fully annotated",
+                        to="irekua_types.EventType",
+                        verbose_name="ready event types",
+                    ),
                 ),
                 migrations.AddField(
-                    model_name='item',
-                    name='source',
-                    field=models.ForeignKey(blank=True, db_column='source_id', help_text='Source of item (parsing function and parent directory)', null=True, on_delete=django.db.models.deletion.PROTECT, to='irekua_items.source', verbose_name='source'),
+                    model_name="item",
+                    name="source",
+                    field=models.ForeignKey(
+                        blank=True,
+                        db_column="source_id",
+                        help_text="Source of item (parsing function and parent directory)",
+                        null=True,
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_items.source",
+                        verbose_name="source",
+                    ),
                 ),
                 migrations.AddField(
-                    model_name='item',
-                    name='tags',
-                    field=models.ManyToManyField(blank=True, help_text='Tags for item', to='irekua_items.Tag', verbose_name='tags'),
+                    model_name="item",
+                    name="tags",
+                    field=models.ManyToManyField(
+                        blank=True,
+                        help_text="Tags for item",
+                        to="irekua_items.Tag",
+                        verbose_name="tags",
+                    ),
                 ),
                 migrations.CreateModel(
-                    name='AnnotationVote',
+                    name="AnnotationVote",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('annotation', models.ForeignKey(db_column='annotation_id', help_text='Reference to annotation being voted', on_delete=django.db.models.deletion.CASCADE, to='irekua_items.annotation', verbose_name='annotation')),
-                        ('created_by', models.ForeignKey(blank=True, db_column='creator_id', help_text='Creator of object', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='annotationvote_created_by', to=settings.AUTH_USER_MODEL, verbose_name='creator')),
-                        ('labels', models.ManyToManyField(blank=True, db_column='labels', help_text='Labels associated with annotation', to='irekua_terms.Term', verbose_name='labels')),
-                        ('modified_by', models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='annotationvote_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "annotation",
+                            models.ForeignKey(
+                                db_column="annotation_id",
+                                help_text="Reference to annotation being voted",
+                                on_delete=django.db.models.deletion.CASCADE,
+                                to="irekua_items.annotation",
+                                verbose_name="annotation",
+                            ),
+                        ),
+                        (
+                            "created_by",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="creator_id",
+                                help_text="Creator of object",
+                                null=True,
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="annotationvote_created_by",
+                                to=settings.AUTH_USER_MODEL,
+                                verbose_name="creator",
+                            ),
+                        ),
+                        (
+                            "labels",
+                            models.ManyToManyField(
+                                blank=True,
+                                db_column="labels",
+                                help_text="Labels associated with annotation",
+                                to="irekua_terms.Term",
+                                verbose_name="labels",
+                            ),
+                        ),
+                        (
+                            "modified_by",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="modified_by",
+                                editable=False,
+                                help_text="User who made modifications last",
+                                null=True,
+                                on_delete=django.db.models.deletion.SET_NULL,
+                                related_name="annotationvote_modified_by",
+                                to=settings.AUTH_USER_MODEL,
+                                verbose_name="modified by",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Annotation Vote',
-                        'verbose_name_plural': 'Annotation Votes',
-                        'ordering': ['-modified_on'],
+                        "verbose_name": "Annotation Vote",
+                        "verbose_name_plural": "Annotation Votes",
+                        "ordering": ["-modified_on"],
                     },
                 ),
                 migrations.AddField(
-                    model_name='annotation',
-                    name='item',
-                    field=models.ForeignKey(db_column='item_id', help_text='Annotated item', on_delete=django.db.models.deletion.PROTECT, to='irekua_items.item', verbose_name='item'),
+                    model_name="annotation",
+                    name="item",
+                    field=models.ForeignKey(
+                        db_column="item_id",
+                        help_text="Annotated item",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_items.item",
+                        verbose_name="item",
+                    ),
                 ),
                 migrations.AddField(
-                    model_name='annotation',
-                    name='labels',
-                    field=models.ManyToManyField(blank=True, db_column='labels', help_text='Labels associated with annotation', to='irekua_terms.Term', verbose_name='labels'),
+                    model_name="annotation",
+                    name="labels",
+                    field=models.ManyToManyField(
+                        blank=True,
+                        db_column="labels",
+                        help_text="Labels associated with annotation",
+                        to="irekua_terms.Term",
+                        verbose_name="labels",
+                    ),
                 ),
                 migrations.AddField(
-                    model_name='annotation',
-                    name='modified_by',
-                    field=models.ForeignKey(blank=True, db_column='modified_by', editable=False, help_text='User who made modifications last', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='annotation_modified_by', to=settings.AUTH_USER_MODEL, verbose_name='modified by'),
+                    model_name="annotation",
+                    name="modified_by",
+                    field=models.ForeignKey(
+                        blank=True,
+                        db_column="modified_by",
+                        editable=False,
+                        help_text="User who made modifications last",
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="annotation_modified_by",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="modified by",
+                    ),
                 ),
             ],
             database_operations=[],

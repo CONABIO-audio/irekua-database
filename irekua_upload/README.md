@@ -1,6 +1,5 @@
 # Irekua Items
 
-
 ## Media Info and Inferable Metadata
 
 ### Introduction
@@ -29,6 +28,11 @@ These stored functions can read a file and return the contained
 media info. Most file formats have a relatively uniform media info
 structure which, in some cases, can be expanded with additional
 information.
+
+#### Metadata Extractors
+
+These stored functions can read a file and infer a part of the item's metadata
+from it. This could be retrieveing
 
 ```python
 class MediaInfoExtractor(Model):
@@ -103,7 +107,5 @@ def get_python_extractor(item_type, mime_type, device):
     return extractors_by_priority[0][0]
 
 ```
-
-
 
 ### Extractor selection

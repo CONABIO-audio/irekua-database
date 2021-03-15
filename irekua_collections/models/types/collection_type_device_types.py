@@ -37,6 +37,7 @@ class CollectionTypeDeviceType(IrekuaModelBase, CollectionMetadataSchemaMixin):
     def __str__(self):
         msg = _("Collection %(collection_type)s: Device Type %(device_type)s")
         params = dict(
-            device_type=str(self.device_type), collection_type=str(self.collection_type)
+            device_type=str(self.device_type),
+            collection_type=str(self.collection_type),
         )
         return msg % params

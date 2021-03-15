@@ -23,7 +23,9 @@ class UserAnnotation(Annotation):
         max_length=16,
         db_column="certainty",
         verbose_name=_("certainty"),
-        help_text=_("Level of certainty of location or labelling " "of annotation"),
+        help_text=_(
+            "Level of certainty of location or labelling " "of annotation"
+        ),
         blank=True,
         choices=CERTAINTY_OPTIONS,
         null=True,

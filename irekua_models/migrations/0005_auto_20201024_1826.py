@@ -7,13 +7,18 @@ import irekua_database.utils
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_models', '0004_update_types_references'),
+        ("irekua_models", "0004_update_types_references"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='modelprediction',
-            name='annotation',
-            field=models.JSONField(db_column='annotation', default=irekua_database.utils.empty_JSON, help_text='Information of annotation location within item', verbose_name='annotation'),
+            model_name="modelprediction",
+            name="annotation",
+            field=models.JSONField(
+                db_column="annotation",
+                default=irekua_database.utils.empty_JSON,
+                help_text="Information of annotation location within item",
+                verbose_name="annotation",
+            ),
         ),
     ]

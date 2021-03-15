@@ -95,8 +95,8 @@ class OrganismObservation(IrekuaModelBaseUser):
             return
 
         # Check organism capture type is allowed in collections of this type
-        organism_observation_type_config = self.clean_organism_observation_type(
-            organism_config
+        organism_observation_type_config = (
+            self.clean_organism_observation_type(organism_config)
         )
 
         # Check that additional collection metadata is valid for organism observation type
@@ -110,18 +110,25 @@ class OrganismObservation(IrekuaModelBaseUser):
             return collection_type.collectiontypeorganismconfig
 
         except ObjectDoesNotExist as error:
-            msg = _("Collections of type %(collection_type)s do not allow organisms.")
+            msg = _(
+                "Collections of type %(collection_type)s do not allow organisms."
+            )
             params = dict(collection_type=collection_type)
             raise ValidationError({"collection": msg % params}) from error
 
     # pylint: disable=no-self-use
     def clean_collection_type(self, organism_config):
         if not organism_config.use_organisms:
-            raise ValidationError(_("This collection does not allow organisms"))
+            raise ValidationError(
+                _("This collection does not allow organisms")
+            )
 
     def clean_compatible_organism_and_observation_type(self):
         # pylint: disable=no-member
-        if self.organism.organism_type != self.organism_observation_type.organism_type:
+        if (
+            self.organism.organism_type
+            != self.organism_observation_type.organism_type
+        ):
             msg = _(
                 "Observations of type %(capture_type)s cannot be registered on organisms "
                 "of type %(organism_type)s"
@@ -148,11 +155,15 @@ class OrganismObservation(IrekuaModelBaseUser):
             )
 
         except ObjectDoesNotExist as error:
-            raise ValidationError({"organism_observation_type": error}) from error
+            raise ValidationError(
+                {"organism_observation_type": error}
+            ) from error
 
     def clean_collection_metadata(self, organism_observation_type_config):
         try:
-            organism_observation_type_config.validate_metadata(self.collection_metadata)
+            organism_observation_type_config.validate_metadata(
+                self.collection_metadata
+            )
 
         except ValidationError as error:
             raise ValidationError({"collection_metadata": error}) from error

@@ -6,29 +6,41 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_geo', '0002_auto_20201019_1731'),
-        ('irekua_collections', '0005_auto_20201020_1251'),
+        ("irekua_geo", "0002_auto_20201019_1731"),
+        ("irekua_collections", "0005_auto_20201020_1251"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='collectiondevice',
-            old_name='internal_id',
-            new_name='collection_name',
+            model_name="collectiondevice",
+            old_name="internal_id",
+            new_name="collection_name",
         ),
         migrations.RenameField(
-            model_name='collectionsite',
-            old_name='internal_id',
-            new_name='collection_name',
+            model_name="collectionsite",
+            old_name="internal_id",
+            new_name="collection_name",
         ),
         migrations.AlterField(
-            model_name='collectiondevice',
-            name='collection_name',
-            field=models.CharField(blank=True, db_column='collection_name', help_text='Nmae of device within the collection (visible to all collection users)', max_length=64, verbose_name='Name within collection'),
+            model_name="collectiondevice",
+            name="collection_name",
+            field=models.CharField(
+                blank=True,
+                db_column="collection_name",
+                help_text="Nmae of device within the collection (visible to all collection users)",
+                max_length=64,
+                verbose_name="Name within collection",
+            ),
         ),
         migrations.AlterField(
-            model_name='collectionsite',
-            name='collection_name',
-            field=models.CharField(blank=True, db_column='collection_name', help_text='Name of site within the collection (visible to all collection users)', max_length=64, verbose_name='Name within collection'),
+            model_name="collectionsite",
+            name="collection_name",
+            field=models.CharField(
+                blank=True,
+                db_column="collection_name",
+                help_text="Name of site within the collection (visible to all collection users)",
+                max_length=64,
+                verbose_name="Name within collection",
+            ),
         ),
     ]

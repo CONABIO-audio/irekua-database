@@ -7,18 +7,29 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0012_clean_user_institutions'),
+        ("irekua_database", "0012_clean_user_institutions"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='institution',
-            name='institution_name',
-            field=models.CharField(db_column='institution_name', help_text='Name of institution', max_length=256, unique=True, verbose_name='institution name'),
+            model_name="institution",
+            name="institution_name",
+            field=models.CharField(
+                db_column="institution_name",
+                help_text="Name of institution",
+                max_length=256,
+                unique=True,
+                verbose_name="institution name",
+            ),
         ),
         migrations.AddField(
-            model_name='institution',
-            name='users',
-            field=models.ManyToManyField(help_text='Users belonging to this institution', through='irekua_database.UserInstitution', to=settings.AUTH_USER_MODEL, verbose_name="Institution's user"),
+            model_name="institution",
+            name="users",
+            field=models.ManyToManyField(
+                help_text="Users belonging to this institution",
+                through="irekua_database.UserInstitution",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Institution's user",
+            ),
         ),
     ]

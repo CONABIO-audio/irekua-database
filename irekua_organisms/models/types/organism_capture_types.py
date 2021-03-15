@@ -119,6 +119,8 @@ class OrganismCaptureType(IrekuaModelBase, MetadataSchemaMixin):
                 " of type %(capture_type)s. Term: %(term)s"
             )
             params = dict(
-                term_type=term.term_type.name, capture_type=self.name, term=term.value
+                term_type=term.term_type.name,
+                capture_type=self.name,
+                term=term.value,
             )
             raise ValidationError(msg % params)

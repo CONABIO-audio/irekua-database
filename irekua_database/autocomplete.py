@@ -21,7 +21,9 @@ def get_viewname_from_model(model):
     return f"{get_name_from_model(model)}_autocomplete"
 
 
-def register_autocomplete(model, urlpatterns, view_name=None, create_field=None):
+def register_autocomplete(
+    model, urlpatterns, view_name=None, create_field=None
+):
     """
     Register an autocomplete view in the urlpatterns.
 

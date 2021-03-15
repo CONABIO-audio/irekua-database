@@ -9,54 +9,56 @@ from irekua_database.base import IrekuaModelBase
 class Locality(IrekuaModelBase):
     name = models.CharField(
         max_length=128,
-        db_column='name',
-        help_text=_('Name of locality'),
-        blank=False)
+        db_column="name",
+        help_text=_("Name of locality"),
+        blank=False,
+    )
 
     description = models.TextField(
         blank=True,
-        db_column='description',
-        verbose_name=_('description'),
-        help_text=_('Description of the locality'))
+        db_column="description",
+        verbose_name=_("description"),
+        help_text=_("Description of the locality"),
+    )
 
     locality_type = models.ForeignKey(
-        'LocalityType',
+        "LocalityType",
         on_delete=models.PROTECT,
-        db_column='locality_type_id',
-        verbose_name=_('locality type'),
-        help_text=_('Type of locality'),
+        db_column="locality_type_id",
+        verbose_name=_("locality type"),
+        help_text=_("Type of locality"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     geometry = MultiPolygonField(
         blank=True,
-        db_column='geometry',
-        verbose_name=_('geometry'),
-        help_text=_('Geometry of locality'),
-        spatial_index=True)
+        db_column="geometry",
+        verbose_name=_("geometry"),
+        help_text=_("Geometry of locality"),
+        spatial_index=True,
+    )
 
     metadata = models.JSONField(
-        db_column='metadata',
-        verbose_name=_('metadata'),
-        help_text=_('Metadata associated to locality'),
+        db_column="metadata",
+        verbose_name=_("metadata"),
+        help_text=_("Metadata associated to locality"),
         blank=True,
-        null=True)
+        null=True,
+    )
 
-    is_part_of = models.ManyToManyField(
-        "self",
-        symmetrical=False,
-        blank=True)
+    is_part_of = models.ManyToManyField("self", symmetrical=False, blank=True)
 
     class Meta:
-        verbose_name = _('Locality')
-        verbose_name_plural = _('Localities')
+        verbose_name = _("Locality")
+        verbose_name_plural = _("Localities")
 
-        ordering = ['-name']
+        ordering = ["-name"]
 
     def clean(self, *args, **kwargs):
         super().clean(*args, **kwargs)
 
-        # Check metadata is valid for locality type
+        #  Check metadata is valid for locality type
         self.clean_valid_metadata()
 
     def clean_valid_metadata(self):
@@ -65,7 +67,7 @@ class Locality(IrekuaModelBase):
             self.locality_type.validate_metadata(self.metadata)
 
         except ValidationError as error:
-            raise ValidationError({'metadata': error}) from error
+            raise ValidationError({"metadata": error}) from error
 
     def validate_point(self, point):
         # pylint: disable=no-member
@@ -74,6 +76,6 @@ class Locality(IrekuaModelBase):
             raise ValidationError(msg)
 
     def __str__(self):
-        return '{locality_type}: {name}'.format(
-            locality_type=self.locality_type,
-            name=self.name)
+        return "{locality_type}: {name}".format(
+            locality_type=self.locality_type, name=self.name
+        )

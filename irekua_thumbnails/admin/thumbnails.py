@@ -3,22 +3,16 @@ from irekua_database.admin.base import IrekuaAdmin
 
 class ItemThumbnailAdmin(IrekuaAdmin):
     search_fields = [
-        'item__id',
+        "item__id",
     ]
 
     list_display = [
-        'item',
-        'created_on',
+        "item",
+        "created_on",
     ]
 
     list_display_links = [
-        'item',
+        "item",
     ]
 
-    fieldsets = (
-        (None, {
-            'fields': (
-                ('item', 'thumbnail'),
-            )
-        }),
-    )
+    fieldsets = ((None, {"fields": (("item", "thumbnail"),)}),)

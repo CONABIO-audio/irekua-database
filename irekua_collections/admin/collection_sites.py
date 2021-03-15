@@ -22,7 +22,9 @@ class SiteDescriptorForm(forms.ModelForm):
         except ValidationError as error:
             raise ValidationError({"sitedescriptor": error}) from error
 
-    def check_unique_descriptor_per_type(self, collection_site, site_descriptor):
+    def check_unique_descriptor_per_type(
+        self, collection_site, site_descriptor
+    ):
         query = collection_site.site_descriptors.filter(
             descriptor_type=site_descriptor.descriptor_type
         ).exclude(pk=site_descriptor.pk)
@@ -106,8 +108,19 @@ class CollectionSiteAdmin(IrekuaUserAdmin):
     ]
 
     fieldsets = (
-        (None, {"fields": (("collection", "site_type"), ("site", "collection_name"))}),
-        (_("Additional Metadata"), {"fields": (("metadata", "collection_metadata"),)}),
+        (
+            None,
+            {
+                "fields": (
+                    ("collection", "site_type"),
+                    ("site", "collection_name"),
+                )
+            },
+        ),
+        (
+            _("Additional Metadata"),
+            {"fields": (("metadata", "collection_metadata"),)},
+        ),
         (_("Site Hierarchy"), {"fields": ("parent_site",)}),
     )
 

@@ -20,7 +20,9 @@ class CollectionAnnotation(UserAnnotation):
     collection_metadata = models.JSONField(
         db_column="collection_metadata",
         verbose_name=_("collection metadata"),
-        help_text=_("Additional metadata associated to annotation in collection"),
+        help_text=_(
+            "Additional metadata associated to annotation in collection"
+        ),
         blank=True,
         null=True,
     )
@@ -44,7 +46,9 @@ class CollectionAnnotation(UserAnnotation):
             return
 
         # Check if this item type is permitted in this collection type
-        annotation_type_config = self.clean_allowed_annotation_type(collection_type)
+        annotation_type_config = self.clean_allowed_annotation_type(
+            collection_type
+        )
 
         # Check if collection metadata is valid for this annotation type
         self.clean_valid_collection_metadata(annotation_type_config)
@@ -59,7 +63,8 @@ class CollectionAnnotation(UserAnnotation):
                 "collections of type %(collection_type)s"
             )
             params = dict(
-                annotation_type=self.annotation_type, collection_type=collection_type
+                annotation_type=self.annotation_type,
+                collection_type=collection_type,
             )
             raise ValidationError({"annotation_type": msg % params}) from error
 
@@ -68,4 +73,6 @@ class CollectionAnnotation(UserAnnotation):
             annotation_type_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({"collection_metadata": str(error)}) from error
+            raise ValidationError(
+                {"collection_metadata": str(error)}
+            ) from error

@@ -10,63 +10,54 @@ class ItemTypeInline(admin.TabularInline):
 
     model = DeploymentType.item_types.through
 
-    autocomplete_fields = (
-        'itemtype',
-    )
+    autocomplete_fields = ("itemtype",)
 
-    verbose_name = _('Item type')
+    verbose_name = _("Item type")
 
-    verbose_name_plural = _('Item types')
+    verbose_name_plural = _("Item types")
 
 
 class DeploymentTypeAdmin(IrekuaAdmin):
     search_fields = (
-        'name',
-        'device_type__name',
+        "name",
+        "device_type__name",
     )
 
     list_display = (
-        'id',
-        'name',
-        'device_type',
-        'restrict_item_types',
-        'created_on'
+        "id",
+        "name",
+        "device_type",
+        "restrict_item_types",
+        "created_on",
     )
 
-    list_display_links = (
-        'id',
-        'name'
-    )
+    list_display_links = ("id", "name")
 
     list_filter = (
-        'device_type',
-        'restrict_item_types',
+        "device_type",
+        "restrict_item_types",
     )
 
-    autocomplete_fields = (
-        'metadata_schema',
-    )
+    autocomplete_fields = ("metadata_schema",)
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'icon'),
-                'description',
-                'device_type',
-            ),
-        }),
-        ('Schemas', {
-            'fields': (
-                ('metadata_schema'),
-            )
-        }),
-        ('Restrictions', {
-            'fields': (
-                (
-                    'restrict_item_types',
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "icon"),
+                    "description",
+                    "device_type",
                 ),
-            ),
-        }),
+            },
+        ),
+        ("Schemas", {"fields": (("metadata_schema"),)}),
+        (
+            "Restrictions",
+            {
+                "fields": (("restrict_item_types",),),
+            },
+        ),
     )
 
     inlines = [

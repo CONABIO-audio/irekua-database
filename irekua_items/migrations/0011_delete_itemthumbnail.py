@@ -6,21 +6,21 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_items', '0010_relocate_annotation_models'),
-        ('irekua_thumbnails', '0001_initial'),
+        ("irekua_items", "0010_relocate_annotation_models"),
+        ("irekua_thumbnails", "0001_initial"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.DeleteModel(
-                    name='ItemThumbnail',
+                    name="ItemThumbnail",
                 ),
             ],
             database_operations=[
                 migrations.AlterModelTable(
-                    name='ItemThumbnail',
-                    table='irekua_thumbnails_itemthumbnail',
+                    name="ItemThumbnail",
+                    table="irekua_thumbnails_itemthumbnail",
                 ),
             ],
         ),

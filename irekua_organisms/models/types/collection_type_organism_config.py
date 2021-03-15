@@ -76,7 +76,10 @@ class CollectionTypeOrganismConfig(IrekuaModelBase):
     organism_observation_types = models.ManyToManyField(
         "OrganismObservationType",
         through="CollectionTypeOrganismObservationType",
-        through_fields=("collection_type_organism_config", "organism_observation_type"),
+        through_fields=(
+            "collection_type_organism_config",
+            "organism_observation_type",
+        ),
         verbose_name=_("organism observation types"),
         help_text=_(
             "Types of organism observation that can be registered into "
@@ -88,7 +91,10 @@ class CollectionTypeOrganismConfig(IrekuaModelBase):
     organism_capture_types = models.ManyToManyField(
         "OrganismCaptureType",
         through="CollectionTypeOrganismCaptureType",
-        through_fields=("collection_type_organism_config", "organism_capture_type"),
+        through_fields=(
+            "collection_type_organism_config",
+            "organism_capture_type",
+        ),
         verbose_name=_("organism capture types"),
         help_text=_(
             "Types of organism captures that can be registered into "

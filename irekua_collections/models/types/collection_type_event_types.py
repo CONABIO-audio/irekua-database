@@ -36,5 +36,7 @@ class CollectionTypeEventType(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     def __str__(self):
         msg = _("Collection %(collection)s: Event Type %(event)s")
-        params = dict(event=str(self.event_type), collection=str(self.collection_type))
+        params = dict(
+            event=str(self.event_type), collection=str(self.collection_type)
+        )
         return msg % params

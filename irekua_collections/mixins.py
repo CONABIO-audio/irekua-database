@@ -9,12 +9,13 @@ class CollectionMetadataSchemaMixin(models.Model):
     metadata_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
-        related_name='%(class)s_metadata_schema',
-        db_column='metadata_schema_id',
-        verbose_name=_('metadata schema'),
-        help_text=_('JSON Schema for collection-specific metadata'),
+        related_name="%(class)s_metadata_schema",
+        db_column="metadata_schema_id",
+        verbose_name=_("metadata schema"),
+        help_text=_("JSON Schema for collection-specific metadata"),
         null=True,
-        blank=True)
+        blank=True,
+    )
 
     class Meta:
         abstract = True
@@ -26,6 +27,8 @@ class CollectionMetadataSchemaMixin(models.Model):
         try:
             self.metadata_schema.validate(metadata)
         except ValidationError as error:
-            msg = _('Invalid collection metadata for %(type)s. Error: %(error)s')
-            params = dict(type=str(self), error=', '.join(error.messages))
+            msg = _(
+                "Invalid collection metadata for %(type)s. Error: %(error)s"
+            )
+            params = dict(type=str(self), error=", ".join(error.messages))
             raise ValidationError(msg, params=params) from error

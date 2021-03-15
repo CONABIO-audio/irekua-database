@@ -1,3 +1,3 @@
 IREKUA_UPLOAD_APPS = [
-    'irekua_upload',
+    "irekua_upload",
 ]

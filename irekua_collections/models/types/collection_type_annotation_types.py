@@ -6,13 +6,17 @@ from irekua_annotations.models import AnnotationType
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
 
 
-class CollectionTypeAnnotationType(IrekuaModelBase, CollectionMetadataSchemaMixin):
+class CollectionTypeAnnotationType(
+    IrekuaModelBase, CollectionMetadataSchemaMixin
+):
     collection_type = models.ForeignKey(
         "CollectionType",
         on_delete=models.CASCADE,
         db_column="collection_type_id",
         verbose_name=_("collection type"),
-        help_text=_("Collection type in which this annotation type is permitted"),
+        help_text=_(
+            "Collection type in which this annotation type is permitted"
+        ),
         blank=False,
         null=False,
     )
@@ -22,7 +26,9 @@ class CollectionTypeAnnotationType(IrekuaModelBase, CollectionMetadataSchemaMixi
         on_delete=models.PROTECT,
         db_column="annotation_type_id",
         verbose_name=_("annotation type"),
-        help_text=_("Annotation type to be admissible in collections of this type"),
+        help_text=_(
+            "Annotation type to be admissible in collections of this type"
+        ),
         blank=False,
         null=False,
     )
@@ -37,6 +43,7 @@ class CollectionTypeAnnotationType(IrekuaModelBase, CollectionMetadataSchemaMixi
     def __str__(self):
         msg = _("Collection %(collection)s: Annotation Type %(annotation)s")
         params = dict(
-            annotation=str(self.annotation_type), collection=str(self.collection_type)
+            annotation=str(self.annotation_type),
+            collection=str(self.collection_type),
         )
         return msg % params

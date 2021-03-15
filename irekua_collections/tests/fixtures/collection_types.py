@@ -61,10 +61,14 @@ def collection_type_factory():
 @pytest.fixture
 @pytest.mark.django_db
 def collection_type_A(manager_A, collection_type_factory):
-    return collection_type_factory("collection type A", administrators=[manager_A])
+    return collection_type_factory(
+        "collection type A", administrators=[manager_A]
+    )
 
 
 @pytest.fixture
 @pytest.mark.django_db
 def collection_type_B(manager_B, collection_type_factory):
-    return collection_type_factory("collection type B", administrators=[manager_B])
+    return collection_type_factory(
+        "collection type B", administrators=[manager_B]
+    )

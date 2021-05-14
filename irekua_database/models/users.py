@@ -11,11 +11,6 @@ class User(AbstractUser):
     People using irekua must be previously registered and should provide
     minimal personal information. This is to track contributions and to control
     access to data.
-
-    Users can belong to collections (:model:`irekua_database.Collection`), possess
-    devices (:model:`irekua_database.PhysicalDevice`), sign licences
-    (:model:`irekua_database.Licence`), upload items (:model:`irekua_database.Item`),
-    annotate data (:model:`irekua_database.Annotation`), and more.
     """
 
     is_developer = models.BooleanField(

@@ -1,8 +1,10 @@
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
+
 from hypothesis import given
 from hypothesis import strategies
 from hypothesis import assume
+
 from hypothesis.extra.django import from_model
 from hypothesis.extra.django import TestCase
 

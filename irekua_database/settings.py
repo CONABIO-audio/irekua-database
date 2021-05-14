@@ -2,6 +2,8 @@ import os
 
 AUTH_USER_MODEL = "irekua_database.User"
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 
 IREKUA_DATABASE_APPS = [
     "irekua_database",

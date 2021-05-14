@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 from django.contrib.gis import forms
 
 import django_filters

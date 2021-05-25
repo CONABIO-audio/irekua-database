@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0013_institution_users'),
+        ("irekua_database", "0013_institution_users"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='userinstitution',
-            unique_together={('institution', 'user')},
+            name="userinstitution",
+            unique_together={("institution", "user")},
         ),
     ]

@@ -10,53 +10,60 @@ class VersionsInline(admin.TabularInline):
 
     model = models.AnnotatorVersion
 
-    verbose_name = _('Version')
+    verbose_name = _("Version")
 
-    verbose_name_plural = _('Versions')
+    verbose_name_plural = _("Versions")
 
-    autocomplete_fields = (
-        'configuration_schema',
-    )
+    autocomplete_fields = ("configuration_schema",)
 
     fields = (
-        'version',
-        'configuration_schema',
+        "version",
+        "configuration_schema",
     )
 
 
 class AnnotatorAdmin(IrekuaAdmin):
     search_fields = [
-        'name',
-        'annotation_type__name',
+        "name",
+        "annotation_type__name",
     ]
 
     list_display = [
-        'id',
-        '__str__',
-        'annotation_type',
-        'created_on',
+        "id",
+        "__str__",
+        "annotation_type",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
-        '__str__',
+        "id",
+        "__str__",
     ]
 
     autocomplete_fields = [
-        'annotation_type',
+        "annotation_type",
     ]
 
     list_filter = [
-        'annotation_type',
+        "annotation_type",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'annotation_type',),
-                ('website', 'logo',),
-            )
-        }),
+        (
+            None,
+            {
+                "fields": (
+                    (
+                        "name",
+                        "annotation_type",
+                    ),
+                    (
+                        "website",
+                        "logo",
+                    ),
+                )
+            },
+        ),
     )
 
     inlines = [

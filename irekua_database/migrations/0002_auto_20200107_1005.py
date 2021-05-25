@@ -6,7 +6,9 @@ from django.db import migrations, models
 
 
 def copy_geo_ref_from_sampling_event(apps, schema_editor):
-    SamplingEventDevice = apps.get_model('irekua_database', 'SamplingEventDevice')
+    SamplingEventDevice = apps.get_model(
+        "irekua_database", "SamplingEventDevice"
+    )
 
     for deployed_device in SamplingEventDevice.objects.all():
         site = deployed_device.sampling_event.collection_site.site
@@ -29,56 +31,62 @@ def copy_geo_ref_from_sampling_event(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_database', '0001_initial'),
+        ("irekua_database", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='samplingeventdevice',
-            name='altitude',
+            model_name="samplingeventdevice",
+            name="altitude",
             field=models.FloatField(
                 blank=True,
-                db_column='altitude',
-                help_text='Altitude of deployed device (in meters)',
+                db_column="altitude",
+                help_text="Altitude of deployed device (in meters)",
                 null=True,
-                verbose_name='altitude'),
+                verbose_name="altitude",
+            ),
         ),
         migrations.AddField(
-            model_name='samplingeventdevice',
-            name='geo_ref',
+            model_name="samplingeventdevice",
+            name="geo_ref",
             field=django.contrib.gis.db.models.fields.PointField(
                 blank=True,
-                db_column='geo_ref',
-                help_text='Georeference of deployed device as Geometry',
+                db_column="geo_ref",
+                help_text="Georeference of deployed device as Geometry",
                 null=True,
                 srid=4326,
-                verbose_name='geo ref'),
+                verbose_name="geo ref",
+            ),
         ),
         migrations.AddField(
-            model_name='samplingeventdevice',
-            name='latitude',
+            model_name="samplingeventdevice",
+            name="latitude",
             field=models.FloatField(
                 blank=True,
-                db_column='latitude',
-                help_text='Latitude of deployed device (in decimal degrees)',
+                db_column="latitude",
+                help_text="Latitude of deployed device (in decimal degrees)",
                 null=True,
                 validators=[
                     django.core.validators.MinValueValidator(-90),
-                    django.core.validators.MaxValueValidator(90)],
-                verbose_name='latitude'),
+                    django.core.validators.MaxValueValidator(90),
+                ],
+                verbose_name="latitude",
+            ),
         ),
         migrations.AddField(
-            model_name='samplingeventdevice',
-            name='longitude',
+            model_name="samplingeventdevice",
+            name="longitude",
             field=models.FloatField(
                 blank=True,
-                db_column='longitude',
-                help_text='Longitude of deployed device (in decimal degrees)',
+                db_column="longitude",
+                help_text="Longitude of deployed device (in decimal degrees)",
                 null=True,
                 validators=[
                     django.core.validators.MinValueValidator(-180),
-                    django.core.validators.MaxValueValidator(180)],
-                verbose_name='longitude'),
+                    django.core.validators.MaxValueValidator(180),
+                ],
+                verbose_name="longitude",
+            ),
         ),
         migrations.RunPython(copy_geo_ref_from_sampling_event),
     ]

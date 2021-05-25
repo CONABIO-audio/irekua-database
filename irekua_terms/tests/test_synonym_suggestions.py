@@ -46,24 +46,36 @@ class SynonymSuggestionTestCase(TestCase):
 
     @given(strategies.integers())
     def test_clean_integer_types(self, value):
-        term, _ = Term.objects.get_or_create(term_type=self.integer, value=value)
+        term, _ = Term.objects.get_or_create(
+            term_type=self.integer, value=value
+        )
 
         with self.assertRaises(ValidationError):
-            SynonymSuggestion(source=term, synonym=value, created_by=self.user).clean()
+            SynonymSuggestion(
+                source=term, synonym=value, created_by=self.user
+            ).clean()
 
     @given(strategies.booleans())
     def test_clean_boolean_types(self, value):
-        term, _ = Term.objects.get_or_create(term_type=self.boolean, value=value)
+        term, _ = Term.objects.get_or_create(
+            term_type=self.boolean, value=value
+        )
 
         with self.assertRaises(ValidationError):
-            SynonymSuggestion(source=term, synonym=value, created_by=self.user).clean()
+            SynonymSuggestion(
+                source=term, synonym=value, created_by=self.user
+            ).clean()
 
     @given(strategies.floats())
     def test_clean_numeric_types(self, value):
-        term, _ = Term.objects.get_or_create(term_type=self.numeric, value=value)
+        term, _ = Term.objects.get_or_create(
+            term_type=self.numeric, value=value
+        )
 
         with self.assertRaises(ValidationError):
-            SynonymSuggestion(source=term, synonym=value, created_by=self.user).clean()
+            SynonymSuggestion(
+                source=term, synonym=value, created_by=self.user
+            ).clean()
 
     @given(
         value=valid_string(),
@@ -74,7 +86,9 @@ class SynonymSuggestionTestCase(TestCase):
         ),
     )
     def test_clean_valid_metadata(self, value, metadata):
-        SynonymSuggestion(source=self.term, synonym=value, metadata=metadata).clean()
+        SynonymSuggestion(
+            source=self.term, synonym=value, metadata=metadata
+        ).clean()
 
     @given(
         value=valid_string(),

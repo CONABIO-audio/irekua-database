@@ -58,7 +58,9 @@ class Model(IrekuaModelBaseUser):
     )
 
     terms = models.ManyToManyField(
-        Term, help_text=_("Terms that the model uses for its predictions."), blank=True
+        Term,
+        help_text=_("Terms that the model uses for its predictions."),
+        blank=True,
     )
 
     class Meta:
@@ -71,22 +73,29 @@ class Model(IrekuaModelBaseUser):
 
     def validate_event_type(self, event_type):
         if not self.event_types.filter(name=event_type.name).exists():
-            msg = _("Event type %(event_type)s is invalid for model " "%(model)s")
+            msg = _(
+                "Event type %(event_type)s is invalid for model " "%(model)s"
+            )
             params = dict(event_type=str(event_type), model=str(self))
             raise ValidationError(msg, params=params)
 
     def validate_item_type(self, item_type):
         if not self.item_types.filter(name=item_type.name).exists():
-            msg = _("Item type %(item_type)s is invalid for model " "%(model)s")
+            msg = _(
+                "Item type %(item_type)s is invalid for model " "%(model)s"
+            )
             params = dict(item_type=str(item_type), model=str(self))
             raise ValidationError(msg, params=params)
 
     def validate_annotation_type(self, annotation_type):
         if self.annotation_type != annotation_type:
             msg = _(
-                "Annotation type %(annotation_type)s is invalid for model " "%(model)s"
+                "Annotation type %(annotation_type)s is invalid for model "
+                "%(model)s"
             )
-            params = dict(annotation_type=str(annotation_type), model=str(self))
+            params = dict(
+                annotation_type=str(annotation_type), model=str(self)
+            )
             raise ValidationError(msg, params=params)
 
     def validate_labels(self, labels):

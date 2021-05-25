@@ -129,7 +129,8 @@ class Collection(IrekuaModelBaseUser):
         db_column="is_open",
         verbose_name=_("is open"),
         help_text=_(
-            "Boolean flag indicating whether contents of the collection " "are public."
+            "Boolean flag indicating whether contents of the collection "
+            "are public."
         ),
         blank=True,
         null=False,
@@ -248,7 +249,9 @@ class Collection(IrekuaModelBaseUser):
 
     def get_user_role(self, user):
         try:
-            collection_user = self.users.through.objects.get(collection=self, user=user)
+            collection_user = self.users.through.objects.get(
+                collection=self, user=user
+            )
             return collection_user.role
 
         except self.users.through.DoesNotExist:

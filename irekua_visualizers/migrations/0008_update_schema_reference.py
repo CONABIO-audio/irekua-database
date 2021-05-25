@@ -5,16 +5,19 @@ import django.db.models.deletion
 
 
 def add_schema_reference(apps, schema_editor):
-    Schema = apps.get_model('irekua_schemas', 'Schema')
-    VisualizerVersion = apps.get_model('irekua_visualizers', 'VisualizerVersion')
+    Schema = apps.get_model("irekua_schemas", "Schema")
+    VisualizerVersion = apps.get_model(
+        "irekua_visualizers", "VisualizerVersion"
+    )
 
     schemas = {}
+
     def get_schema_object_from_schema(schema):
         if isinstance(schema, str):
             schema = json.loads(schema)
 
-        title = schema.get('title', None)
-        description = schema.get('description', '')
+        title = schema.get("title", None)
+        description = schema.get("description", "")
 
         if title is None:
             return None
@@ -23,11 +26,7 @@ def add_schema_reference(apps, schema_editor):
             return schemas[title]
 
         schema_object, _ = Schema.objects.get_or_create(
-            name=title,
-            defaults={
-                'description': description,
-                'schema': schema
-            }
+            name=title, defaults={"description": description, "schema": schema}
         )
 
         schemas[title] = schema_object
@@ -47,39 +46,53 @@ def add_schema_reference(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('irekua_visualizers', '0007_remove_old_models'),
+        ("irekua_schemas", "0002_auto_20201018_2158"),
+        ("irekua_visualizers", "0007_remove_old_models"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='visualizer',
-            name='version',
+            model_name="visualizer",
+            name="version",
         ),
         migrations.AlterField(
-            model_name='annotationvisualizer',
-            name='visualizer_configuration',
-            field=models.JSONField(blank=True, db_column='visualizer_configuration', help_text='Configuration of visualizer at annotation creation', null=True, verbose_name='visualizer configuration'),
+            model_name="annotationvisualizer",
+            name="visualizer_configuration",
+            field=models.JSONField(
+                blank=True,
+                db_column="visualizer_configuration",
+                help_text="Configuration of visualizer at annotation creation",
+                null=True,
+                verbose_name="visualizer configuration",
+            ),
         ),
         migrations.AddField(
-            model_name='visualizerversion',
-            name='configuration_schema_tmp',
-            field=models.ForeignKey(blank=True, db_column='configuration_schema_id', help_text='JSON schema for visualizer tool configuration info', null=True, on_delete=django.db.models.deletion.PROTECT, to='irekua_schemas.schema', verbose_name='configuration schema'),
+            model_name="visualizerversion",
+            name="configuration_schema_tmp",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="configuration_schema_id",
+                help_text="JSON schema for visualizer tool configuration info",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_schemas.schema",
+                verbose_name="configuration schema",
+            ),
         ),
         migrations.RunPython(
             add_schema_reference,
         ),
         migrations.RemoveField(
-            model_name='visualizerversion',
-            name='configuration_schema',
+            model_name="visualizerversion",
+            name="configuration_schema",
         ),
         migrations.RenameField(
-            model_name='visualizerversion',
-            old_name='configuration_schema_tmp',
-            new_name='configuration_schema',
+            model_name="visualizerversion",
+            old_name="configuration_schema_tmp",
+            new_name="configuration_schema",
         ),
         migrations.RemoveField(
-            model_name='visualizer',
-            name='configuration_schema',
+            model_name="visualizer",
+            name="configuration_schema",
         ),
     ]

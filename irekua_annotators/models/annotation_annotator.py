@@ -57,10 +57,14 @@ class AnnotationAnnotator(IrekuaModelBase):
     def clean_configuration(self):
         try:
             # pylint: disable=no-member
-            self.annotator_version.validate_configuration(self.annotator_configuration)
+            self.annotator_version.validate_configuration(
+                self.annotator_configuration
+            )
 
         except ValidationError as error:
-            raise ValidationError({"annotator_configuration": error}) from error
+            raise ValidationError(
+                {"annotator_configuration": error}
+            ) from error
 
     def clean_compatible_annotation_type(self):
         # pylint: disable=no-member

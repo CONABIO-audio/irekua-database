@@ -6,22 +6,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_items', '0001_initial'),
+        ("irekua_items", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='annotationvote',
-            options={'ordering': ['-created_on'], 'verbose_name': 'Annotation Vote', 'verbose_name_plural': 'Annotation Votes'},
+            name="annotationvote",
+            options={
+                "ordering": ["-created_on"],
+                "verbose_name": "Annotation Vote",
+                "verbose_name_plural": "Annotation Votes",
+            },
         ),
         migrations.AddField(
-            model_name='annotationvote',
-            name='incorrect_geometry',
-            field=models.BooleanField(blank=True, db_column='incorrect_geometry', default=False, help_text='Is the annotation geometry incorrect?', verbose_name='incorrect geometry'),
+            model_name="annotationvote",
+            name="incorrect_geometry",
+            field=models.BooleanField(
+                blank=True,
+                db_column="incorrect_geometry",
+                default=False,
+                help_text="Is the annotation geometry incorrect?",
+                verbose_name="incorrect geometry",
+            ),
         ),
         migrations.AlterField(
-            model_name='item',
-            name='filesize',
-            field=models.IntegerField(blank=True, db_column='filesize', help_text='Size of resource in bytes', null=True, verbose_name='file size'),
+            model_name="item",
+            name="filesize",
+            field=models.IntegerField(
+                blank=True,
+                db_column="filesize",
+                help_text="Size of resource in bytes",
+                null=True,
+                verbose_name="file size",
+            ),
         ),
     ]

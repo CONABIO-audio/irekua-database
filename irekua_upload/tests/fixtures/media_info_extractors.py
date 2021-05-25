@@ -8,7 +8,9 @@ from irekua_upload.models import MediaInfoExtractor
 
 @pytest.fixture
 @pytest.mark.django_db
-def media_info_extractor_factory(generate_random_python_file, media_info_type_A):
+def media_info_extractor_factory(
+    generate_random_python_file, media_info_type_A
+):
     def create_media_info_extractor(
         name,
         mime_type,

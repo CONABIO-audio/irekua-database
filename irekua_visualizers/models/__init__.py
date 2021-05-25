@@ -6,9 +6,9 @@ from .annotation_visualizers import AnnotationVisualizer
 
 
 __all__ = [
-    'Visualizer',
-    'VisualizerItemType',
-    'VisualizerModule',
-    'VisualizerVersion',
-    'AnnotationVisualizer',
+    "Visualizer",
+    "VisualizerItemType",
+    "VisualizerModule",
+    "VisualizerVersion",
+    "AnnotationVisualizer",
 ]

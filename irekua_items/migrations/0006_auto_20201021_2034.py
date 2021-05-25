@@ -6,12 +6,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_items', '0005_update_device_type_models_reference'),
+        ("irekua_items", "0005_update_device_type_models_reference"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='source',
-            options={'ordering': ['-created_on'], 'verbose_name': 'Source', 'verbose_name_plural': 'Sources'},
+            name="source",
+            options={
+                "ordering": ["-created_on"],
+                "verbose_name": "Source",
+                "verbose_name_plural": "Sources",
+            },
         ),
     ]

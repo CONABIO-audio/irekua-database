@@ -7,8 +7,8 @@ import django.db.models.deletion
 
 def move_json_schema_to_foreign_key(model_name, field):
     def python_migration(apps, schema_editor):
-        Schema = apps.get_model('irekua_schemas', 'Schema')
-        Model = apps.get_model('irekua_devices', model_name)
+        Schema = apps.get_model("irekua_schemas", "Schema")
+        Model = apps.get_model("irekua_devices", model_name)
 
         schemas = {}
 
@@ -16,8 +16,8 @@ def move_json_schema_to_foreign_key(model_name, field):
             if isinstance(schema, str):
                 schema = json.loads(schema)
 
-            title = schema.get('title', None)
-            description = schema.get('description', '')
+            title = schema.get("title", None)
+            description = schema.get("description", "")
 
             if title is None:
                 return None
@@ -27,10 +27,7 @@ def move_json_schema_to_foreign_key(model_name, field):
 
             schema_object, _ = Schema.objects.get_or_create(
                 name=title,
-                defaults={
-                    'description': description,
-                    'schema': schema
-                }
+                defaults={"description": description, "schema": schema},
             )
 
             schemas[title] = schema_object
@@ -43,7 +40,7 @@ def move_json_schema_to_foreign_key(model_name, field):
                 continue
 
             schema_object = get_schema_object_from_schema(schema)
-            setattr(obj, f'{field}_tmp', schema_object)
+            setattr(obj, f"{field}_tmp", schema_object)
             obj.save()
 
     return python_migration
@@ -52,58 +49,82 @@ def move_json_schema_to_foreign_key(model_name, field):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('irekua_devices', '0001_initial'),
-        ('irekua_database', '0010_massive_migration_to_submodules'),
+        ("irekua_schemas", "0002_auto_20201018_2158"),
+        ("irekua_devices", "0001_initial"),
+        ("irekua_database", "0010_massive_migration_to_submodules"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='physicaldevice',
-            name='bundle',
+            model_name="physicaldevice",
+            name="bundle",
         ),
         migrations.AddField(
-            model_name='device',
-            name='configuration_schema_tmp',
-            field=models.ForeignKey(blank=True, db_column='configuration schema', help_text='JSON Schema for configuration info of device', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='configuration_schema', to='irekua_schemas.schema', verbose_name='annotation schema'),
+            model_name="device",
+            name="configuration_schema_tmp",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="configuration schema",
+                help_text="JSON Schema for configuration info of device",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="configuration_schema",
+                to="irekua_schemas.schema",
+                verbose_name="annotation schema",
+            ),
         ),
         migrations.RunPython(
-            move_json_schema_to_foreign_key('Device', 'configuration_schema')
+            move_json_schema_to_foreign_key("Device", "configuration_schema")
         ),
         migrations.RemoveField(
-            model_name='device',
-            name='configuration_schema',
+            model_name="device",
+            name="configuration_schema",
         ),
         migrations.RenameField(
-            model_name='device',
-            old_name='configuration_schema_tmp',
-            new_name='configuration_schema',
+            model_name="device",
+            old_name="configuration_schema_tmp",
+            new_name="configuration_schema",
         ),
         migrations.AddField(
-            model_name='device',
-            name='metadata_schema_tmp',
-            field=models.ForeignKey(blank=True, db_column='metadata_schema_id', help_text='JSON Schema for additional metadata', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='device_metadata_schema', to='irekua_schemas.schema', verbose_name='metadata schema'),
+            model_name="device",
+            name="metadata_schema_tmp",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="metadata_schema_id",
+                help_text="JSON Schema for additional metadata",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="device_metadata_schema",
+                to="irekua_schemas.schema",
+                verbose_name="metadata schema",
+            ),
         ),
         migrations.RunPython(
-            move_json_schema_to_foreign_key('Device', 'metadata_schema')
+            move_json_schema_to_foreign_key("Device", "metadata_schema")
         ),
         migrations.RemoveField(
-            model_name='device',
-            name='metadata_schema',
+            model_name="device",
+            name="metadata_schema",
         ),
         migrations.RenameField(
-            model_name='device',
-            old_name='metadata_schema_tmp',
-            new_name='metadata_schema',
+            model_name="device",
+            old_name="metadata_schema_tmp",
+            new_name="metadata_schema",
         ),
         migrations.AlterField(
-            model_name='physicaldevice',
-            name='identifier',
-            field=models.CharField(blank=True, db_column='name', help_text='Device name (visible only to owner)', max_length=128, verbose_name='name'),
+            model_name="physicaldevice",
+            name="identifier",
+            field=models.CharField(
+                blank=True,
+                db_column="name",
+                help_text="Device name (visible only to owner)",
+                max_length=128,
+                verbose_name="name",
+            ),
         ),
         migrations.RenameField(
-            model_name='physicaldevice',
-            old_name='identifier',
-            new_name='name',
-        )
+            model_name="physicaldevice",
+            old_name="identifier",
+            new_name="name",
+        ),
     ]

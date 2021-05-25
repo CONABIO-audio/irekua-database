@@ -1,8 +1,10 @@
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
+
 from hypothesis import given
 from hypothesis import strategies
 from hypothesis import assume
+
 from hypothesis.extra.django import from_model
 from hypothesis.extra.django import TestCase
 
@@ -30,7 +32,9 @@ class EntailmentTypeTestCase(TestCase):
         target=random_term_type(),
     )
     def test_repr(self, source, target):
-        entailment_type = EntailmentType(source_type=source, target_type=target)
+        entailment_type = EntailmentType(
+            source_type=source, target_type=target
+        )
         self.assertEqual(str(entailment_type), f"{source} => {target}")
 
     @given(
@@ -43,7 +47,9 @@ class EntailmentTypeTestCase(TestCase):
         EntailmentType.objects.create(source_type=source, target_type=target)
 
         with self.assertRaises(IntegrityError):
-            EntailmentType.objects.create(source_type=source, target_type=target)
+            EntailmentType.objects.create(
+                source_type=source, target_type=target
+            )
 
     @given(
         source=random_term_type(),

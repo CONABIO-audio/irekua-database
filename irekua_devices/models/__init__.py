@@ -6,8 +6,8 @@ from .types import DeviceType
 
 
 __all__ = [
-    'Device',
-    'DeviceBrand',
-    'PhysicalDevice',
-    'DeviceType',
+    "Device",
+    "DeviceBrand",
+    "PhysicalDevice",
+    "DeviceType",
 ]

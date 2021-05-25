@@ -6,7 +6,7 @@ from irekua_upload.widgets import AceCodeWidget
 
 class OperationCodeField(forms.CharField):
     def __init__(self, *args, **kwargs):
-        kwargs['widget'] = AceCodeWidget
+        kwargs["widget"] = AceCodeWidget
         super().__init__(*args, **kwargs)
 
     def clean(self, value):

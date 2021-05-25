@@ -8,24 +8,72 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Schema',
+            name="Schema",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('name', models.CharField(db_column='name', help_text='Name of schema', max_length=256, unique=True, verbose_name='name')),
-                ('description', models.TextField(blank=True, db_column='description', help_text='Schema description', verbose_name='description')),
-                ('schema', models.JSONField(db_column='schema', help_text='JSON Schema', validators=[irekua_schemas.utils.validate_JSON_schema], verbose_name='schema')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        db_column="name",
+                        help_text="Name of schema",
+                        max_length=256,
+                        unique=True,
+                        verbose_name="name",
+                    ),
+                ),
+                (
+                    "description",
+                    models.TextField(
+                        blank=True,
+                        db_column="description",
+                        help_text="Schema description",
+                        verbose_name="description",
+                    ),
+                ),
+                (
+                    "schema",
+                    models.JSONField(
+                        db_column="schema",
+                        help_text="JSON Schema",
+                        validators=[irekua_schemas.utils.validate_JSON_schema],
+                        verbose_name="schema",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Schema',
-                'verbose_name_plural': 'Schemata',
-                'ordering': ['-created_on'],
+                "verbose_name": "Schema",
+                "verbose_name_plural": "Schemata",
+                "ordering": ["-created_on"],
             },
         ),
     ]

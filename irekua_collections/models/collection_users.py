@@ -85,4 +85,6 @@ class CollectionUser(IrekuaModelBaseUser):
             role_config.validate_metadata(self.collection_metadata)
 
         except ValidationError as error:
-            raise ValidationError({"collection_metadata": str(error)}) from error
+            raise ValidationError(
+                {"collection_metadata": str(error)}
+            ) from error

@@ -10,13 +10,11 @@ class TermTypeInline(admin.TabularInline):
 
     model = OrganismType.term_types.through
 
-    autocomplete_fields = (
-        'termtype',
-    )
+    autocomplete_fields = ("termtype",)
 
-    verbose_name = _('Term Type')
+    verbose_name = _("Term Type")
 
-    verbose_name_plural = _('Term Types')
+    verbose_name_plural = _("Term Types")
 
 
 class ItemTypeInline(admin.TabularInline):
@@ -24,58 +22,56 @@ class ItemTypeInline(admin.TabularInline):
 
     model = OrganismType.item_types.through
 
-    autocomplete_fields = (
-        'itemtype',
-    )
+    autocomplete_fields = ("itemtype",)
 
-    verbose_name = _('Item Type')
+    verbose_name = _("Item Type")
 
-    verbose_name_plural = _('Item Types')
+    verbose_name_plural = _("Item Types")
 
 
 class OrganismTypeAdmin(IrekuaAdmin):
     search_fields = [
-        'name',
+        "name",
     ]
 
     list_display = (
-        'id',
-        '__str__',
-        'is_multi_organism',
-        'restrict_item_types',
-        'created_on',
+        "id",
+        "__str__",
+        "is_multi_organism",
+        "restrict_item_types",
+        "created_on",
     )
 
     list_display_links = (
-        'id',
-        '__str__',
+        "id",
+        "__str__",
     )
 
     list_filter = (
-        'is_multi_organism',
-        'created_on',
+        "is_multi_organism",
+        "created_on",
     )
 
-    autocomplete_fields = (
-        'term_types',
-    )
+    autocomplete_fields = ("term_types",)
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name', 'icon'),
-                'description',
-                'is_multi_organism',
-            )
-        }),
-        (_('Identification'), {
-            'fields': ('identification_info_schema',),
-        }),
-        (_('Restrictions'), {
-            'fields': (
-                'restrict_item_types',
-            )
-        })
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "icon"),
+                    "description",
+                    "is_multi_organism",
+                )
+            },
+        ),
+        (
+            _("Identification"),
+            {
+                "fields": ("identification_info_schema",),
+            },
+        ),
+        (_("Restrictions"), {"fields": ("restrict_item_types",)}),
     )
 
     inlines = [

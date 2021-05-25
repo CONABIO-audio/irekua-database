@@ -7,77 +7,301 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('irekua_geo', '0002_auto_20201019_1731'),
+        ("irekua_schemas", "0002_auto_20201018_2158"),
+        ("irekua_geo", "0002_auto_20201019_1731"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.CreateModel(
-                    name='SiteDescriptorType',
+                    name="SiteDescriptorType",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('name', models.CharField(db_column='name', help_text='Name for site descriptor type', max_length=128, unique=True, verbose_name='name')),
-                        ('description', models.TextField(db_column='description', help_text='Description of site descriptor type', verbose_name='description')),
-                        ('icon', models.ImageField(blank=True, db_column='icon', help_text='Site descriptor type icon', null=True, upload_to='images/site_descriptor_types/', verbose_name='icon')),
-                        ('metadata', models.TextField(blank=True, db_column='metadata', help_text='Metadata of site descriptor type', verbose_name='metadata')),
-                        ('source', models.URLField(blank=True, db_column='url', help_text='Source of information for site descriptor type', verbose_name='source')),
-                        ('metadata_schema', models.ForeignKey(blank=True, db_column='metadata_schema_id', help_text='JSON Schema for additional metadata', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='sitedescriptortype_metadata_schema', to='irekua_schemas.schema', verbose_name='metadata schema')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "name",
+                            models.CharField(
+                                db_column="name",
+                                help_text="Name for site descriptor type",
+                                max_length=128,
+                                unique=True,
+                                verbose_name="name",
+                            ),
+                        ),
+                        (
+                            "description",
+                            models.TextField(
+                                db_column="description",
+                                help_text="Description of site descriptor type",
+                                verbose_name="description",
+                            ),
+                        ),
+                        (
+                            "icon",
+                            models.ImageField(
+                                blank=True,
+                                db_column="icon",
+                                help_text="Site descriptor type icon",
+                                null=True,
+                                upload_to="images/site_descriptor_types/",
+                                verbose_name="icon",
+                            ),
+                        ),
+                        (
+                            "metadata",
+                            models.TextField(
+                                blank=True,
+                                db_column="metadata",
+                                help_text="Metadata of site descriptor type",
+                                verbose_name="metadata",
+                            ),
+                        ),
+                        (
+                            "source",
+                            models.URLField(
+                                blank=True,
+                                db_column="url",
+                                help_text="Source of information for site descriptor type",
+                                verbose_name="source",
+                            ),
+                        ),
+                        (
+                            "metadata_schema",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="metadata_schema_id",
+                                help_text="JSON Schema for additional metadata",
+                                null=True,
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="sitedescriptortype_metadata_schema",
+                                to="irekua_schemas.schema",
+                                verbose_name="metadata schema",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Site Descriptor Type',
-                        'verbose_name_plural': 'Site Descriptor Types',
-                        'ordering': ['name'],
+                        "verbose_name": "Site Descriptor Type",
+                        "verbose_name_plural": "Site Descriptor Types",
+                        "ordering": ["name"],
                     },
                 ),
                 migrations.CreateModel(
-                    name='SiteType',
+                    name="SiteType",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('name', models.CharField(db_column='name', help_text='Name of site type', max_length=128, unique=True, verbose_name='name')),
-                        ('description', models.TextField(db_column='description', help_text='Description of site type', verbose_name='description')),
-                        ('metadata_schema', models.ForeignKey(blank=True, db_column='metadata_schema_id', help_text='JSON Schema for additional metadata', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='sitetype_metadata_schema', to='irekua_schemas.schema', verbose_name='metadata schema')),
-                        ('site_descriptor_types', models.ManyToManyField(blank=True, to='irekua_geo.SiteDescriptorType')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "name",
+                            models.CharField(
+                                db_column="name",
+                                help_text="Name of site type",
+                                max_length=128,
+                                unique=True,
+                                verbose_name="name",
+                            ),
+                        ),
+                        (
+                            "description",
+                            models.TextField(
+                                db_column="description",
+                                help_text="Description of site type",
+                                verbose_name="description",
+                            ),
+                        ),
+                        (
+                            "metadata_schema",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="metadata_schema_id",
+                                help_text="JSON Schema for additional metadata",
+                                null=True,
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="sitetype_metadata_schema",
+                                to="irekua_schemas.schema",
+                                verbose_name="metadata schema",
+                            ),
+                        ),
+                        (
+                            "site_descriptor_types",
+                            models.ManyToManyField(
+                                blank=True, to="irekua_geo.SiteDescriptorType"
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Site Type',
-                        'verbose_name_plural': 'Site Types',
-                        'ordering': ['name'],
+                        "verbose_name": "Site Type",
+                        "verbose_name_plural": "Site Types",
+                        "ordering": ["name"],
                     },
                 ),
                 migrations.CreateModel(
-                    name='LocalityType',
+                    name="LocalityType",
                     fields=[
-                        ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                        ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                        ('name', models.CharField(db_column='name', help_text='Name of locality', max_length=128, unique=True)),
-                        ('description', models.TextField(blank=True, db_column='description', help_text='Description of type of locality', verbose_name='description')),
-                        ('source', models.URLField(blank=True, db_column='source', help_text='Source of information for localities of this type', max_length=128, verbose_name='source')),
-                        ('original_datum', models.TextField(blank=True, db_column='original_datum', help_text='Datum used for the original coordinates for localities of this type in WTK format', verbose_name='original datum')),
-                        ('publication_date', models.DateField(blank=True, db_column='publication_date', help_text='Date of publication of localities defined in this type', verbose_name='publication date')),
-                        ('metadata_schema', models.ForeignKey(blank=True, db_column='metadata_schema_id', help_text='JSON Schema for additional metadata', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='localitytype_metadata_schema', to='irekua_schemas.schema', verbose_name='metadata schema')),
+                        (
+                            "id",
+                            models.AutoField(
+                                auto_created=True,
+                                primary_key=True,
+                                serialize=False,
+                                verbose_name="ID",
+                            ),
+                        ),
+                        (
+                            "created_on",
+                            models.DateTimeField(
+                                auto_now_add=True,
+                                db_column="created_on",
+                                help_text="Date of creation",
+                                verbose_name="created on",
+                            ),
+                        ),
+                        (
+                            "modified_on",
+                            models.DateTimeField(
+                                auto_now=True,
+                                db_column="modified_on",
+                                help_text="Date of last modification",
+                                verbose_name="modified on",
+                            ),
+                        ),
+                        (
+                            "name",
+                            models.CharField(
+                                db_column="name",
+                                help_text="Name of locality",
+                                max_length=128,
+                                unique=True,
+                            ),
+                        ),
+                        (
+                            "description",
+                            models.TextField(
+                                blank=True,
+                                db_column="description",
+                                help_text="Description of type of locality",
+                                verbose_name="description",
+                            ),
+                        ),
+                        (
+                            "source",
+                            models.URLField(
+                                blank=True,
+                                db_column="source",
+                                help_text="Source of information for localities of this type",
+                                max_length=128,
+                                verbose_name="source",
+                            ),
+                        ),
+                        (
+                            "original_datum",
+                            models.TextField(
+                                blank=True,
+                                db_column="original_datum",
+                                help_text="Datum used for the original coordinates for localities of this type in WTK format",
+                                verbose_name="original datum",
+                            ),
+                        ),
+                        (
+                            "publication_date",
+                            models.DateField(
+                                blank=True,
+                                db_column="publication_date",
+                                help_text="Date of publication of localities defined in this type",
+                                verbose_name="publication date",
+                            ),
+                        ),
+                        (
+                            "metadata_schema",
+                            models.ForeignKey(
+                                blank=True,
+                                db_column="metadata_schema_id",
+                                help_text="JSON Schema for additional metadata",
+                                null=True,
+                                on_delete=django.db.models.deletion.PROTECT,
+                                related_name="localitytype_metadata_schema",
+                                to="irekua_schemas.schema",
+                                verbose_name="metadata schema",
+                            ),
+                        ),
                     ],
                     options={
-                        'verbose_name': 'Locality Type',
-                        'verbose_name_plural': 'Locality Types',
-                        'ordering': ['-name'],
+                        "verbose_name": "Locality Type",
+                        "verbose_name_plural": "Locality Types",
+                        "ordering": ["-name"],
                     },
                 ),
                 migrations.AlterField(
-                    model_name='locality',
-                    name='locality_type',
-                    field=models.ForeignKey(db_column='locality_type_id', help_text='Type of locality', on_delete=django.db.models.deletion.PROTECT, to='irekua_geo.localitytype', verbose_name='locality type'),
+                    model_name="locality",
+                    name="locality_type",
+                    field=models.ForeignKey(
+                        db_column="locality_type_id",
+                        help_text="Type of locality",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_geo.localitytype",
+                        verbose_name="locality type",
+                    ),
                 ),
                 migrations.AlterField(
-                    model_name='sitedescriptor',
-                    name='descriptor_type',
-                    field=models.ForeignKey(db_column='descriptor_type', help_text='Type of site descriptor', on_delete=django.db.models.deletion.CASCADE, to='irekua_geo.sitedescriptortype', verbose_name='descriptor type'),
+                    model_name="sitedescriptor",
+                    name="descriptor_type",
+                    field=models.ForeignKey(
+                        db_column="descriptor_type",
+                        help_text="Type of site descriptor",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_geo.sitedescriptortype",
+                        verbose_name="descriptor type",
+                    ),
                 ),
             ],
             database_operations=[],

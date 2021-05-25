@@ -43,7 +43,9 @@ class LicenceType(IrekuaModelBase, MetadataSchemaMixin):
     years_valid_for = models.IntegerField(
         db_column="years_valid_for",
         verbose_name=_("years valid for"),
-        help_text=_("Number of years for which licences of this type " "are valid"),
+        help_text=_(
+            "Number of years for which licences of this type " "are valid"
+        ),
         blank=False,
         null=False,
     )

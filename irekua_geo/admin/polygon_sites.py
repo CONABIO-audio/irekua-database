@@ -4,4 +4,7 @@ from .sites import SiteAdmin
 
 
 class PolygonSiteAdmin(SiteAdmin):
-    fieldsets = (*SiteAdmin.fieldsets, (_("Geometry"), {"fields": ("geometry",)}))
+    fieldsets = (
+        *SiteAdmin.fieldsets,
+        (_("Geometry"), {"fields": ("geometry",)}),
+    )

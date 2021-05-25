@@ -4,4 +4,7 @@ from .sites import SiteAdmin
 
 
 class MultiLineStringSiteAdmin(SiteAdmin):
-    fieldsets = (*SiteAdmin.fieldsets, (_("Geometry"), {"fields": ("geometry",)}))
+    fieldsets = (
+        *SiteAdmin.fieldsets,
+        (_("Geometry"), {"fields": ("geometry",)}),
+    )

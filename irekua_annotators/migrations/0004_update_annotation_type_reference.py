@@ -7,17 +7,23 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotations', '0001_initial'),
-        ('irekua_annotators', '0003_change_annotation_type_reference'),
+        ("irekua_annotations", "0001_initial"),
+        ("irekua_annotators", "0003_change_annotation_type_reference"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AlterField(
-                    model_name='annotationtool',
-                    name='annotation_type',
-                    field=models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation this tool produces', on_delete=django.db.models.deletion.CASCADE, to='irekua_annotations.annotationtype', verbose_name='annotation type'),
+                    model_name="annotationtool",
+                    name="annotation_type",
+                    field=models.ForeignKey(
+                        db_column="annotation_type_id",
+                        help_text="Type of annotation this tool produces",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_annotations.annotationtype",
+                        verbose_name="annotation type",
+                    ),
                 ),
             ],
             database_operations=[],

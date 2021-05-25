@@ -4,7 +4,7 @@ from .thumbnails import ItemThumbnail
 
 
 __all__ = [
-    'ThumbnailCreatorItemType',
-    'ThumbnailCreator',
-    'ItemThumbnail',
+    "ThumbnailCreatorItemType",
+    "ThumbnailCreator",
+    "ItemThumbnail",
 ]

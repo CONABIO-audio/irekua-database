@@ -10,56 +10,55 @@ class SupersetInline(admin.TabularInline):
 
     model = Locality.is_part_of.through
 
-    verbose_name = _('Superset')
+    verbose_name = _("Superset")
 
-    verbose_name_plural = _('Supersets')
+    verbose_name_plural = _("Supersets")
 
     autocomplete_fields = [
-        'to_locality',
+        "to_locality",
     ]
 
-    fk_name = 'from_locality'
+    fk_name = "from_locality"
 
 
 class LocalityAdmin(IrekuaAdmin):
     search_fields = [
-        'id',
-        'name',
+        "id",
+        "name",
     ]
 
     list_display = [
-        'id',
-        'name',
-        'locality_type',
-        'created_on',
+        "id",
+        "name",
+        "locality_type",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
-        'name',
+        "id",
+        "name",
     ]
 
     list_filter = [
-        'locality_type',
+        "locality_type",
     ]
 
     autocomplete_fields = [
-        'locality_type',
+        "locality_type",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('name','locality_type'),
-                'description',
-                'geometry',
-            )
-        }),
-        (_('Additional Metadata'), {
-            'fields': (
-                ('metadata',),
-            )
-        })
+        (
+            None,
+            {
+                "fields": (
+                    ("name", "locality_type"),
+                    "description",
+                    "geometry",
+                )
+            },
+        ),
+        (_("Additional Metadata"), {"fields": (("metadata",),)}),
     )
 
     inlines = [

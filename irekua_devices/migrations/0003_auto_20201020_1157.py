@@ -7,14 +7,23 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('irekua_devices', '0002_change_to_schema_reference'),
+        ("irekua_schemas", "0002_auto_20201018_2158"),
+        ("irekua_devices", "0002_change_to_schema_reference"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='device',
-            name='configuration_schema',
-            field=models.ForeignKey(blank=True, db_column='configuration schema', help_text='JSON Schema for configuration info of device', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='configuration_schema', to='irekua_schemas.schema', verbose_name='configuration schema'),
+            model_name="device",
+            name="configuration_schema",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="configuration schema",
+                help_text="JSON Schema for configuration info of device",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="configuration_schema",
+                to="irekua_schemas.schema",
+                verbose_name="configuration schema",
+            ),
         ),
     ]

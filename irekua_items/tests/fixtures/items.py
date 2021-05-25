@@ -10,7 +10,9 @@ from django.core.files.uploadedfile import UploadedFile
 def generate_random_wav():
     import wave
 
-    def create_random_wav(sample_rate=44100, duration=1, sample_width=2, channels=1):
+    def create_random_wav(
+        sample_rate=44100, duration=1, sample_width=2, channels=1
+    ):
         if sample_width not in [2, 4]:
             raise NotImplementedError
 

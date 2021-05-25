@@ -6,8 +6,8 @@ import django.db.models.deletion
 
 def move_json_schema_to_foreign_key(model_name, field):
     def python_migration(apps, schema_editor):
-        Schema = apps.get_model('irekua_schemas', 'Schema')
-        Model = apps.get_model('irekua_collections', model_name)
+        Schema = apps.get_model("irekua_schemas", "Schema")
+        Model = apps.get_model("irekua_collections", model_name)
 
         schemas = {}
 
@@ -15,8 +15,8 @@ def move_json_schema_to_foreign_key(model_name, field):
             if isinstance(schema, str):
                 schema = json.loads(schema)
 
-            title = schema.get('title', None)
-            description = schema.get('description', '')
+            title = schema.get("title", None)
+            description = schema.get("description", "")
 
             if title is None:
                 return None
@@ -26,10 +26,7 @@ def move_json_schema_to_foreign_key(model_name, field):
 
             schema_object, _ = Schema.objects.get_or_create(
                 name=title,
-                defaults={
-                    'description': description,
-                    'schema': schema
-                }
+                defaults={"description": description, "schema": schema},
             )
 
             schemas[title] = schema_object
@@ -42,7 +39,7 @@ def move_json_schema_to_foreign_key(model_name, field):
                 continue
 
             schema_object = get_schema_object_from_schema(schema)
-            setattr(obj, f'{field}_tmp', schema_object)
+            setattr(obj, f"{field}_tmp", schema_object)
             obj.save()
 
     return python_migration
@@ -51,61 +48,94 @@ def move_json_schema_to_foreign_key(model_name, field):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('irekua_collections', '0001_initial'),
-        ('irekua_database', '0010_massive_migration_to_submodules'),
+        ("irekua_schemas", "0002_auto_20201018_2158"),
+        ("irekua_collections", "0001_initial"),
+        ("irekua_database", "0010_massive_migration_to_submodules"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='collectiondevicetype',
-            name='metadata_schema_tmp',
-            field=models.ForeignKey(blank=True, db_column='metadata_schema_id', help_text='JSON Schema for collection-specific metadata', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='collectiondevicetype_metadata_schema', to='irekua_schemas.schema', verbose_name='metadata schema'),
+            model_name="collectiondevicetype",
+            name="metadata_schema_tmp",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="metadata_schema_id",
+                help_text="JSON Schema for collection-specific metadata",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="collectiondevicetype_metadata_schema",
+                to="irekua_schemas.schema",
+                verbose_name="metadata schema",
+            ),
         ),
         migrations.RunPython(
-            move_json_schema_to_foreign_key('CollectionDeviceType', 'metadata_schema')
+            move_json_schema_to_foreign_key(
+                "CollectionDeviceType", "metadata_schema"
+            )
         ),
         migrations.RemoveField(
-            model_name='collectiondevicetype',
-            name='metadata_schema',
+            model_name="collectiondevicetype",
+            name="metadata_schema",
         ),
         migrations.RenameField(
-            model_name='collectiondevicetype',
-            old_name='metadata_schema_tmp',
-            new_name='metadata_schema',
+            model_name="collectiondevicetype",
+            old_name="metadata_schema_tmp",
+            new_name="metadata_schema",
         ),
         migrations.AddField(
-            model_name='collectionitemtype',
-            name='metadata_schema_tmp',
-            field=models.ForeignKey(blank=True, db_column='metadata_schema_id', help_text='JSON Schema for collection-specific metadata', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='collectionitemtype_metadata_schema', to='irekua_schemas.schema', verbose_name='metadata schema'),
+            model_name="collectionitemtype",
+            name="metadata_schema_tmp",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="metadata_schema_id",
+                help_text="JSON Schema for collection-specific metadata",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="collectionitemtype_metadata_schema",
+                to="irekua_schemas.schema",
+                verbose_name="metadata schema",
+            ),
         ),
         migrations.RunPython(
-            move_json_schema_to_foreign_key('CollectionItemType', 'metadata_schema')
+            move_json_schema_to_foreign_key(
+                "CollectionItemType", "metadata_schema"
+            )
         ),
         migrations.RemoveField(
-            model_name='collectionitemtype',
-            name='metadata_schema',
+            model_name="collectionitemtype",
+            name="metadata_schema",
         ),
         migrations.RenameField(
-            model_name='collectionitemtype',
-            old_name='metadata_schema_tmp',
-            new_name='metadata_schema',
+            model_name="collectionitemtype",
+            old_name="metadata_schema_tmp",
+            new_name="metadata_schema",
         ),
         migrations.AddField(
-            model_name='collectionrole',
-            name='metadata_schema_tmp',
-            field=models.ForeignKey(blank=True, db_column='metadata_schema_id', help_text='JSON Schema for collection-specific metadata', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='collectionrole_metadata_schema', to='irekua_schemas.schema', verbose_name='metadata schema'),
+            model_name="collectionrole",
+            name="metadata_schema_tmp",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="metadata_schema_id",
+                help_text="JSON Schema for collection-specific metadata",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="collectionrole_metadata_schema",
+                to="irekua_schemas.schema",
+                verbose_name="metadata schema",
+            ),
         ),
         migrations.RunPython(
-            move_json_schema_to_foreign_key('CollectionRole', 'metadata_schema')
+            move_json_schema_to_foreign_key(
+                "CollectionRole", "metadata_schema"
+            )
         ),
         migrations.RemoveField(
-            model_name='collectionrole',
-            name='metadata_schema',
+            model_name="collectionrole",
+            name="metadata_schema",
         ),
         migrations.RenameField(
-            model_name='collectionrole',
-            old_name='metadata_schema_tmp',
-            new_name='metadata_schema',
+            model_name="collectionrole",
+            old_name="metadata_schema_tmp",
+            new_name="metadata_schema",
         ),
     ]

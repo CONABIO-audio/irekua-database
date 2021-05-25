@@ -5,40 +5,39 @@ from irekua_database.admin.base import IrekuaAdmin
 
 class SiteDescriptorAdmin(IrekuaAdmin):
     search_fields = [
-        'value',
-        'descriptor_type__name',
+        "value",
+        "descriptor_type__name",
     ]
 
     list_display = [
-        'id',
-        'value',
-        'descriptor_type',
-        'created_on',
+        "id",
+        "value",
+        "descriptor_type",
+        "created_on",
     ]
 
     list_display_links = [
-        'id',
-        'value',
+        "id",
+        "value",
     ]
 
     list_filter = [
-        'descriptor_type',
+        "descriptor_type",
     ]
 
     autocomplete_fields = [
-        'descriptor_type',
+        "descriptor_type",
     ]
 
     fieldsets = (
-        (None, {
-            'fields': (
-                ('descriptor_type','value'),
-                'description',
-            )
-        }),
-        (_('Additional Metadata'), {
-            'fields': (
-                ('metadata',),
-            )
-        })
+        (
+            None,
+            {
+                "fields": (
+                    ("descriptor_type", "value"),
+                    "description",
+                )
+            },
+        ),
+        (_("Additional Metadata"), {"fields": (("metadata",),)}),
     )

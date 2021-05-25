@@ -8,44 +8,45 @@ from irekua_schemas.models import Schema
 
 class VisualizerVersion(IrekuaModelBase):
     visualizer = models.ForeignKey(
-        'Visualizer',
+        "Visualizer",
         models.CASCADE,
-        db_column='visualizer_id',
-        verbose_name=_('visualizer'),
-        help_text=_('Visualizer'),
+        db_column="visualizer_id",
+        verbose_name=_("visualizer"),
+        help_text=_("Visualizer"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     version = models.CharField(
         max_length=16,
-        db_column='version',
-        verbose_name=_('version'),
-        help_text=_('Version of visualizer app'),
+        db_column="version",
+        verbose_name=_("version"),
+        help_text=_("Version of visualizer app"),
         blank=False,
-        null=False)
+        null=False,
+    )
 
     configuration_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
-        db_column='configuration_schema_id',
-        verbose_name=_('configuration schema'),
-        help_text=_('JSON schema for visualizer tool configuration info'),
+        db_column="configuration_schema_id",
+        verbose_name=_("configuration schema"),
+        help_text=_("JSON schema for visualizer tool configuration info"),
         null=True,
-        blank=True)
+        blank=True,
+    )
 
     class Meta:
-        verbose_name = _('Visualizer Version')
+        verbose_name = _("Visualizer Version")
 
-        verbose_name_plural = _('Visualizer Versions')
+        verbose_name_plural = _("Visualizer Versions")
 
-        ordering = ['visualizer', '-version']
+        ordering = ["visualizer", "-version"]
 
-        unique_together = (
-            ('visualizer', 'version'),
-        )
+        unique_together = (("visualizer", "version"),)
 
     def __str__(self):
-        return f'{self.visualizer} @ {self.version}'
+        return f"{self.visualizer} @ {self.version}"
 
     def validate_configuration(self, configuration):
         if self.configuration_schema is None:
@@ -56,6 +57,6 @@ class VisualizerVersion(IrekuaModelBase):
             self.configuration_schema.validate(configuration)
 
         except ValidationError as error:
-            msg = _('Invalid visualizer configuration. Error: %(error)s')
+            msg = _("Invalid visualizer configuration. Error: %(error)s")
             params = dict(error=error)
             raise ValidationError(msg % params) from error

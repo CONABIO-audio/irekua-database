@@ -100,7 +100,10 @@ class SamplingEventTypeAdmin(IrekuaAdmin):
                         "restrict_item_types",
                     ),
                     ("restrict_deployment_positions", "deployment_distance"),
-                    ("can_have_subsampling_events", "restrict_subsampling_event_types"),
+                    (
+                        "can_have_subsampling_events",
+                        "restrict_subsampling_event_types",
+                    ),
                 ),
             },
         ),

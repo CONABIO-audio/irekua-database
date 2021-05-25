@@ -6,26 +6,26 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_visualizers', '0006_created_annotation_visualizer_model'),
+        ("irekua_visualizers", "0006_created_annotation_visualizer_model"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='visualizercomponentitemtype',
+            name="visualizercomponentitemtype",
             unique_together=None,
         ),
         migrations.RemoveField(
-            model_name='visualizercomponentitemtype',
-            name='item_type',
+            model_name="visualizercomponentitemtype",
+            name="item_type",
         ),
         migrations.RemoveField(
-            model_name='visualizercomponentitemtype',
-            name='visualizer_component',
+            model_name="visualizercomponentitemtype",
+            name="visualizer_component",
         ),
         migrations.DeleteModel(
-            name='VisualizerComponent',
+            name="VisualizerComponent",
         ),
         migrations.DeleteModel(
-            name='VisualizerComponentItemType',
+            name="VisualizerComponentItemType",
         ),
     ]

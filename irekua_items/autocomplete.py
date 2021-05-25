@@ -80,7 +80,8 @@ class ItemAutocomplete(autocomplete.Select2QuerySetView):
 
         if self.q:
             qs = qs.filter(
-                Q(id__istartswith=self.q) | Q(item_type__name__istartswith=self.q)
+                Q(id__istartswith=self.q)
+                | Q(item_type__name__istartswith=self.q)
             )
 
         return qs

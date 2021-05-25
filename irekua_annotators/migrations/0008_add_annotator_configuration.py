@@ -7,39 +7,77 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_schemas', '0002_auto_20201018_2158'),
-        ('irekua_annotators', '0007_remove_old_models'),
+        ("irekua_schemas", "0002_auto_20201018_2158"),
+        ("irekua_annotators", "0007_remove_old_models"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='annotationannotator',
-            name='annotator_configuration',
-            field=models.JSONField(blank=True, db_column='annotator_configuration', help_text='Configuration of annotator at annotation creation', null=True, verbose_name='annotator configuration'),
+            model_name="annotationannotator",
+            name="annotator_configuration",
+            field=models.JSONField(
+                blank=True,
+                db_column="annotator_configuration",
+                help_text="Configuration of annotator at annotation creation",
+                null=True,
+                verbose_name="annotator configuration",
+            ),
         ),
         migrations.AddField(
-            model_name='annotatorversion',
-            name='configuration_schema',
-            field=models.ForeignKey(blank=True, db_column='configuration_schema', help_text='JSON schema for annotator configuration', null=True, on_delete=django.db.models.deletion.PROTECT, to='irekua_schemas.schema', verbose_name='configuration schema'),
+            model_name="annotatorversion",
+            name="configuration_schema",
+            field=models.ForeignKey(
+                blank=True,
+                db_column="configuration_schema",
+                help_text="JSON schema for annotator configuration",
+                null=True,
+                on_delete=django.db.models.deletion.PROTECT,
+                to="irekua_schemas.schema",
+                verbose_name="configuration schema",
+            ),
         ),
         migrations.AlterField(
-            model_name='annotator',
-            name='annotation_type',
-            field=models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation this annotator produces', on_delete=django.db.models.deletion.CASCADE, to='irekua_annotations.annotationtype', verbose_name='annotation type'),
+            model_name="annotator",
+            name="annotation_type",
+            field=models.ForeignKey(
+                db_column="annotation_type_id",
+                help_text="Type of annotation this annotator produces",
+                on_delete=django.db.models.deletion.CASCADE,
+                to="irekua_annotations.annotationtype",
+                verbose_name="annotation type",
+            ),
         ),
         migrations.AlterField(
-            model_name='annotator',
-            name='logo',
-            field=models.ImageField(blank=True, db_column='logo', help_text='Annotator logo', null=True, upload_to='images/annotators/', verbose_name='logo'),
+            model_name="annotator",
+            name="logo",
+            field=models.ImageField(
+                blank=True,
+                db_column="logo",
+                help_text="Annotator logo",
+                null=True,
+                upload_to="images/annotators/",
+                verbose_name="logo",
+            ),
         ),
         migrations.AlterField(
-            model_name='annotator',
-            name='name',
-            field=models.CharField(db_column='name', help_text='Name of annotator', max_length=64, verbose_name='name'),
+            model_name="annotator",
+            name="name",
+            field=models.CharField(
+                db_column="name",
+                help_text="Name of annotator",
+                max_length=64,
+                verbose_name="name",
+            ),
         ),
         migrations.AlterField(
-            model_name='annotator',
-            name='website',
-            field=models.URLField(blank=True, db_column='website', help_text='Annotator website', null=True, verbose_name='website'),
+            model_name="annotator",
+            name="website",
+            field=models.URLField(
+                blank=True,
+                db_column="website",
+                help_text="Annotator website",
+                null=True,
+                verbose_name="website",
+            ),
         ),
     ]

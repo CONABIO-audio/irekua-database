@@ -166,7 +166,14 @@ def example_schema(schema_factory):
             "title": "The Root Schema",
             "description": "The root schema is the schema that comprises the entire JSON document.",
             "default": {},
-            "required": ["checked", "dimensions", "id", "name", "price", "tags"],
+            "required": [
+                "checked",
+                "dimensions",
+                "id",
+                "name",
+                "price",
+                "tags",
+            ],
             "properties": {
                 "checked": {
                     "$id": "#/properties/checked",

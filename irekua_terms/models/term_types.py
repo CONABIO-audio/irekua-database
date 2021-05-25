@@ -10,90 +10,103 @@ class TermType(IrekuaModelBase):
     name = models.CharField(
         max_length=128,
         unique=True,
-        db_column='name',
-        verbose_name=_('name'),
-        help_text=_('Name for term type'),
-        blank=False)
+        db_column="name",
+        verbose_name=_("name"),
+        help_text=_("Name for term type"),
+        blank=False,
+    )
 
     description = models.TextField(
-        db_column='description',
-        verbose_name=_('description'),
-        help_text=_('Description of term type'),
-        blank=False)
+        db_column="description",
+        verbose_name=_("description"),
+        help_text=_("Description of term type"),
+        blank=False,
+    )
 
     icon = models.ImageField(
-        db_column='icon',
-        verbose_name=_('icon'),
-        help_text=_('Term type icon'),
-        upload_to='images/term_types/',
+        db_column="icon",
+        verbose_name=_("icon"),
+        help_text=_("Term type icon"),
+        upload_to="images/term_types/",
         blank=True,
-        null=True)
+        null=True,
+    )
 
     metadata_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
-        related_name='term_metadata_schema',
-        db_column='metadata_schema_id',
-        verbose_name=_('metadata schema'),
-        help_text=_('JSON Schema for metadata of term info'),
+        related_name="term_metadata_schema",
+        db_column="metadata_schema_id",
+        verbose_name=_("metadata schema"),
+        help_text=_("JSON Schema for metadata of term info"),
         null=True,
-        blank=True)
+        blank=True,
+    )
 
     synonym_metadata_schema = models.ForeignKey(
         Schema,
         models.PROTECT,
-        related_name='synonym_metadata_schema',
-        db_column='synonym_metadata_schema_id',
-        verbose_name=_('synonym metadata schema'),
-        help_text=_('JSON Schema for metadata of synonym info'),
+        related_name="synonym_metadata_schema",
+        db_column="synonym_metadata_schema_id",
+        verbose_name=_("synonym metadata schema"),
+        help_text=_("JSON Schema for metadata of synonym info"),
         null=True,
-        blank=True)
+        blank=True,
+    )
 
     is_categorical = models.BooleanField(
-        db_column='is_categorical',
-        verbose_name=_('is categorical'),
+        db_column="is_categorical",
+        verbose_name=_("is categorical"),
         help_text=_(
-            'Flag indicating whether the term type represents '
-            'a categorical variable'),
+            "Flag indicating whether the term type represents "
+            "a categorical variable"
+        ),
         default=True,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     is_numerical = models.BooleanField(
-        db_column='is_numerical',
-        verbose_name=_('is numerical'),
+        db_column="is_numerical",
+        verbose_name=_("is numerical"),
         help_text=_(
-            'Flag indicating whether the term type represents '
-            'a numerical (float) variable'),
+            "Flag indicating whether the term type represents "
+            "a numerical (float) variable"
+        ),
         default=False,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     is_integer = models.BooleanField(
-        db_column='is_integer',
-        verbose_name=_('is integer'),
+        db_column="is_integer",
+        verbose_name=_("is integer"),
         help_text=_(
-            'Flag indicating whether the term type represents '
-            'a integral (int) variable'),
+            "Flag indicating whether the term type represents "
+            "a integral (int) variable"
+        ),
         default=False,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     is_boolean = models.BooleanField(
-        db_column='is_boolean',
-        verbose_name=_('is boolean'),
+        db_column="is_boolean",
+        verbose_name=_("is boolean"),
         help_text=_(
-            'Flag indicating whether the term type represents '
-            'a categorical variable'),
+            "Flag indicating whether the term type represents "
+            "a categorical variable"
+        ),
         default=False,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     class Meta:
-        verbose_name = _('Term Type')
-        verbose_name_plural = _('Term Types')
+        verbose_name = _("Term Type")
+        verbose_name_plural = _("Term Types")
 
-        ordering = ['name']
+        ordering = ["name"]
 
     def __str__(self):
         return str(self.name)
@@ -108,19 +121,18 @@ class TermType(IrekuaModelBase):
         # type.
         self.clean_synonym_metadata()
 
-
     def clean_has_only_one_class(self):
         flags = (
-            self.is_categorical +
-            self.is_numerical +
-            self.is_integer +
-            self.is_boolean
+            self.is_categorical
+            + self.is_numerical
+            + self.is_integer
+            + self.is_boolean
         )
 
         if flags != 1:
             msg = _(
-                'Term type can only be of one and only one type '
-                '(categorical/numerical/integer/boolean)'
+                "Term type can only be of one and only one type "
+                "(categorical/numerical/integer/boolean)"
             )
             raise ValidationError(msg)
 
@@ -129,8 +141,7 @@ class TermType(IrekuaModelBase):
             return
 
         if self.synonym_metadata_schema is not None:
-            msg = _(
-                'Non categorical term types cannot have synonyms')
+            msg = _("Non categorical term types cannot have synonyms")
             raise ValidationError(msg)
 
     def validate_value(self, value):
@@ -155,7 +166,7 @@ class TermType(IrekuaModelBase):
 
     def validate_metadata(self, metadata):
         if self.metadata_schema is None:
-            # If no metadata schema for terms was given,
+            #  If no metadata schema for terms was given,
             # any metadata is valid.
             return
 
@@ -164,18 +175,20 @@ class TermType(IrekuaModelBase):
 
         except ValidationError as error:
             msg = _(
-                'Invalid metadata for term of type %(type)s. '
-                'Error: %(error)s')
+                "Invalid metadata for term of type %(type)s. "
+                "Error: %(error)s"
+            )
             params = dict(type=str(self), error=str(error))
             raise ValidationError(msg % params) from error
 
     def validate_synonym_metadata(self, metadata):
         if self.synonym_metadata_schema is None:
-            # If no metadata schema for synonyms was given,
+            #  If no metadata schema for synonyms was given,
             # no metadata is valid.
             msg = _(
-                'No synonym metadata schema was given for terms of '
-                'type %(type)s, hence synonym metadata is invalid.')
+                "No synonym metadata schema was given for terms of "
+                "type %(type)s, hence synonym metadata is invalid."
+            )
             params = dict(type=str(self))
             raise ValidationError(msg % params)
 
@@ -184,8 +197,9 @@ class TermType(IrekuaModelBase):
 
         except ValidationError as error:
             msg = _(
-                'Invalid metadata for synonym of terms of type '
-                '%(type)s. Error: %(error)s')
+                "Invalid metadata for synonym of terms of type "
+                "%(type)s. Error: %(error)s"
+            )
             params = dict(type=str(self), error=str(error))
             raise ValidationError(msg % params) from error
 
@@ -201,8 +215,8 @@ class TermType(IrekuaModelBase):
                 pass
 
         msg = _(
-            'Value %(value)s is invalid for numerical '
-            'term of type %(type)s')
+            "Value %(value)s is invalid for numerical " "term of type %(type)s"
+        )
         params = dict(value=value, type=str(self))
         raise ValidationError(msg % params)
 
@@ -222,8 +236,8 @@ class TermType(IrekuaModelBase):
                 pass
 
         msg = _(
-            'Value %(value)s is invalid for integer '
-            'term of type %(type)s')
+            "Value %(value)s is invalid for integer " "term of type %(type)s"
+        )
         params = dict(value=value, type=str(self))
         raise ValidationError(msg % params)
 
@@ -232,7 +246,7 @@ class TermType(IrekuaModelBase):
             return
 
         if isinstance(value, str):
-            if value.lower() in ['true', 'false', '0', '1']:
+            if value.lower() in ["true", "false", "0", "1"]:
                 return
 
         if isinstance(value, (int, float)):
@@ -240,8 +254,8 @@ class TermType(IrekuaModelBase):
                 return
 
         msg = _(
-            'Value %(value)s is invalid for boolean '
-            'term of type %(type)s')
+            "Value %(value)s is invalid for boolean " "term of type %(type)s"
+        )
         params = dict(value=value, type=str(self))
         raise ValidationError(msg % params)
 
@@ -250,10 +264,13 @@ class TermType(IrekuaModelBase):
             return
 
         msg = _(
-            'Value %(value)s is invalid for categorical term '
-            'of type %(type)s')
+            "Value %(value)s is invalid for categorical term "
+            "of type %(type)s"
+        )
         params = dict(value=value, type=str(self))
         raise ValidationError(msg % params)
 
     def entailments(self):
-        return TermType.objects.filter(entailment_target_type__source_type=self)
+        return TermType.objects.filter(
+            entailment_target_type__source_type=self
+        )

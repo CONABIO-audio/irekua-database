@@ -5,14 +5,23 @@ import django.db.models.deletion
 
 
 def move_annotations_to_collection_annotations(apps, schema_editor):
-    AnnotationTmp = apps.get_model('irekua_annotations', 'AnnotationTmp')
-    CollectionAnnotation = apps.get_model('irekua_collections', 'CollectionAnnotation')
-    VisualizerVersion = apps.get_model('irekua_visualizers', 'VisualizerVersion')
-    AnnotationVisualizer = apps.get_model('irekua_visualizers', 'AnnotationVisualizer')
-    AnnotatorVersion = apps.get_model('irekua_annotators', 'AnnotatorVersion')
-    AnnotationAnnotator = apps.get_model('irekua_annotators', 'AnnotationAnnotator')
+    AnnotationTmp = apps.get_model("irekua_annotations", "AnnotationTmp")
+    CollectionAnnotation = apps.get_model(
+        "irekua_collections", "CollectionAnnotation"
+    )
+    VisualizerVersion = apps.get_model(
+        "irekua_visualizers", "VisualizerVersion"
+    )
+    AnnotationVisualizer = apps.get_model(
+        "irekua_visualizers", "AnnotationVisualizer"
+    )
+    AnnotatorVersion = apps.get_model("irekua_annotators", "AnnotatorVersion")
+    AnnotationAnnotator = apps.get_model(
+        "irekua_annotators", "AnnotationAnnotator"
+    )
 
     annotators = {}
+
     def get_annotator_version(annotation):
         tool = annotation.annotation_tool
 
@@ -21,13 +30,14 @@ def move_annotations_to_collection_annotations(apps, schema_editor):
 
         if (name, version) not in annotators:
             version = AnnotatorVersion.objects.get(
-                annotator__name=name,
-                version=version)
+                annotator__name=name, version=version
+            )
             annotators[(name, version)] = version
 
         return annotators[(name, version)]
 
     visualizers = {}
+
     def get_visualizer_version(annotation):
         visualizer = annotation.visualizer
 
@@ -36,8 +46,8 @@ def move_annotations_to_collection_annotations(apps, schema_editor):
 
         if (name, version) not in visualizers:
             version = VisualizerVersion.objects.get(
-                visualizer__name=name,
-                version=version)
+                visualizer__name=name, version=version
+            )
             visualizers[(name, version)] = version
 
         return visualizers[(name, version)]
@@ -57,45 +67,53 @@ def move_annotations_to_collection_annotations(apps, schema_editor):
             created_by=annotation.created_by,
             modified_by=annotation.modified_by,
             created_on=annotation.created_on,
-            commentaries=annotation.commentaries)
+            commentaries=annotation.commentaries,
+        )
 
         # Add labels
         new_annotation.labels.set(annotation.labels.all())
         new_annotation.save()
 
-        # Add visualizer configuration
+        #  Add visualizer configuration
         visualizer = get_visualizer_version(annotation)
         AnnotationVisualizer.objects.create(
             annotation=new_annotation,
             visualizer_version=visualizer,
-            visualizer_configuration=annotation.visualizer_configuration)
+            visualizer_configuration=annotation.visualizer_configuration,
+        )
 
         # Add annotation configuration
         annotator = get_annotator_version(annotation)
         AnnotationAnnotator.objects.create(
-            annotation=new_annotation,
-            annotator_version=annotator)
+            annotation=new_annotation, annotator_version=annotator
+        )
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotations', '0003_annotation_userannotation'),
-        ('irekua_collections', '0014_collectionannotation'),
-        ('irekua_visualizers', '0006_created_annotation_visualizer_model'),
-        ('irekua_annotators', '0006_annotationannotator'),
+        ("irekua_annotations", "0003_annotation_userannotation"),
+        ("irekua_collections", "0014_collectionannotation"),
+        ("irekua_visualizers", "0006_created_annotation_visualizer_model"),
+        ("irekua_annotators", "0006_annotationannotator"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='annotationvote',
-            name='annotation',
-            field=models.ForeignKey(db_column='annotation_id', help_text='Reference to annotation being voted', on_delete=django.db.models.deletion.CASCADE, to='irekua_annotations.annotation', verbose_name='annotation'),
+            model_name="annotationvote",
+            name="annotation",
+            field=models.ForeignKey(
+                db_column="annotation_id",
+                help_text="Reference to annotation being voted",
+                on_delete=django.db.models.deletion.CASCADE,
+                to="irekua_annotations.annotation",
+                verbose_name="annotation",
+            ),
         ),
         migrations.RunPython(
             move_annotations_to_collection_annotations,
         ),
         migrations.DeleteModel(
-            name='AnnotationTmp',
+            name="AnnotationTmp",
         ),
     ]

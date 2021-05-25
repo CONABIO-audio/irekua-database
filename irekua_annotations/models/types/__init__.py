@@ -3,6 +3,6 @@ from .event_types import EventType
 
 
 __all__ = [
-    'AnnotationType',
-    'EventType',
+    "AnnotationType",
+    "EventType",
 ]

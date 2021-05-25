@@ -6,7 +6,9 @@ from irekua_items.models import LicenceType
 from irekua_collections.mixins import CollectionMetadataSchemaMixin
 
 
-class CollectionTypeLicenceType(IrekuaModelBase, CollectionMetadataSchemaMixin):
+class CollectionTypeLicenceType(
+    IrekuaModelBase, CollectionMetadataSchemaMixin
+):
     collection_type = models.ForeignKey(
         "CollectionType",
         on_delete=models.CASCADE,
@@ -22,7 +24,9 @@ class CollectionTypeLicenceType(IrekuaModelBase, CollectionMetadataSchemaMixin):
         on_delete=models.PROTECT,
         db_column="licence_type_id",
         verbose_name=_("licence type"),
-        help_text=_("Licence type to be admissible in collections of this type"),
+        help_text=_(
+            "Licence type to be admissible in collections of this type"
+        ),
         blank=False,
         null=False,
     )
@@ -37,6 +41,7 @@ class CollectionTypeLicenceType(IrekuaModelBase, CollectionMetadataSchemaMixin):
     def __str__(self):
         msg = _("Collection %(collection)s: Licence Type %(licence)s")
         params = dict(
-            licence=str(self.licence_type), collection=str(self.collection_type)
+            licence=str(self.licence_type),
+            collection=str(self.collection_type),
         )
         return msg % params

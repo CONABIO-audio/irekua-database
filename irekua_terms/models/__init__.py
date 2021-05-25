@@ -8,11 +8,11 @@ from .terms import Term
 
 
 __all__ = [
-    'SynonymSuggestion',
-    'EntailmentType',
-    'TermSuggestion',
-    'Entailment',
-    'TermType',
-    'Synonym',
-    'Term',
+    "SynonymSuggestion",
+    "EntailmentType",
+    "TermSuggestion",
+    "Entailment",
+    "TermType",
+    "Synonym",
+    "Term",
 ]

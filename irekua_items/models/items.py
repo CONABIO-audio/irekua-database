@@ -44,7 +44,9 @@ def infer_datetime(
         tz = pytz_timezone(tz_info)
 
     if dt is None:
-        dt = timezone.localtime(timezone=tz).replace(hour=0, minute=0, second=0)
+        dt = timezone.localtime(timezone=tz).replace(
+            hour=0, minute=0, second=0
+        )
     else:
         dt = timezone.localtime(dt, timezone=tz)
 

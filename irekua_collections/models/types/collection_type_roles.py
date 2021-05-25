@@ -36,5 +36,7 @@ class CollectionTypeRole(IrekuaModelBase, CollectionMetadataSchemaMixin):
 
     def __str__(self):
         msg = _("Collection %(collection)s: Role %(role)s")
-        params = dict(role=str(self.role), collection=str(self.collection_type))
+        params = dict(
+            role=str(self.role), collection=str(self.collection_type)
+        )
         return msg % params

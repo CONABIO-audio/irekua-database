@@ -6,13 +6,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotations', '0004_auto_20201024_2241'),
+        ("irekua_annotations", "0004_auto_20201024_2241"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='annotation',
-            name='annotation',
-            field=models.JSONField(blank=True, db_column='annotation', help_text='Information of annotation location within item', null=True, verbose_name='annotation'),
+            model_name="annotation",
+            name="annotation",
+            field=models.JSONField(
+                blank=True,
+                db_column="annotation",
+                help_text="Information of annotation location within item",
+                null=True,
+                verbose_name="annotation",
+            ),
         ),
     ]

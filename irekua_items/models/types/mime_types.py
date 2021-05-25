@@ -11,7 +11,8 @@ mimetypes.init()
 
 class MimeType(IrekuaModelBase):
     MIME_TYPES = [
-        (value, value) for value in sorted(list(set(mimetypes.types_map.values())))
+        (value, value)
+        for value in sorted(list(set(mimetypes.types_map.values())))
     ]
 
     mime_type = models.CharField(
@@ -53,7 +54,8 @@ class MimeType(IrekuaModelBase):
             self.media_info_type.validate_media_info(media_info)
         except ValidationError as error:
             msg = _(
-                "Invalid media info for item of mime type %(type)s. " "Error %(error)s"
+                "Invalid media info for item of mime type %(type)s. "
+                "Error %(error)s"
             )
             params = dict(type=str(self), error=str(error))
             raise ValidationError(msg, params=params) from error

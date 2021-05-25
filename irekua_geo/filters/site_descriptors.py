@@ -7,14 +7,14 @@ from irekua_database.autocomplete import get_autocomplete_widget
 
 
 search_fields = (
-    'value',
-    'descriptor_type__name',
+    "value",
+    "descriptor_type__name",
 )
 
 
 ordering_fields = (
-    'created_on',
-    'value',
+    "created_on",
+    "value",
 )
 
 
@@ -28,5 +28,5 @@ class Filter(IrekuaFilter):
         model = SiteDescriptor
 
         fields = {
-            'value': ['exact', 'icontains'],
+            "value": ["exact", "icontains"],
         }

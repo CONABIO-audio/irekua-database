@@ -6,18 +6,18 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotators', '0006_annotationannotator'),
+        ("irekua_annotators", "0006_annotationannotator"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='annotationtoolcomponent',
-            name='annotation_tool',
+            model_name="annotationtoolcomponent",
+            name="annotation_tool",
         ),
         migrations.DeleteModel(
-            name='AnnotationTool',
+            name="AnnotationTool",
         ),
         migrations.DeleteModel(
-            name='AnnotationToolComponent',
+            name="AnnotationToolComponent",
         ),
     ]

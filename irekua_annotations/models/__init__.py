@@ -7,9 +7,9 @@ from .types import EventType
 
 
 __all__ = [
-    'AnnotationVote',
-    'AnnotationType',
-    'UserAnnotation',
-    'Annotation',
-    'EventType',
+    "AnnotationVote",
+    "AnnotationType",
+    "UserAnnotation",
+    "Annotation",
+    "EventType",
 ]

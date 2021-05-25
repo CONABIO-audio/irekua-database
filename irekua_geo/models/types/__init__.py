@@ -4,7 +4,7 @@ from .site_types import SiteType
 
 
 __all__ = [
-    'LocalityType',
-    'SiteDescriptorType',
-    'SiteType',
+    "LocalityType",
+    "SiteDescriptorType",
+    "SiteType",
 ]

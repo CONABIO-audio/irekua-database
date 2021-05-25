@@ -32,7 +32,9 @@ def device_type_factory():
 @pytest.fixture
 @pytest.mark.django_db
 def camera(device_type_factory, image_png, image_jpeg, video_avi):
-    return device_type_factory("camara", mime_types=[image_png, image_jpeg, video_avi])
+    return device_type_factory(
+        "camara", mime_types=[image_png, image_jpeg, video_avi]
+    )
 
 
 @pytest.fixture

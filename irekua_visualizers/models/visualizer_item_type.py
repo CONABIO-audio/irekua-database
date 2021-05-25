@@ -9,40 +9,43 @@ class VisualizerItemType(IrekuaModelBase):
     item_type = models.ForeignKey(
         ItemType,
         on_delete=models.CASCADE,
-        db_column='item_type_id',
-        verbose_name=_('item type'),
-        help_text=_('Item type'))
+        db_column="item_type_id",
+        verbose_name=_("item type"),
+        help_text=_("Item type"),
+    )
 
     visualizer = models.ForeignKey(
-        'Visualizer',
+        "Visualizer",
         on_delete=models.CASCADE,
-        db_column='visualizer_id',
-        verbose_name=_('visualizer'),
-        help_text=_('Visualizer'))
+        db_column="visualizer_id",
+        verbose_name=_("visualizer"),
+        help_text=_("Visualizer"),
+    )
 
     is_active = models.BooleanField(
-        db_column='is_active',
-        verbose_name=_('is active'),
+        db_column="is_active",
+        verbose_name=_("is active"),
         help_text=_(
-            'Indicates wheter this visualizer should be used '
-            'as the default visualizer of this item type.'),
+            "Indicates wheter this visualizer should be used "
+            "as the default visualizer of this item type."
+        ),
         default=True,
         blank=False,
-        null=False)
+        null=False,
+    )
 
     class Meta:
-        verbose_name = _('Visualizer Item Type')
+        verbose_name = _("Visualizer Item Type")
 
-        verbose_name_plural = _('Visualizer Item Types')
+        verbose_name_plural = _("Visualizer Item Types")
 
-        unique_together = (
-            ('item_type', 'visualizer'),
-        )
+        unique_together = (("item_type", "visualizer"),)
 
     def _deactivate_others(self):
         (
-            VisualizerItemType.objects
-            .filter(item_type=self.item_type, is_active=True)
+            VisualizerItemType.objects.filter(
+                item_type=self.item_type, is_active=True
+            )
             .exclude(pk=self.pk)
             .update(is_active=False)
         )

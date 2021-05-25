@@ -6,13 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_geo', '0006_add_boolean_fields_to_site_type'),
+        ("irekua_geo", "0006_add_boolean_fields_to_site_type"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='sitetype',
-            name='icon',
-            field=models.ImageField(blank=True, db_column='icon', help_text='Icon for site type', null=True, upload_to='images/site_types/', verbose_name='icon'),
+            model_name="sitetype",
+            name="icon",
+            field=models.ImageField(
+                blank=True,
+                db_column="icon",
+                help_text="Icon for site type",
+                null=True,
+                upload_to="images/site_types/",
+                verbose_name="icon",
+            ),
         ),
     ]

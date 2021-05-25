@@ -7,27 +7,43 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_annotations', '0001_initial'),
-        ('irekua_models', '0005_auto_20201024_1826'),
+        ("irekua_annotations", "0001_initial"),
+        ("irekua_models", "0005_auto_20201024_1826"),
     ]
 
     operations = [
         migrations.SeparateDatabaseAndState(
             state_operations=[
                 migrations.AlterField(
-                    model_name='model',
-                    name='annotation_type',
-                    field=models.ForeignKey(db_column='annotation_type_id', help_text='Type of annotation produced by the model.', on_delete=django.db.models.deletion.CASCADE, to='irekua_annotations.annotationtype', verbose_name='annotation type'),
+                    model_name="model",
+                    name="annotation_type",
+                    field=models.ForeignKey(
+                        db_column="annotation_type_id",
+                        help_text="Type of annotation produced by the model.",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_annotations.annotationtype",
+                        verbose_name="annotation type",
+                    ),
                 ),
                 migrations.AlterField(
-                    model_name='model',
-                    name='event_types',
-                    field=models.ManyToManyField(blank=True, help_text='Event types that can be detected by the model.', to='irekua_annotations.EventType'),
+                    model_name="model",
+                    name="event_types",
+                    field=models.ManyToManyField(
+                        blank=True,
+                        help_text="Event types that can be detected by the model.",
+                        to="irekua_annotations.EventType",
+                    ),
                 ),
                 migrations.AlterField(
-                    model_name='modelprediction',
-                    name='event_type',
-                    field=models.ForeignKey(db_column='event_type_id', help_text='Event predicted by the model.', on_delete=django.db.models.deletion.PROTECT, to='irekua_annotations.eventtype', verbose_name='event type'),
+                    model_name="modelprediction",
+                    name="event_type",
+                    field=models.ForeignKey(
+                        db_column="event_type_id",
+                        help_text="Event predicted by the model.",
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="irekua_annotations.eventtype",
+                        verbose_name="event type",
+                    ),
                 ),
             ],
             database_operations=[],

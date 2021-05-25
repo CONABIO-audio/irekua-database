@@ -8,12 +8,12 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('irekua_items', '0002_auto_20201019_1402'),
+        ("irekua_items", "0002_auto_20201019_1402"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='annotationvote',
-            unique_together={('annotation', 'created_by')},
+            name="annotationvote",
+            unique_together={("annotation", "created_by")},
         ),
     ]

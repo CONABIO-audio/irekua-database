@@ -8,13 +8,20 @@ import irekua_visualizers.models.visualizer_module
 
 
 def copy_visualizer_objects_into_new_models(apps, schema_editor):
-    VisualizerVersion = apps.get_model('irekua_visualizers', 'VisualizerVersion')
-    VisualizerModule = apps.get_model('irekua_visualizers', 'VisualizerModule')
-    VisualizerItemType = apps.get_model('irekua_visualizers', 'VisualizerItemType')
-    Visualizer = apps.get_model('irekua_visualizers', 'Visualizer')
-    VisualizerComponentItemType = apps.get_model('irekua_visualizers', 'VisualizerComponentItemType')
+    VisualizerVersion = apps.get_model(
+        "irekua_visualizers", "VisualizerVersion"
+    )
+    VisualizerModule = apps.get_model("irekua_visualizers", "VisualizerModule")
+    VisualizerItemType = apps.get_model(
+        "irekua_visualizers", "VisualizerItemType"
+    )
+    Visualizer = apps.get_model("irekua_visualizers", "Visualizer")
+    VisualizerComponentItemType = apps.get_model(
+        "irekua_visualizers", "VisualizerComponentItemType"
+    )
 
     visualizers = {}
+
     def get_visualizer(name):
         if name not in visualizers:
             vis = Visualizer.objects.filter(name=name).first()
@@ -29,7 +36,7 @@ def copy_visualizer_objects_into_new_models(apps, schema_editor):
             visualizer=representative,
             version=visualizer.version,
             defaults={
-                'configuration_schema': visualizer.configuration_schema,
+                "configuration_schema": visualizer.configuration_schema,
             },
         )
 
@@ -39,11 +46,12 @@ def copy_visualizer_objects_into_new_models(apps, schema_editor):
             module, _ = VisualizerModule.objects.get_or_create(
                 visualizer_version=version,
                 defaults={
-                    'javascript_file': component.javascript_file,
-                    'is_active': True,
-                })
+                    "javascript_file": component.javascript_file,
+                    "is_active": True,
+                },
+            )
 
-            # Add admissible item types to visualizer
+            #  Add admissible item types to visualizer
             queryset = VisualizerComponentItemType.objects.filter(
                 visualizer_component=component
             )
@@ -53,7 +61,7 @@ def copy_visualizer_objects_into_new_models(apps, schema_editor):
                     item_type=vis_item_type.item_type,
                     visualizer=representative,
                     defaults={
-                        'is_active': vis_item_type.is_active,
+                        "is_active": vis_item_type.is_active,
                     },
                 )
 
@@ -64,86 +72,238 @@ def copy_visualizer_objects_into_new_models(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('irekua_items', '0010_relocate_annotation_models'),
-        ('irekua_visualizers', '0004_auto_20201024_1826'),
+        ("irekua_items", "0010_relocate_annotation_models"),
+        ("irekua_visualizers", "0004_auto_20201024_1826"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='VisualizerVersion',
+            name="VisualizerVersion",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('version', models.CharField(db_column='version', help_text='Version of visualizer app', max_length=16, verbose_name='version')),
-                ('configuration_schema', models.JSONField(blank=True, db_column='configuration_schema', default=irekua_database.utils.simple_JSON_schema, help_text='JSON schema for visualizer tool configuration info', validators=[irekua_database.utils.validate_JSON_schema], verbose_name='configuration schema')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "version",
+                    models.CharField(
+                        db_column="version",
+                        help_text="Version of visualizer app",
+                        max_length=16,
+                        verbose_name="version",
+                    ),
+                ),
+                (
+                    "configuration_schema",
+                    models.JSONField(
+                        blank=True,
+                        db_column="configuration_schema",
+                        default=irekua_database.utils.simple_JSON_schema,
+                        help_text="JSON schema for visualizer tool configuration info",
+                        validators=[
+                            irekua_database.utils.validate_JSON_schema
+                        ],
+                        verbose_name="configuration schema",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Visualizer Version',
-                'verbose_name_plural': 'Visualizer Versions',
-                'ordering': ['visualizer', '-version'],
+                "verbose_name": "Visualizer Version",
+                "verbose_name_plural": "Visualizer Versions",
+                "ordering": ["visualizer", "-version"],
             },
         ),
         migrations.AddField(
-            model_name='visualizer',
-            name='description',
-            field=models.TextField(blank=True, db_column='description', help_text='Description of the visualizer', verbose_name='description'),
+            model_name="visualizer",
+            name="description",
+            field=models.TextField(
+                blank=True,
+                db_column="description",
+                help_text="Description of the visualizer",
+                verbose_name="description",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='visualizer',
+            name="visualizer",
             unique_together=set(),
         ),
         migrations.CreateModel(
-            name='VisualizerModule',
+            name="VisualizerModule",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('javascript_file', models.FileField(db_column='javascript_file', help_text='Javascript file containing visualizer version module', upload_to=irekua_visualizers.models.visualizer_module.visualizer_version_module_path, verbose_name='javascript file')),
-                ('is_active', models.BooleanField(db_column='is_active', default=True, help_text='Boolean flag that indicates whether this version is to be used as the default version of this visualizer.', verbose_name='is active')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "javascript_file",
+                    models.FileField(
+                        db_column="javascript_file",
+                        help_text="Javascript file containing visualizer version module",
+                        upload_to=irekua_visualizers.models.visualizer_module.visualizer_version_module_path,
+                        verbose_name="javascript file",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        db_column="is_active",
+                        default=True,
+                        help_text="Boolean flag that indicates whether this version is to be used as the default version of this visualizer.",
+                        verbose_name="is active",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Visualizer Module',
-                'verbose_name_plural': 'Visualizer Modules',
-                'ordering': ['-created_on'],
+                "verbose_name": "Visualizer Module",
+                "verbose_name_plural": "Visualizer Modules",
+                "ordering": ["-created_on"],
             },
         ),
         migrations.AddField(
-            model_name='visualizerversion',
-            name='visualizer',
-            field=models.ForeignKey(db_column='visualizer_id', help_text='Visualizer', on_delete=django.db.models.deletion.CASCADE, to='irekua_visualizers.visualizer', verbose_name='visualizer'),
+            model_name="visualizerversion",
+            name="visualizer",
+            field=models.ForeignKey(
+                db_column="visualizer_id",
+                help_text="Visualizer",
+                on_delete=django.db.models.deletion.CASCADE,
+                to="irekua_visualizers.visualizer",
+                verbose_name="visualizer",
+            ),
         ),
         migrations.CreateModel(
-            name='VisualizerItemType',
+            name="VisualizerItemType",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_on', models.DateTimeField(auto_now_add=True, db_column='created_on', help_text='Date of creation', verbose_name='created on')),
-                ('modified_on', models.DateTimeField(auto_now=True, db_column='modified_on', help_text='Date of last modification', verbose_name='modified on')),
-                ('is_active', models.BooleanField(db_column='is_active', default=True, help_text='Indicates wheter this visualizer should be used as the default visualizer of this item type.', verbose_name='is active')),
-                ('item_type', models.ForeignKey(db_column='item_type_id', help_text='Item type', on_delete=django.db.models.deletion.CASCADE, to='irekua_items.itemtype', verbose_name='item type')),
-                ('visualizer', models.ForeignKey(db_column='visualizer_id', help_text='Visualizer', on_delete=django.db.models.deletion.CASCADE, to='irekua_visualizers.visualizer', verbose_name='visualizer')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_on",
+                    models.DateTimeField(
+                        auto_now_add=True,
+                        db_column="created_on",
+                        help_text="Date of creation",
+                        verbose_name="created on",
+                    ),
+                ),
+                (
+                    "modified_on",
+                    models.DateTimeField(
+                        auto_now=True,
+                        db_column="modified_on",
+                        help_text="Date of last modification",
+                        verbose_name="modified on",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        db_column="is_active",
+                        default=True,
+                        help_text="Indicates wheter this visualizer should be used as the default visualizer of this item type.",
+                        verbose_name="is active",
+                    ),
+                ),
+                (
+                    "item_type",
+                    models.ForeignKey(
+                        db_column="item_type_id",
+                        help_text="Item type",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_items.itemtype",
+                        verbose_name="item type",
+                    ),
+                ),
+                (
+                    "visualizer",
+                    models.ForeignKey(
+                        db_column="visualizer_id",
+                        help_text="Visualizer",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="irekua_visualizers.visualizer",
+                        verbose_name="visualizer",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'Visualizer Item Type',
-                'verbose_name_plural': 'Visualizer Item Types',
-                'unique_together': {('item_type', 'visualizer')},
+                "verbose_name": "Visualizer Item Type",
+                "verbose_name_plural": "Visualizer Item Types",
+                "unique_together": {("item_type", "visualizer")},
             },
         ),
         migrations.AddField(
-            model_name='visualizer',
-            name='item_types',
-            field=models.ManyToManyField(through='irekua_visualizers.VisualizerItemType', to='irekua_items.ItemType'),
+            model_name="visualizer",
+            name="item_types",
+            field=models.ManyToManyField(
+                through="irekua_visualizers.VisualizerItemType",
+                to="irekua_items.ItemType",
+            ),
         ),
         migrations.AddField(
-            model_name='visualizermodule',
-            name='visualizer_version',
-            field=models.OneToOneField(db_column='visualizer_version_id', help_text='visualizer version to which this module belongs', on_delete=django.db.models.deletion.CASCADE, to='irekua_visualizers.visualizerversion', verbose_name='visualizer version'),
+            model_name="visualizermodule",
+            name="visualizer_version",
+            field=models.OneToOneField(
+                db_column="visualizer_version_id",
+                help_text="visualizer version to which this module belongs",
+                on_delete=django.db.models.deletion.CASCADE,
+                to="irekua_visualizers.visualizerversion",
+                verbose_name="visualizer version",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='visualizerversion',
-            unique_together={('visualizer', 'version')},
+            name="visualizerversion",
+            unique_together={("visualizer", "version")},
         ),
-        migrations.RunPython(
-            copy_visualizer_objects_into_new_models
-        )
+        migrations.RunPython(copy_visualizer_objects_into_new_models),
     ]

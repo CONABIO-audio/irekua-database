@@ -9,16 +9,14 @@ from irekua_database.autocomplete import get_autocomplete_widget
 
 
 search_fields = (
-    'source__value',
-    'target__value',
-    'source__term_type__name',
-    'target__term_type__name',
+    "source__value",
+    "target__value",
+    "source__term_type__name",
+    "target__term_type__name",
 )
 
 
-ordering_fields = (
-    'created_on',
-)
+ordering_fields = ("created_on",)
 
 
 class Filter(IrekuaFilter):
@@ -46,8 +44,8 @@ class Filter(IrekuaFilter):
         model = Entailment
 
         fields = {
-            'source__value': ['exact', 'icontains'],
-            'target__value': ['exact', 'icontains'],
-            'source__term_type__name': ['exact', 'icontains'],
-            'target__term_type__name': ['exact', 'icontains'],
+            "source__value": ["exact", "icontains"],
+            "target__value": ["exact", "icontains"],
+            "source__term_type__name": ["exact", "icontains"],
+            "target__term_type__name": ["exact", "icontains"],
         }

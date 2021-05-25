@@ -113,4 +113,4 @@ class CollectionDevice(IrekuaModelBaseUser):
     def items(self):
         from irekua_collections.models import CollectionItem
 
-        return CollectionItem.objects.filter(deployment=self)
+        return CollectionItem.objects.filter(collection_device=self)

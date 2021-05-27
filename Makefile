@@ -15,5 +15,5 @@ createsuperuser:
 up:
 	sudo docker-compose up
 
-test:
+test: build
 	sudo docker-compose run app python manage.py test --keepdb

@@ -62,6 +62,22 @@ class UserCreationForm(forms.ModelForm):
 class UserAdmin(BaseUserAdmin):
     model = models.User
     add_form = UserCreationForm
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("username", "email"),
+            },
+        ),
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("password1", "password2"),
+            },
+        ),
+    )
 
     list_display = (
         "username",

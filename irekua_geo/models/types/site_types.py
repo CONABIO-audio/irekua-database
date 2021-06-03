@@ -191,6 +191,8 @@ class SiteType(IrekuaModelBase, MetadataSchemaMixin):
         if not self.restrict_subsite_types:
             return
 
+        print(site_type, self.subsite_types.all(), self)
+
         if not self.subsite_types.filter(pk=site_type.pk).exists():
             msg = _(
                 "A site of type %(site_type)s cannot be declared as a subsite "

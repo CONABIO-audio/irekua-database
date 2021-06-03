@@ -40,7 +40,7 @@ To start the development apps run:
 
 The database admin is at:
 
-    localhost:5002/admin
+    localhost:8000/admin
 
 ### Run the tests
 

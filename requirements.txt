@@ -1,6 +1,6 @@
 asgiref==3.2.10
 attrs==20.1.0
-Django==3.1
+Django==3.1.10
 irekua-dev-settings==0.1
 jsonschema==3.2.0
 numpy==1.19.1

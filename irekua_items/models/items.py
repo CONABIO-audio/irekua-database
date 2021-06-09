@@ -297,6 +297,10 @@ class Item(IrekuaModelBaseUser):
             msg = _("Hash of file and recorded hash do not coincide")
             raise ValidationError({"hash": msg})
 
+        if Item.objects.filter(hash=self.hash).exists():
+            msg = _("The file is probably already in the database, the hash extracted exists in the database")
+            raise ValidationError({"hash": msg})
+
     def clean_mime_type(self):
         if self.mime_type is not None:
             return

@@ -14,11 +14,9 @@ jobs:
     steps:
     - name: Copy repository
       uses: actions/checkout@v2
-    - name: Build images
-      run: docker-compose build
     - name: Start containers
       run: docker-compose up --detach
     - name: Wait for database to start
       run: sleep 10
     - name: Run tests
-      run: docker-compose run app python manage.py test --keepdb
+      run: docker-compose run app python manage.py test --keepdb --verbosity=3

@@ -46,9 +46,10 @@ class Filter(IrekuaUserFilter):
         widget=get_autocomplete_widget(model=SiteType),
     )
 
-    site_descriptors = filters.ModelChoiceFilter(
+    site_descriptors = filters.ModelMultipleChoiceFilter(
         queryset=SiteDescriptor.objects.all(),
-        widget=get_autocomplete_widget(model=SiteDescriptor),
+        widget=get_autocomplete_widget(model=SiteDescriptor, multiple=True),
+        conjoined=True,
     )
 
     descriptor_type = filters.ModelChoiceFilter(
@@ -68,9 +69,17 @@ class Filter(IrekuaUserFilter):
         widget=get_autocomplete_widget(model=SiteType),
     )
 
+    parent_parent_site = filters.ModelChoiceFilter(
+        queryset=CollectionSite.objects.all(),
+        widget=get_autocomplete_widget(model=CollectionSite),
+        field_name="parent_site__parent_site",
+    )
+
     class Meta:
         model = CollectionSite
 
         fields = {
             "collection_name": ["exact", "icontains"],
+            "collection__name": ["exact", "icontains"],
+            "site_type__name": ["exact", "icontains"],
         }

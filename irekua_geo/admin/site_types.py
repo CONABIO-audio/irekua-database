@@ -21,9 +21,9 @@ class SubSiteTypeInline(admin.TabularInline):
 
     model = SiteType.subsite_types.through
 
-    fk_name = "to_sitetype"
+    fk_name = "from_sitetype"
 
-    autocomplete_fields = ("from_sitetype",)
+    autocomplete_fields = ("to_sitetype",)
 
     verbose_name = _("Sub Site type")
 

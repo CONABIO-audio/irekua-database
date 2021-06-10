@@ -29,4 +29,5 @@ class Filter(IrekuaFilter):
 
         fields = {
             "value": ["exact", "icontains"],
+            "descriptor_type__name": ["exact", "icontains"],
         }

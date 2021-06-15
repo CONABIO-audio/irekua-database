@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
 from irekua_items.models import Item
-from irekua_items.models import ItemType
 
 
 class CollectionItemsManager(models.Manager):

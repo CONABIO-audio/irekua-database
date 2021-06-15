@@ -333,3 +333,33 @@ class Collection(IrekuaModelBaseUser):
             return False
 
         return role.has_permission("add_collectionitem")
+
+    def can_create_annotation(self, user):
+        """Returns True if user can create an annotation of an item in this
+        collection"""
+        if not user.is_authenticated:
+            return False
+
+        if user.is_superuser:
+            return True
+
+        if user.is_curator:
+            return True
+
+        # pylint: disable=no-member
+        if self.collection_type.is_admin(user):
+            return True
+
+        if self.is_admin(user):
+            return True
+
+        # TODO: add permissions for public annotators in certain cases
+
+        role = self.get_user_role(user)
+
+        if role is None:
+            # If user is not part of the collection no annotation
+            # permissions are given
+            return False
+
+        return role.has_permission("add_collectionannotation")

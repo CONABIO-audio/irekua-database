@@ -36,7 +36,6 @@ def _select_by_priority(
             continue
 
         device_specific = device in extractor.devices.all()
-        print(device, extractor.devices.all(), device_specific)
         if extractor.devices.count() and not device_specific:
             # If the extractor has listed some devices but does not contain
             # the selected device then do not use this extractor

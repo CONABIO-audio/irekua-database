@@ -69,6 +69,20 @@ class SiteDescriptorInline(admin.TabularInline):
     ]
 
 
+class AssociatedUserInline(admin.TabularInline):
+    extra = 0
+
+    model = CollectionSite.associated_users.through
+
+    verbose_name = _("Associated user")
+
+    verbose_name_plural = _("Associated users")
+
+    autocomplete_fields = [
+        "user",
+    ]
+
+
 class CollectionSiteAdmin(IrekuaUserAdmin):
     search_fields = [
         "collection_name",
@@ -126,4 +140,5 @@ class CollectionSiteAdmin(IrekuaUserAdmin):
 
     inlines = [
         SiteDescriptorInline,
+        AssociatedUserInline,
     ]

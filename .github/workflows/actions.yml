@@ -2,10 +2,12 @@ name: Tests
 on:
   pull_request:
     branches:
+      - develop
       - irekua_cleanup
       - master
   push:
     branches:
+      - develop
       - irekua_cleanup
       - master
 jobs:
@@ -15,7 +17,7 @@ jobs:
     - name: Copy repository
       uses: actions/checkout@v2
     - name: Start containers
-      run: docker-compose up --detach
+      run: make up
     - name: Wait for database to start
       run: sleep 10
     - name: Run tests

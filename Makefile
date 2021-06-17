@@ -13,9 +13,9 @@ createsuperuser:
 	docker-compose run app python manage.py createsuperuser
 
 up:
-	docker-compose up
+	docker-compose up --detach
 
-test: build
+test:
 	docker-compose run app pytest
 
 clean: clean-build clean-pyc clean-test clean-cache

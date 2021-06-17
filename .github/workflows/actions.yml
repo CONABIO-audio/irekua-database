@@ -19,4 +19,4 @@ jobs:
     - name: Wait for database to start
       run: sleep 10
     - name: Run tests
-      run: docker-compose run app python manage.py test --keepdb --verbosity=3
+      run: make test

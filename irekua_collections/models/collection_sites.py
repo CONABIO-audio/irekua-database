@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from irekua_database.models import User
 from irekua_database.base import IrekuaModelBaseUser
 from irekua_geo.models import SiteType
 from irekua_geo.models import SiteDescriptor
@@ -79,6 +80,15 @@ class CollectionSite(IrekuaModelBaseUser):
         help_text=_("Site to which this site belongs if any"),
     )
 
+    associated_users = models.ManyToManyField(
+        User,
+        blank=True,
+        verbose_name=_("associated users"),
+        help_text=_(
+            "List of collection users that are associated to this site."
+        ),
+    )
+
     class Meta:
         verbose_name = _("Collection Site")
 
@@ -125,6 +135,8 @@ class CollectionSite(IrekuaModelBaseUser):
 
         # Check if additional collection metadata is valid for this site type
         self.clean_valid_collection_metadata(site_type_config)
+
+        self.clean_associated_users()
 
     def clean_valid_metadata(self):
         try:
@@ -177,6 +189,15 @@ class CollectionSite(IrekuaModelBaseUser):
 
         except ValidationError as error:
             raise ValidationError({"site": error}) from error
+
+    def clean_associated_users(self):
+        for user in self.associated_users.all():
+            if not self.collection.is_user(user):
+                msg = _(
+                    "The user you are trying to associate to "
+                    "this site does not belong to the site's collection"
+                )
+                raise ValidationError({"associated_users": msg})
 
     def validate_descriptor(self, descriptor):
         if self.id is None:

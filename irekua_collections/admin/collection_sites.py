@@ -68,9 +68,35 @@ class SiteDescriptorInline(admin.TabularInline):
         "sitedescriptor",
     ]
 
+class SiteDescriptorForm(forms.ModelForm):
+    class Meta:
+        model = CollectionSite.associated_users.through
+        fields = (
+            "collectionsite",
+            "user",
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        collection_site = cleaned_data["collectionsite"]
+
+        associated_user = cleaned_data["user"]
+
+        if not collection_site.collection.is_user(associated_user):
+            msg = _(
+                "The user you are trying to associate to "
+                "this site does not belong to the site's collection"
+            )
+            raise ValidationError({"user": msg})
+
+        return cleaned_data
+
 
 class AssociatedUserInline(admin.TabularInline):
     extra = 0
+
+    form = SiteDescriptorForm
 
     model = CollectionSite.associated_users.through
 

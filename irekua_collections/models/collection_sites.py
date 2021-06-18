@@ -197,7 +197,7 @@ class CollectionSite(IrekuaModelBaseUser):
                     "The user you are trying to associate to "
                     "this site does not belong to the site's collection"
                 )
-                raise ValidationError({"associated_users": msg})
+                raise ValidationError(msg)
 
     def validate_descriptor(self, descriptor):
         if self.id is None:

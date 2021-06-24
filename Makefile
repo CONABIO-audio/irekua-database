@@ -47,7 +47,7 @@ clean-test:
 
 coverage:
 	docker-compose run app pytest && \
-	docker-compose run app codecov --token=${codecov_token}
+	docker-compose run app codecov --commit=$$(git rev-parse HEAD) --token=${codecov_token}
 
 createsuperuser:
 	docker-compose run app python manage.py createsuperuser

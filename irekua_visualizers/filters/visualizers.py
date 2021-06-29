@@ -28,5 +28,6 @@ class Filter(IrekuaFilter):
 
         fields = {
             "item_types__name": ["exact", "icontains"],
+            "item_types__id": ["exact", "icontains"],
             "name": ["exact"],
         }

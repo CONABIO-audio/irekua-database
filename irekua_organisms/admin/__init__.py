@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from irekua_organisms import models
 
+from irekua_collections.admin.organism_items import OrganismItemAdmin
 from .collection_type_organism_config import CollectionTypeOrganismConfigAdmin
 from .organism import OrganismAdmin
 from .organism_capture import OrganismCaptureAdmin
@@ -32,4 +33,8 @@ admin.site.register(
 admin.site.register(
     models.OrganismCapture,
     OrganismCaptureAdmin,
+)
+admin.site.register(
+    models.OrganismItem,
+    OrganismItemAdmin,
 )

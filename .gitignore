@@ -91,3 +91,7 @@ db.sqlite3
 
 .vscode
 .mypy_cache/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+*.ipynb

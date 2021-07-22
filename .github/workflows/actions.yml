@@ -20,5 +20,5 @@ jobs:
       run: make up
     - name: Wait for database to start
       run: sleep 10
-    - name: Run tests
-      run: make test
+    - name: Run tests and evaluate coverage
+      run: make coverage

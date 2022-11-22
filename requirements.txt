@@ -4,7 +4,7 @@ Django==3.1
 irekua-dev-settings==0.1
 jsonschema==3.2.0
 numpy==1.19.1
-Pillow==7.2.0
+Pillow==9.3.0
 psycopg2-binary==2.8.5
 pycountry==20.7.3
 pyrsistent==0.16.0
